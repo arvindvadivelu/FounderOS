@@ -8,17 +8,27 @@ import {
   Trash2,
   CheckCircle2,
   Calendar,
+  Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 import { db } from '../db';
-import { SpotlightCard } from '../components/common/SpotlightCard';
 import { MetricCard } from '../components/common/MetricCard';
-import { Badge, getStatusBadgeVariant } from '../components/common/Badge';
 import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createGoal, updateGoal, deleteGoal } from '../db/services/goalNoteService';
 import { formatDate } from '../utils/formatters';
 import { useToast } from '../components/common/Toast';
 import type { Goal } from '../types';
+
+const GOAL_STATUS_CONFIG: Record<
+  'on_track' | 'at_risk' | 'behind' | 'achieved',
+  { color: string; bg: string; border: string; label: string }
+> = {
+  on_track: { color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.25)', label: 'On Track' },
+  at_risk: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.25)', label: 'At Risk' },
+  behind: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.25)', label: 'Behind' },
+  achieved: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.25)', label: 'Achieved' },
+};
 
 export const GoalsPage: React.FC = () => {
   const { showToast } = useToast();
@@ -116,24 +126,86 @@ export const GoalsPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            COMPANY STRATEGY • QUARTERLY & ANNUAL OKRS
+          </div>
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+            }}
+          >
             Company Goals & OKR Tracking
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Set quarterly and annual company targets for revenue, customer count, and efficiency.
+          </h1>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '640px' }}>
+            Set quarterly and annual company targets for revenue, customer count, unit economics, and operational efficiency.
           </p>
         </div>
 
+        {/* Primary CTA Button with Action Indicator Dot */}
         <button
           type="button"
           onClick={openAddModal}
-          className="btn-primary"
-          style={{ borderRadius: '50px', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          style={{
+            borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+            padding: '10px 22px',
+            backgroundColor: '#0050FF',
+            color: '#ffffff',
+            border: 'none',
+            fontSize: '13.5px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
         >
-          <Plus size={15} /> Set New Goal
+          <Plus size={15} />
+          <span>Set New Goal</span>
+          <span
+            style={{
+              width: '7px',
+              height: '7px',
+              borderRadius: '50%',
+              backgroundColor: '#ffffff',
+              opacity: 0.9,
+            }}
+          />
         </button>
       </div>
 
@@ -165,7 +237,7 @@ export const GoalsPage: React.FC = () => {
           value={achievedGoals.length}
           subtitle="100% target reached"
           changeType="positive"
-          icon={<Target size={18} />}
+          icon={<Sparkles size={18} />}
         />
       </div>
 
@@ -183,78 +255,188 @@ export const GoalsPage: React.FC = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '18px',
+            gap: '20px',
           }}
         >
           {goals.map((g) => {
             const pct = Math.min(100, Math.round((g.currentValue / g.target) * 100));
+            const statusKey = (g.status in GOAL_STATUS_CONFIG) ? (g.status as keyof typeof GOAL_STATUS_CONFIG) : 'on_track';
+            const statusCfg = GOAL_STATUS_CONFIG[statusKey];
 
             return (
-              <SpotlightCard
+              <div
                 key={g.id}
                 style={{
-                  padding: '22px',
+                  backgroundColor: '#0b0f19',
+                  borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '24px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '14px',
+                  gap: '16px',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                {/* Header with Period & Status Tags */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--brand-accent)' }}>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '8px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          padding: '2px 8px',
+                          borderRadius: '10px', // 10px tag chip
+                          backgroundColor: 'rgba(0, 80, 255, 0.12)',
+                          color: '#38bdf8',
+                          border: '1px solid rgba(0, 80, 255, 0.25)',
+                        }}
+                      >
                         {g.period} OKR
                       </span>
-                      <Badge variant={getStatusBadgeVariant(g.status)}>{g.status.replace('_', ' ')}</Badge>
+
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          padding: '2px 8px',
+                          borderRadius: '10px', // 10px tag chip
+                          backgroundColor: statusCfg.bg,
+                          border: `1px solid ${statusCfg.border}`,
+                          color: statusCfg.color,
+                          fontSize: '11px',
+                          fontWeight: 700,
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: '5px',
+                            height: '5px',
+                            borderRadius: '50%',
+                            backgroundColor: statusCfg.color,
+                          }}
+                        />
+                        {statusCfg.label}
+                      </div>
                     </div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>{g.title}</h3>
+
+                    <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', margin: 0 }}>
+                      {g.title}
+                    </h3>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '4px' }}>
+                  <div style={{ display: 'flex', gap: '6px' }}>
                     <button
                       type="button"
                       onClick={() => openEditModal(g)}
-                      style={{ color: 'var(--text-dim)', padding: '2px' }}
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%', // Circular 28px button
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: '#94a3b8',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#38bdf8';
+                        e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#94a3b8';
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                      }}
                       title="Edit Goal"
                     >
-                      <Edit2 size={14} />
+                      <Edit2 size={13} />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteGoal(g.id)}
-                      style={{ color: 'var(--text-dim)', padding: '2px' }}
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%', // Circular 28px button
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: '#94a3b8',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#ef4444';
+                        e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#94a3b8';
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                      }}
                       title="Delete Goal"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={13} />
                     </button>
                   </div>
                 </div>
 
                 {g.description && (
-                  <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                  <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5, margin: 0 }}>
                     {g.description}
                   </p>
                 )}
 
                 {/* Numbers & Progress Gauge */}
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
-                    <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)' }}>
+                <div
+                  style={{
+                    padding: '14px 16px',
+                    borderRadius: '16px', // 16px container
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.03em' }}>
                       {g.unit === '$' ? `$${g.currentValue.toLocaleString()}` : `${g.currentValue.toLocaleString()} ${g.unit}`}
-                      <span style={{ fontSize: '13px', color: 'var(--text-dim)', fontWeight: 500, marginLeft: '6px' }}>
+                      <span style={{ fontSize: '13px', color: '#64748b', fontWeight: 500, marginLeft: '6px' }}>
                         / {g.unit === '$' ? `$${g.target.toLocaleString()}` : `${g.target.toLocaleString()} ${g.unit}`}
                       </span>
                     </div>
-                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--brand-accent)' }}>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: 800,
+                        padding: '2px 8px',
+                        borderRadius: '10px',
+                        backgroundColor: pct >= 100 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(0, 80, 255, 0.12)',
+                        color: pct >= 100 ? '#34d399' : '#38bdf8',
+                        border: `1px solid ${pct >= 100 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(0, 80, 255, 0.25)'}`,
+                      }}
+                    >
                       {pct}%
                     </span>
                   </div>
 
                   <div
                     style={{
-                      height: '8px',
-                      borderRadius: '999px',
-                      backgroundColor: 'var(--bg-surface-elevated)',
+                      height: '7px',
+                      borderRadius: '50px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
                       overflow: 'hidden',
                       position: 'relative',
                     }}
@@ -263,32 +445,32 @@ export const GoalsPage: React.FC = () => {
                       style={{
                         height: '100%',
                         width: `${pct}%`,
-                        backgroundColor: pct >= 100 ? '#10b981' : 'var(--brand-accent)',
-                        borderRadius: '999px',
+                        background: pct >= 100 ? '#10b981' : 'linear-gradient(90deg, #0050FF 0%, #38bdf8 100%)',
+                        borderRadius: '50px',
                         transition: 'width 0.4s ease',
                       }}
                     />
                   </div>
                 </div>
 
-                {/* Footer */}
+                {/* Footer Metadata */}
                 {g.deadline && (
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      fontSize: '11.5px',
-                      color: 'var(--text-dim)',
+                      fontSize: '12px',
+                      color: '#64748b',
                       paddingTop: '8px',
-                      borderTop: '1px solid var(--border-faint)',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
                     }}
                   >
-                    <Calendar size={13} />
-                    <span>Target Target: {formatDate(g.deadline)}</span>
+                    <Calendar size={13} color="#38bdf8" />
+                    <span>Target Deadline: {formatDate(g.deadline)}</span>
                   </div>
                 )}
-              </SpotlightCard>
+              </div>
             );
           })}
         </div>
@@ -301,9 +483,9 @@ export const GoalsPage: React.FC = () => {
         title={editingGoal ? 'Edit Company Goal' : 'Create Company Goal'}
         subtitle="Specify target metrics, measurement units, and target timeframe"
       >
-        <form onSubmit={handleSaveGoal} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleSaveGoal} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Goal Title *
             </label>
             <input
@@ -313,11 +495,12 @@ export const GoalsPage: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Description
             </label>
             <textarea
@@ -326,18 +509,20 @@ export const GoalsPage: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Period
               </label>
               <select
                 value={period}
                 onChange={(e) => setPeriod(e.target.value as any)}
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               >
                 <option value="Q1">Q1</option>
                 <option value="Q2">Q2</option>
@@ -349,13 +534,14 @@ export const GoalsPage: React.FC = () => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               >
                 <option value="on_track">On Track</option>
                 <option value="at_risk">At Risk</option>
@@ -367,7 +553,7 @@ export const GoalsPage: React.FC = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Current Value *
               </label>
               <input
@@ -377,12 +563,13 @@ export const GoalsPage: React.FC = () => {
                 onChange={(e) => setCurrentValue(parseFloat(e.target.value) || 0)}
                 placeholder="10000"
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
-                Target Target *
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Target Metric *
               </label>
               <input
                 type="number"
@@ -392,11 +579,12 @@ export const GoalsPage: React.FC = () => {
                 onChange={(e) => setTarget(parseFloat(e.target.value) || 0)}
                 placeholder="25000"
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Unit Symbol
               </label>
               <input
@@ -405,12 +593,13 @@ export const GoalsPage: React.FC = () => {
                 onChange={(e) => setUnit(e.target.value)}
                 placeholder="$, customers, users, %"
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Target Deadline Date
             </label>
             <input
@@ -418,15 +607,53 @@ export const GoalsPage: React.FC = () => {
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-            <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                borderRadius: '50px',
+                padding: '9px 18px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#94a3b8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
-              {editingGoal ? 'Update Goal' : 'Set Goal'}
+            <button
+              type="submit"
+              style={{
+                borderRadius: '50px',
+                padding: '9px 22px',
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+              }}
+            >
+              <span>{editingGoal ? 'Update Goal' : 'Set Goal'}</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                }}
+              />
             </button>
           </div>
         </form>
