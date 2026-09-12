@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   Check,
   RefreshCw,
-  Menu,
   X,
   Layers,
   AlertTriangle,
@@ -31,7 +30,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const [downloadState, setDownloadState] = useState<'idle' | 'downloading' | 'completed'>('idle');
   const [downloadType, setDownloadType] = useState<'setup' | 'portable'>('setup');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const triggerDownload = (type: 'setup' | 'portable') => {
     setDownloadType(type);
@@ -192,30 +190,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Nav Right Action Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* Circular Blue Menu Toggle Button (#0050FF) */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              title="Toggle Menu"
-              style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                backgroundColor: '#0050FF', // --brand-accent
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#ffffff',
-                boxShadow: '0 0 16px rgba(0, 80, 255, 0.45)',
-                transition: 'transform 0.15s ease',
-              }}
-              onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.95)')}
-              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-            >
-              {mobileMenuOpen ? <X size={18} strokeWidth={2.5} /> : <Menu size={18} strokeWidth={2.5} />}
-            </button>
-
             {/* Download Setup Pill Button (Dark glass pill with embedded Sky Pop dot) */}
             <button
               onClick={() => triggerDownload('setup')}
@@ -309,63 +283,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </button>
           </div>
         </div>
-
-        {/* Mobile Expandable Menu */}
-        {mobileMenuOpen && (
-          <div
-            style={{
-              marginTop: '12px',
-              backgroundColor: '#0b0f19',
-              borderRadius: '24px',
-              padding: '20px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '14px',
-              boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
-            }}
-          >
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                triggerDownload('setup');
-              }}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                color: '#f8fafc',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderRadius: '50px',
-                padding: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-              }}
-            >
-              <Download size={15} />
-              <span>Download Setup (.exe)</span>
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onLaunchApp();
-              }}
-              style={{
-                backgroundColor: '#0050FF',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '50px',
-                padding: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-            >
-              Launch Web Command Center →
-            </button>
-          </div>
-        )}
       </header>
 
       {/* Main Container */}
