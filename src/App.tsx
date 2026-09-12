@@ -29,7 +29,7 @@ import { FinancialForecastingPage } from './pages/FinancialForecastingPage';
 import { CustomerIntelligencePage } from './pages/CustomerIntelligencePage';
 import { ProductIntelligencePage } from './pages/ProductIntelligencePage';
 import { AutonomousOperationsPage } from './pages/AutonomousOperationsPage';
-import { seedDemoData } from './db/seed';
+import { initFreshDatabase } from './db/seed';
 
 export function App() {
   // Simple hash/state based client-side routing
@@ -37,13 +37,10 @@ export function App() {
     return window.location.hash ? window.location.hash.slice(1) : '/';
   });
 
-  // Check if DB is completely fresh; if so, initialize with seed demo company so founder has instant working system
+  // Ensure fresh database initialization without seeding demo company records
   useEffect(() => {
     async function checkFirstRun() {
-      const companyCount = await db.companies.count();
-      if (companyCount === 0) {
-        await seedDemoData();
-      }
+      await initFreshDatabase();
     }
     checkFirstRun();
   }, []);

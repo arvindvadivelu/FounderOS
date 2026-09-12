@@ -18,6 +18,7 @@ import {
   Landmark,
   Scale,
   UploadCloud,
+  MonitorDown,
 } from 'lucide-react';
 import { db } from '../../db';
 
@@ -232,6 +233,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       action: () => {
         onClose();
         onGenerateBriefing();
+      },
+    },
+    {
+      id: 'act_download_desktop',
+      title: 'Download FounderOS Desktop App (.exe)',
+      subtitle: 'Native Windows setup installer with background AI & offline SQLite',
+      category: 'Actions',
+      icon: <MonitorDown size={15} color="var(--brand-accent)" />,
+      action: () => {
+        onClose();
+        const link = document.createElement('a');
+        link.href = '/downloads/FounderOS-Setup.exe';
+        link.download = 'FounderOS-Setup.exe';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       },
     },
     {

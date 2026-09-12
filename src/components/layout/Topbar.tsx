@@ -9,6 +9,8 @@ import {
   Wifi,
   FileCheck,
   Loader2,
+  MonitorDown,
+  Check,
 } from 'lucide-react';
 import { useAIChatState } from '../../ai/aiChatService';
 import type { Company } from '../../types';
@@ -36,6 +38,25 @@ export const Topbar: React.FC<TopbarProps> = ({
   currentRoute,
 }) => {
   const { anyActive, status: aiStatus } = useAIChatState();
+  const isDesktop = typeof window !== 'undefined' && Boolean((window as any).desktopBridge);
+  const [downloadStatus, setDownloadStatus] = React.useState<'idle' | 'downloading' | 'done'>('idle');
+
+  const handleDownloadDesktop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDownloadStatus('downloading');
+
+    const link = document.createElement('a');
+    link.href = '/downloads/FounderOS-Setup.exe';
+    link.download = 'FounderOS-Setup.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(() => {
+      setDownloadStatus('done');
+      setTimeout(() => setDownloadStatus('idle'), 3500);
+    }, 1200);
+  };
   const getPageTitle = (route: string) => {
     switch (route) {
       case '/': return 'Command Center';
@@ -219,6 +240,54 @@ export const Topbar: React.FC<TopbarProps> = ({
           <FileCheck size={14} color="var(--brand-accent)" />
           <span className="briefing-label">Daily Briefing</span>
         </button>
+
+        {/* Download Desktop App CTA */}
+        {!isDesktop && (
+          <button
+            type="button"
+            onClick={handleDownloadDesktop}
+            className="btn-secondary"
+            style={{
+              padding: '6px 12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              borderColor: downloadStatus !== 'idle' ? 'var(--brand-accent)' : undefined,
+              backgroundColor: downloadStatus !== 'idle' ? 'rgba(0, 80, 255, 0.08)' : undefined,
+              transition: 'all 0.2s ease',
+            }}
+            title="Download FounderOS Native Desktop App for Windows (.exe setup)"
+          >
+            {downloadStatus === 'downloading' ? (
+              <Loader2 size={14} className="animate-spin" color="var(--brand-accent)" />
+            ) : downloadStatus === 'done' ? (
+              <Check size={14} color="#10b981" />
+            ) : (
+              <MonitorDown size={14} color="var(--brand-accent)" />
+            )}
+            <span className="desktop-download-label">
+              {downloadStatus === 'downloading'
+                ? 'Downloading...'
+                : downloadStatus === 'done'
+                ? 'Setup Ready!'
+                : 'Download Desktop'}
+            </span>
+            <span
+              style={{
+                fontSize: '9px',
+                padding: '1px 5px',
+                borderRadius: '4px',
+                backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                color: 'var(--brand-accent)',
+                fontWeight: 700,
+                letterSpacing: '0.5px',
+              }}
+            >
+              EXE
+            </span>
+          </button>
+        )}
 
         {/* Ask AI CEO Button */}
         <button

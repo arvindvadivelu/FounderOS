@@ -8,6 +8,7 @@ desktop/node_modules/
 desktop/dist/
 desktop/dist-electron/
 desktop/release/
+public/downloads/*.exe
 
 # Environment variables & secrets
 .env

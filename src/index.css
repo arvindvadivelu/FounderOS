@@ -424,7 +424,7 @@ button {
     display: flex !important;
   }
 
-  .search-label, .briefing-label {
+  .search-label, .briefing-label, .desktop-download-label {
     display: none;
   }
 

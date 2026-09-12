@@ -1452,3 +1452,39 @@ export async function clearAllCompanyData(): Promise<void> {
     });
   });
 }
+
+/**
+ * Initializes a clean, empty workspace for fresh users.
+ * Does NOT populate any demo company, customers, deals, tasks, or transactions.
+ */
+export async function initFreshDatabase(): Promise<void> {
+  const settingsCount = await db.settings.count();
+  if (settingsCount === 0) {
+    await db.settings.put({
+      id: 'singleton',
+      theme: 'dark',
+      currency: 'USD',
+      timezone: 'UTC',
+      dateFormat: 'YYYY-MM-DD',
+      demoLoaded: false,
+    });
+  }
+
+  const providersCount = await db.aiProviders.count();
+  if (providersCount === 0) {
+    await db.aiProviders.put({
+      id: 'provider_openrouter',
+      name: 'OpenRouter (Default)',
+      type: 'openrouter',
+      baseUrl: 'https://openrouter.ai/api/v1',
+      apiKey: '',
+      model: 'anthropic/claude-3.7-sonnet',
+      temperature: 0.2,
+      maxTokens: 4096,
+      customHeaders: {},
+      isDefault: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }
+}

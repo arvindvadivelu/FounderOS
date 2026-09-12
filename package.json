@@ -10,7 +10,9 @@
     "desktop:dev": "npm --prefix desktop run dev",
     "desktop:build": "npm --prefix desktop run build",
     "desktop:start": "npm --prefix desktop start",
-    "desktop:package": "npm --prefix desktop run package:portable"
+    "desktop:package": "npm --prefix desktop run package:portable",
+    "desktop:setup": "npm --prefix desktop run package:win",
+    "desktop:sync": "powershell -Command \"New-Item -ItemType Directory -Force -Path 'public/downloads'; Copy-Item -Path 'desktop/release/FounderOS Setup 1.0.0.exe' -Destination 'public/downloads/FounderOS-Setup.exe' -Force\""
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
