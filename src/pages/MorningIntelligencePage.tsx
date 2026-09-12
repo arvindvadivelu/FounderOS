@@ -16,7 +16,6 @@ import {
   Clock,
   Layers,
   Check,
-  Printer,
   Compass,
   MessageSquare,
   Bot,
@@ -104,10 +103,6 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
     } finally {
       setExecutingRecId(null);
     }
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   if (isLoading) {
@@ -206,15 +201,6 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
 
         {/* Action Controls */}
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="btn-secondary"
-            style={{ padding: '9px 14px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
-          >
-            <Printer size={15} /> Print Briefing
-          </button>
-
           <button
             type="button"
             onClick={() => onNavigate('/ai?action=briefing')}

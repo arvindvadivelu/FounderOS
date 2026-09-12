@@ -44,12 +44,10 @@ export const AppShell: React.FC<AppShellProps> = ({
     return await db.tasks.where('status').notEqual('done').count();
   }, []);
 
-  const currentTheme = settings?.theme || 'dark';
-
-  // Apply theme to HTML attribute
+  // Apply dark theme permanently to HTML attribute
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-  }, [currentTheme]);
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }, []);
 
   // Global Keyboard Shortcuts (Ctrl+K, Cmd+K, Ctrl+/, Cmd+/)
   useEffect(() => {
@@ -70,10 +68,6 @@ export const AppShell: React.FC<AppShellProps> = ({
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
-  const toggleTheme = async () => {
-    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    await updateSettings({ theme: nextTheme });
-  };
 
   return (
     <div
@@ -114,8 +108,6 @@ export const AppShell: React.FC<AppShellProps> = ({
         <Topbar
           currentRoute={currentRoute}
           company={company || null}
-          theme={currentTheme}
-          onToggleTheme={toggleTheme}
           onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           onOpenAiCopilot={() => setIsAiCopilotOpen(true)}

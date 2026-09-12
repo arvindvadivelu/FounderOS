@@ -43,6 +43,7 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   badge?: number | string;
+  disabled?: boolean;
 }
 
 interface NavSection {
@@ -67,17 +68,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: '/kpis', label: 'KPI Center', icon: <TrendingUp size={16} /> },
         { id: '/ai', label: 'AI CEO', icon: <Sparkles size={16} color="var(--brand-accent)" /> },
         { id: '/notes', label: 'Notes', icon: <FileText size={16} color="#38bdf8" /> },
-      ],
-    },
-    {
-      title: 'FOUNDEROS V2',
-      items: [
-        { id: '/workflows', label: 'Automated Workflows', icon: <Zap size={16} color="#38bdf8" /> },
-        { id: '/boardroom', label: 'Executive Boardroom', icon: <Users size={16} color="#a78bfa" />, badge: 'C-Suite' },
-        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" /> },
-        { id: '/customer-intelligence', label: 'Customer Intelligence', icon: <Target size={16} color="#0ea5e9" /> },
-        { id: '/product-intelligence', label: 'Product Intelligence', icon: <FolderKanban size={16} color="#f59e0b" /> },
-        { id: '/autopilot', label: 'Autonomous Operations', icon: <Cpu size={16} color="#10b981" />, badge: 'Autopilot' },
       ],
     },
     {
@@ -111,6 +101,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: '/management/employees', label: 'Employees', icon: <UserCheck size={16} /> },
         { id: '/management/departments', label: 'Departments', icon: <Building2 size={16} /> },
         { id: '/management/uploads', label: 'Corporate Vault', icon: <UploadCloud size={16} /> },
+      ],
+    },
+    {
+      title: 'FOUNDEROS V2',
+      items: [
+        { id: '/workflows', label: 'Automated Workflows', icon: <Zap size={16} color="#38bdf8" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/boardroom', label: 'Executive Boardroom', icon: <Users size={16} color="#a78bfa" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/customer-intelligence', label: 'Customer Intelligence', icon: <Target size={16} color="#0ea5e9" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/product-intelligence', label: 'Product Intelligence', icon: <FolderKanban size={16} color="#f59e0b" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/autopilot', label: 'Autonomous Operations', icon: <Cpu size={16} color="#10b981" />, disabled: true, badge: 'Coming Soon' },
       ],
     },
     {
@@ -259,11 +260,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 {sec.items.map((item) => {
                   const isActive = currentRoute === item.id;
+                  const isDisabled = Boolean(item.disabled);
                   return (
                     <button
                       key={item.id}
                       type="button"
+                      disabled={isDisabled}
                       onClick={() => {
+                        if (isDisabled) return;
                         onNavigate(item.id);
                         onCloseMobile?.();
                       }}
@@ -274,43 +278,60 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         padding: '8px 12px',
                         borderRadius: 'var(--radius-md)',
                         backgroundColor: isActive ? 'var(--primary-blue-surface)' : 'transparent',
-                        color: isActive ? 'var(--brand-accent)' : 'var(--text-muted)',
+                        color: isDisabled
+                          ? 'var(--text-dim)'
+                          : isActive
+                          ? 'var(--brand-accent)'
+                          : 'var(--text-muted)',
                         fontWeight: isActive ? 600 : 500,
                         fontSize: '13px',
                         transition: 'all var(--transition-fast)',
                         border: isActive ? '1px solid var(--border-active)' : '1px solid transparent',
                         textAlign: 'left',
                         width: '100%',
+                        cursor: isDisabled ? 'not-allowed' : 'pointer',
+                        opacity: isDisabled ? 0.48 : 1,
                       }}
                       onMouseEnter={(e) => {
-                        if (!isActive) {
+                        if (!isActive && !isDisabled) {
                           e.currentTarget.style.backgroundColor = 'var(--bg-surface-elevated)';
                           e.currentTarget.style.color = 'var(--text-main)';
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (!isActive) {
+                        if (!isActive && !isDisabled) {
                           e.currentTarget.style.backgroundColor = 'transparent';
                           e.currentTarget.style.color = 'var(--text-muted)';
                         }
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ color: isActive ? 'var(--brand-accent)' : 'inherit', display: 'flex' }}>
+                        <span style={{ color: isDisabled ? 'var(--text-dim)' : isActive ? 'var(--brand-accent)' : 'inherit', display: 'flex' }}>
                           {item.icon}
                         </span>
-                        <span>{item.label}</span>
+                        <span style={{ textDecoration: isDisabled ? 'none' : 'none' }}>{item.label}</span>
                       </div>
 
-                      {item.badge !== undefined && Number(item.badge) > 0 && (
+                      {item.badge !== undefined && (
                         <span
                           style={{
-                            fontSize: '10.5px',
+                            fontSize: isDisabled ? '9px' : '10.5px',
                             fontWeight: 700,
-                            padding: '1px 6px',
+                            padding: isDisabled ? '2px 7px' : '1px 6px',
                             borderRadius: '999px',
-                            backgroundColor: isActive ? 'var(--brand-accent)' : 'var(--bg-surface-elevated)',
-                            color: isActive ? '#ffffff' : 'var(--text-dim)',
+                            backgroundColor: isDisabled
+                              ? 'rgba(168, 85, 247, 0.12)'
+                              : isActive
+                              ? 'var(--brand-accent)'
+                              : 'var(--bg-surface-elevated)',
+                            color: isDisabled
+                              ? '#c084fc'
+                              : isActive
+                              ? '#ffffff'
+                              : 'var(--text-dim)',
+                            border: isDisabled ? '1px solid rgba(168, 85, 247, 0.28)' : 'none',
+                            letterSpacing: isDisabled ? '0.4px' : 'normal',
+                            textTransform: isDisabled ? 'uppercase' : 'none',
                           }}
                         >
                           {item.badge}

@@ -29,6 +29,7 @@ import { FinancialForecastingPage } from './pages/FinancialForecastingPage';
 import { CustomerIntelligencePage } from './pages/CustomerIntelligencePage';
 import { ProductIntelligencePage } from './pages/ProductIntelligencePage';
 import { AutonomousOperationsPage } from './pages/AutonomousOperationsPage';
+import { V2ComingSoonPage } from './pages/V2ComingSoonPage';
 import { initFreshDatabase } from './db/seed';
 import { ToastProvider } from './components/common/Toast';
 
@@ -123,17 +124,17 @@ export function App() {
       case '/integrations':
         return <IntegrationsPage onNavigate={handleNavigate} />;
       case '/workflows':
-        return <WorkflowsPage />;
+        return <V2ComingSoonPage featureName="Automated Workflows" onNavigate={handleNavigate} />;
       case '/boardroom':
-        return <ExecutiveBoardroomPage />;
+        return <V2ComingSoonPage featureName="Executive Boardroom" onNavigate={handleNavigate} />;
       case '/forecasting':
-        return <FinancialForecastingPage />;
+        return <V2ComingSoonPage featureName="Financial Forecasting" onNavigate={handleNavigate} />;
       case '/customer-intelligence':
-        return <CustomerIntelligencePage />;
+        return <V2ComingSoonPage featureName="Customer Intelligence" onNavigate={handleNavigate} />;
       case '/product-intelligence':
-        return <ProductIntelligencePage />;
+        return <V2ComingSoonPage featureName="Product Intelligence" onNavigate={handleNavigate} />;
       case '/autopilot':
-        return <AutonomousOperationsPage />;
+        return <V2ComingSoonPage featureName="Autonomous Operations" onNavigate={handleNavigate} />;
       case '/settings':
         return <SettingsPage initialTab={currentRoute.includes('tab=providers') ? 'providers' : 'company'} />;
       default:

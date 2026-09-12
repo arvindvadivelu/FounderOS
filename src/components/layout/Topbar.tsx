@@ -3,8 +3,6 @@ import {
   Menu,
   Search,
   Sparkles,
-  Sun,
-  Moon,
   Database,
   Wifi,
   FileCheck,
@@ -21,8 +19,6 @@ interface TopbarProps {
   onOpenAiCopilot: () => void;
   onNavigateToAi?: () => void;
   onGenerateBriefing: () => void;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
   company: Company | null;
   currentRoute: string;
 }
@@ -33,8 +29,6 @@ export const Topbar: React.FC<TopbarProps> = ({
   onOpenAiCopilot,
   onNavigateToAi,
   onGenerateBriefing,
-  theme,
-  onToggleTheme,
   currentRoute,
 }) => {
   const { anyActive, status: aiStatus } = useAIChatState();
@@ -313,21 +307,6 @@ export const Topbar: React.FC<TopbarProps> = ({
           >
             Ctrl /
           </kbd>
-        </button>
-
-        {/* Theme Toggle */}
-        <button
-          type="button"
-          onClick={onToggleTheme}
-          className="btn-secondary"
-          style={{
-            padding: '7px',
-            borderRadius: '999px',
-            color: 'var(--text-muted)',
-          }}
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        >
-          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
         </button>
       </div>
     </header>
