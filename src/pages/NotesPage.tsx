@@ -17,9 +17,11 @@ import { SpotlightCard } from '../components/common/SpotlightCard';
 import { EmptyState } from '../components/common/EmptyState';
 import { createNote, updateNote, deleteNote } from '../db/services/goalNoteService';
 import { formatDate, formatRelativeTime } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Note } from '../types';
 
 export const NotesPage: React.FC = () => {
+  const { showToast } = useToast();
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -94,6 +96,7 @@ export const NotesPage: React.FC = () => {
       content: activeContent,
       isPinned: activeIsPinned,
     });
+    showToast('success', 'Note Saved', `Document "${activeTitle || 'Untitled'}" saved successfully.`);
   };
 
   const handleDeleteNote = async (id: string) => {
@@ -102,6 +105,7 @@ export const NotesPage: React.FC = () => {
       if (selectedNoteId === id) {
         setSelectedNoteId(null);
       }
+      showToast('info', 'Note Deleted', 'Document removed.');
     }
   };
 

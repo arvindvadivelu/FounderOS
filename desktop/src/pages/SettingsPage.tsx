@@ -24,6 +24,7 @@ import { SpotlightCard } from '../components/common/SpotlightCard';
 import { Badge } from '../components/common/Badge';
 import { Modal } from '../components/common/Modal';
 import { ConfirmDialog } from '../components/common/ConfirmDialog';
+import { useToast } from '../components/common/Toast';
 import {
   getAllAIProviders,
   saveAIProvider,
@@ -42,6 +43,7 @@ interface SettingsPageProps {
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'providers' | 'data' | 'company' | 'about'>(
     initialTab === 'providers' ? 'providers' : 'providers'
   );
@@ -163,7 +165,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       try {
         parsedHeaders = JSON.parse(pCustomHeaders);
       } catch {
-        alert('Invalid JSON in Custom Headers field. Please fix format.');
+        showToast('error', 'Invalid Headers', 'Invalid JSON in Custom Headers field. Please fix format.');
         return;
       }
     }
@@ -182,6 +184,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       isDefault: pIsDefault,
     });
 
+    showToast('success', 'AI Provider Saved', `Configuration for "${pName}" has been saved.`);
     setIsProviderModalOpen(false);
   };
 
@@ -208,13 +211,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       currency: compCurrency,
     });
     await updateSettings({ currency: compCurrency });
-    alert('Company profile updated successfully.');
+    showToast('success', 'Company Profile Saved', 'Company profile and preferences updated successfully.');
   };
 
   const handleExportData = async () => {
     const data = await exportAllData();
     const filename = `founderos_backup_${new Date().toISOString().split('T')[0]}.json`;
     downloadJsonFile(data, filename);
+    showToast('info', 'Backup Exported', 'Downloaded encrypted JSON database backup.');
   };
 
   const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,10 +235,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       const json = JSON.parse(text);
       const res = await importDataFromPayload(json);
       setImportStatus(res);
-      alert('Database successfully imported and restored from backup!');
+      showToast('success', 'Backup Restored', 'Database successfully imported and restored from backup!');
     } catch (err: any) {
       setImportStatus({ success: false, message: err.message || 'Import failed' });
-      alert(`Import error: ${err.message}`);
+      showToast('error', 'Import Failed', err.message || 'Import error occurred.');
     } finally {
       e.target.value = '';
     }
@@ -242,7 +246,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
 
   const handleResetDatabase = async () => {
     await clearAllCompanyData();
-    alert('All company data deleted. Database is now a clean slate.');
+    showToast('danger', 'Database Cleared', 'All company data deleted. Database is now a clean slate.');
   };
 
   return (

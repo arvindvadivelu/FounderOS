@@ -21,9 +21,11 @@ import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createCustomer, updateCustomer, deleteCustomer } from '../db/services/customerService';
 import { formatCurrency, formatDate, formatRelativeTime } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Customer, CustomerStatus } from '../types';
 
 export const CustomersPage: React.FC = () => {
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
@@ -129,6 +131,7 @@ export const CustomersPage: React.FC = () => {
         notes,
         tags: parsedTags,
       });
+      showToast('success', 'Customer Updated', `Customer "${companyName}" saved successfully.`);
     } else {
       await createCustomer({
         companyName,
@@ -143,6 +146,7 @@ export const CustomersPage: React.FC = () => {
         notes,
         tags: parsedTags,
       });
+      showToast('success', 'Customer Created', `Customer "${companyName}" added successfully.`);
     }
 
     setIsModalOpen(false);
@@ -152,6 +156,7 @@ export const CustomersPage: React.FC = () => {
     if (confirm('Are you sure you want to delete this customer?')) {
       await deleteCustomer(id);
       if (selectedCustomerId === id) setSelectedCustomerId(null);
+      showToast('info', 'Customer Deleted', 'Customer record was removed.');
     }
   };
 

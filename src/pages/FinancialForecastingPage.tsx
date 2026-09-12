@@ -26,15 +26,15 @@ export const FinancialForecastingPage: React.FC = () => {
   const transactions = useLiveQuery(() => db.transactions.toArray(), []);
 
   // Compute live current financial baselines
-  const currentCash = bankAccounts?.reduce((sum, b) => sum + (b.balance || 0), 0) || 285000;
-  const currentMrr = customers?.reduce((sum, c) => sum + (c.monthlyRevenue || 0), 0) || 24800;
-  const baseMonthlyBurn = 18500;
+  const currentCash = bankAccounts?.reduce((sum, b) => sum + (b.balance || 0), 0) || 0;
+  const currentMrr = customers?.reduce((sum, c) => sum + (c.monthlyRevenue || 0), 0) || 0;
+  const baseMonthlyBurn = 0;
 
   // Active scenario and slider state
   const [selectedScenarioType, setSelectedScenarioType] = useState<'base' | 'best' | 'worst'>('base');
-  const [growthRate, setGrowthRate] = useState<number>(8);
-  const [churnRate, setChurnRate] = useState<number>(2);
-  const [grossMargin, setGrossMargin] = useState<number>(80);
+  const [growthRate, setGrowthRate] = useState<number>(0);
+  const [churnRate, setChurnRate] = useState<number>(0);
+  const [grossMargin, setGrossMargin] = useState<number>(0);
   const [burnBuffer, setBurnBuffer] = useState<number>(baseMonthlyBurn);
 
   // Hiring form state

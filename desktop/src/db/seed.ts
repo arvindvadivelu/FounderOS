@@ -995,25 +995,11 @@ export async function seedDemoData(): Promise<void> {
 
 export async function clearAllCompanyData(): Promise<void> {
   await db.transaction('rw', db.tables, async () => {
-    await db.companies.clear();
-    await db.customers.clear();
-    await db.deals.clear();
-    await db.transactions.clear();
-    await db.invoices.clear();
-    await db.projects.clear();
-    await db.tasks.clear();
-    await db.features.clear();
-    await db.bugs.clear();
-    await db.goals.clear();
-    await db.notes.clear();
-    await db.activities.clear();
-    await db.aiConversations.clear();
-    await db.aiMessages.clear();
-    await db.employees.clear();
-    await db.departments.clear();
-    await db.bankAccounts.clear();
-    await db.balanceSheetItems.clear();
-    await db.uploadedFiles.clear();
+    for (const table of db.tables) {
+      if (table.name !== 'settings' && table.name !== 'aiProviders') {
+        await table.clear();
+      }
+    }
     
     // Reset settings to fresh clean singleton
     await db.settings.clear();
@@ -1034,13 +1020,14 @@ export async function clearAllCompanyData(): Promise<void> {
  */
 export async function initFreshDatabase(): Promise<void> {
   // Purge any legacy pre-loaded demo company records or unpurged demo data
-  const demoCompany = await db.companies.get('comp_default');
-  const hasPurgedFlag = typeof localStorage !== 'undefined' ? localStorage.getItem('founderos_preloaded_purged_v2') : 'true';
+  const companies = await db.companies.toArray();
+  const hasDemo = companies.some((c) => c.name === 'Solvst AI' || c.id === 'comp_default');
+  const hasPurgedFlag = typeof localStorage !== 'undefined' ? localStorage.getItem('founderos_preloaded_purged_v3') : null;
 
-  if (demoCompany || !hasPurgedFlag) {
+  if (hasDemo || !hasPurgedFlag) {
     await clearAllCompanyData();
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('founderos_preloaded_purged_v2', 'true');
+      localStorage.setItem('founderos_preloaded_purged_v3', 'true');
     }
   }
 

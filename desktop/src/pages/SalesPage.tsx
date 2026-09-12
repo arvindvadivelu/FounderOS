@@ -18,9 +18,11 @@ import { Badge, getStatusBadgeVariant } from '../components/common/Badge';
 import { Modal } from '../components/common/Modal';
 import { createDeal, updateDeal, deleteDeal } from '../db/services/dealService';
 import { formatCurrency, formatDate } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Deal, DealStage } from '../types';
 
 export const SalesPage: React.FC = () => {
+  const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
 
@@ -124,6 +126,7 @@ export const SalesPage: React.FC = () => {
         source,
         notes,
       });
+      showToast('success', 'Deal Updated', `Sales deal "${name}" updated successfully.`);
     } else {
       await createDeal({
         name,
@@ -145,6 +148,7 @@ export const SalesPage: React.FC = () => {
           origin: { y: 0.6 },
         });
       }
+      showToast('success', 'Deal Created', `Sales deal "${name}" added to pipeline.`);
     }
 
     setIsModalOpen(false);
@@ -153,6 +157,7 @@ export const SalesPage: React.FC = () => {
   const handleDeleteDeal = async (id: string) => {
     if (confirm('Delete this sales deal?')) {
       await deleteDeal(id);
+      showToast('info', 'Deal Removed', 'Sales deal removed from pipeline.');
     }
   };
 

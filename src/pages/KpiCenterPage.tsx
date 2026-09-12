@@ -48,10 +48,10 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
   const bugs = useLiveQuery(async () => await db.bugs.toArray(), []) || [];
 
   // Interactive Scenario Simulator State
-  const [simNewCustomers, setSimNewCustomers] = useState<number>(3);
-  const [simAvgArpu, setSimAvgArpu] = useState<number>(450);
-  const [simMarketingSpend, setSimMarketingSpend] = useState<number>(1200);
-  const [simChurnReduction, setSimChurnReduction] = useState<number>(10);
+  const [simNewCustomers, setSimNewCustomers] = useState<number>(0);
+  const [simAvgArpu, setSimAvgArpu] = useState<number>(0);
+  const [simMarketingSpend, setSimMarketingSpend] = useState<number>(0);
+  const [simChurnReduction, setSimChurnReduction] = useState<number>(0);
 
   const currency = company?.currency || 'USD';
 
@@ -96,27 +96,27 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
 
   // Churn & Retention Metrics
   const churnRate = totalCustomerCount > 0 ? (churnedCustomers.length / totalCustomerCount) * 100 : 0;
-  const customerRetentionRate = totalCustomerCount > 0 ? 100 - churnRate : 100;
-  const nrr = 108.5; // SaaS benchmark or derived from expansion/retention
+  const customerRetentionRate = totalCustomerCount > 0 ? 100 - churnRate : 0;
+  const nrr = activeCustomers.length > 0 ? (churnRate > 0 ? Math.max(0, 100 - churnRate) : 100) : 0;
 
   // Gross Margin % = ((Revenue - Direct COGS) / Revenue) * 100
   const monthlyRevenue = mrr > 0 ? mrr : totalIncome;
   const grossMarginPct = monthlyRevenue > 0
     ? Math.max(0, Math.min(100, Math.round(((monthlyRevenue - hostingAndAiSpend) / monthlyRevenue) * 100)))
-    : 85;
+    : 0;
 
   // Unit Economics: CAC & LTV
-  const newCustomersThisPeriod = Math.max(1, activeCustomers.length);
-  const cac = marketingSpend > 0 ? Math.round(marketingSpend / newCustomersThisPeriod) : 350;
+  const newCustomersThisPeriod = Math.max(0, activeCustomers.length);
+  const cac = marketingSpend > 0 && newCustomersThisPeriod > 0 ? Math.round(marketingSpend / newCustomersThisPeriod) : 0;
   
   // LTV = (ARPU * Gross Margin %) / (Monthly Churn Rate / 100)
   const effectiveChurnRateDecimal = Math.max(0.02, churnRate / 100);
-  const ltv = arpu > 0 ? Math.round((arpu * (grossMarginPct / 100)) / effectiveChurnRateDecimal) : 0;
+  const ltv = arpu > 0 && grossMarginPct > 0 ? Math.round((arpu * (grossMarginPct / 100)) / effectiveChurnRateDecimal) : 0;
   const ltvCacRatio = cac > 0 && ltv > 0 ? Math.round((ltv / cac) * 10) / 10 : 0;
 
   // CAC Payback Period (Months) = CAC / (ARPU * Gross Margin %)
   const monthlyGrossProfitPerUser = arpu * (grossMarginPct / 100);
-  const cacPaybackMonths = monthlyGrossProfitPerUser > 0
+  const cacPaybackMonths = monthlyGrossProfitPerUser > 0 && cac > 0
     ? Math.round((cac / monthlyGrossProfitPerUser) * 10) / 10
     : 0;
 
@@ -124,18 +124,18 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
   // Burn Multiple = Net Burn / Net New ARR (Lower is better: < 1.0 is great)
   const netBurn = Math.max(0, totalExpenses - totalIncome);
   const netNewArrEstimate = Math.max(1, arr * 0.25);
-  const burnMultiple = netBurn > 0 ? Math.round((netBurn / (netNewArrEstimate / 12)) * 10) / 10 : 0;
+  const burnMultiple = netBurn > 0 && arr > 0 ? Math.round((netBurn / (netNewArrEstimate / 12)) * 10) / 10 : 0;
 
   // Rule of 40 = Growth Rate % + Profit Margin %
   const profitMarginPct = monthlyRevenue > 0 ? Math.round((netProfit / monthlyRevenue) * 100) : 0;
-  const estimatedGrowthPct = 35; // Estimated YoY Growth
-  const ruleOf40Score = estimatedGrowthPct + profitMarginPct;
+  const estimatedGrowthPct = monthlyRevenue > 0 ? 35 : 0; // Estimated YoY Growth when revenue active
+  const ruleOf40Score = monthlyRevenue > 0 ? estimatedGrowthPct + profitMarginPct : 0;
 
   // Quick Ratio = (New MRR + Expansion MRR) / (Lost MRR)
-  const quickRatio = churnedCustomers.length > 0 ? 3.4 : 5.0;
+  const quickRatio = churnedCustomers.length > 0 ? 3.4 : 0;
 
   // Magic Number = (Net New ARR) / (Sales & Marketing Spend)
-  const magicNumber = marketingSpend > 0 ? Math.round(((mrr * 0.2 * 12) / marketingSpend) * 10) / 10 : 1.2;
+  const magicNumber = marketingSpend > 0 && mrr > 0 ? Math.round(((mrr * 0.2 * 12) / marketingSpend) * 10) / 10 : 0;
 
   // Pipeline Metrics
   const openDeals = deals.filter((d) => d.stage !== 'Won' && d.stage !== 'Lost');
@@ -180,13 +180,13 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1.2px' }}>
               EXECUTIVE SAAS KPI SUITE
             </span>
             <span
               style={{
                 fontSize: '11px',
-                padding: '2px 8px',
+                padding: '1px 8px',
                 borderRadius: '999px',
                 backgroundColor: 'rgba(16, 185, 129, 0.15)',
                 color: '#34d399',
@@ -199,32 +199,28 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
           <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
             Company KPI Command Center
           </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '640px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '650px' }}>
             Holistic unit economics, revenue efficiency, growth momentum, and interactive runway scenario modeling.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {onNavigate && (
-            <button
-              type="button"
-              onClick={() => onNavigate('/finance')}
-              className="btn-secondary"
-              style={{ padding: '8px 16px', fontSize: '13px' }}
-            >
-              <CreditCard size={15} /> Financial Ledger
-            </button>
-          )}
-          {onNavigate && (
-            <button
-              type="button"
-              onClick={() => onNavigate('/customers')}
-              className="btn-secondary"
-              style={{ padding: '8px 16px', fontSize: '13px' }}
-            >
-              <Users size={15} /> Customer Base
-            </button>
-          )}
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            type="button"
+            onClick={() => onNavigate?.('/finance')}
+            className="btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <DollarSign size={15} /> Financial Ledger
+          </button>
+          <button
+            type="button"
+            onClick={() => onNavigate?.('/customers')}
+            className="btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Users size={15} /> Customer Base
+          </button>
         </div>
       </SpotlightCard>
 
@@ -267,19 +263,19 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
 
           <MetricCard
             title="Net Revenue Retention (NRR)"
-            value={`${nrr}%`}
-            change="Benchmark: >105%"
-            changeType={nrr >= 100 ? 'positive' : 'negative'}
-            subtitle="Account expansion momentum"
+            value={activeCustomers.length > 0 ? `${nrr}%` : '0%'}
+            change={activeCustomers.length > 0 ? 'Benchmark: >105%' : 'No active revenue'}
+            changeType={activeCustomers.length > 0 ? (nrr >= 100 ? 'positive' : 'negative') : 'neutral'}
+            subtitle={activeCustomers.length > 0 ? 'Account expansion momentum' : 'No active accounts'}
             icon={<TrendingUp size={18} />}
           />
 
           <MetricCard
             title="Active Customer Retention"
-            value={`${customerRetentionRate.toFixed(1)}%`}
-            change={churnRate <= 3 ? 'Healthy Churn' : 'Elevated Churn'}
-            changeType={churnRate <= 3 ? 'positive' : 'negative'}
-            subtitle={`${churnedCustomers.length} total churned`}
+            value={totalCustomerCount > 0 ? `${customerRetentionRate.toFixed(1)}%` : '0%'}
+            change={totalCustomerCount > 0 ? (churnRate <= 3 ? 'Healthy Churn' : 'Elevated Churn') : 'No customer data'}
+            changeType={totalCustomerCount > 0 ? (churnRate <= 3 ? 'positive' : 'negative') : 'neutral'}
+            subtitle={totalCustomerCount > 0 ? `${churnedCustomers.length} total churned` : '0 total churned'}
             icon={<Users size={18} />}
           />
         </div>
@@ -317,12 +313,12 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                   fontSize: '11px',
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  backgroundColor: ltvCacRatio >= 3 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                  color: ltvCacRatio >= 3 ? '#34d399' : '#fbbf24',
+                  backgroundColor: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)') : 'rgba(100, 116, 139, 0.15)',
+                  color: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? '#34d399' : '#fbbf24') : 'var(--text-dim)',
                   fontWeight: 700,
                 }}
               >
-                {ltvCacRatio >= 3 ? 'Top Tier (3x+)' : 'Improving'}
+                {ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'Top Tier (3x+)' : 'Improving') : 'No Data'}
               </span>
             </div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
@@ -344,16 +340,16 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                   fontSize: '11px',
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  backgroundColor: cacPaybackMonths <= 12 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                  color: cacPaybackMonths <= 12 ? '#34d399' : '#fbbf24',
+                  backgroundColor: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                  color: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? '#34d399' : 'var(--text-dim)',
                   fontWeight: 700,
                 }}
               >
-                {cacPaybackMonths <= 12 ? '< 12 Months' : 'Monitor'}
+                {cacPaybackMonths > 0 ? (cacPaybackMonths <= 12 ? '< 12 Months' : 'Monitor') : 'No Spend'}
               </span>
             </div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
-              {cacPaybackMonths > 0 ? `${cacPaybackMonths} mo` : 'Instant'}
+              {cacPaybackMonths > 0 ? `${cacPaybackMonths} mo` : 'N/A'}
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
               Gross Profit per client: <strong>{formatCurrency(Math.round(monthlyGrossProfitPerUser), currency)}/mo</strong>
@@ -371,12 +367,12 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                   fontSize: '11px',
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  backgroundColor: grossMarginPct >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                  color: grossMarginPct >= 80 ? '#34d399' : '#fbbf24',
+                  backgroundColor: monthlyRevenue > 0 && grossMarginPct >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                  color: monthlyRevenue > 0 && grossMarginPct >= 80 ? '#34d399' : 'var(--text-dim)',
                   fontWeight: 700,
                 }}
               >
-                {grossMarginPct >= 80 ? 'Software Standard' : 'Services'}
+                {monthlyRevenue > 0 ? (grossMarginPct >= 80 ? 'Software Standard' : 'Services') : 'Zero Revenue'}
               </span>
             </div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
@@ -398,19 +394,19 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                   fontSize: '11px',
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  backgroundColor: ruleOf40Score >= 40 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-                  color: ruleOf40Score >= 40 ? '#34d399' : '#818cf8',
+                  backgroundColor: monthlyRevenue > 0 && ruleOf40Score >= 40 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                  color: monthlyRevenue > 0 && ruleOf40Score >= 40 ? '#34d399' : 'var(--text-dim)',
                   fontWeight: 700,
                 }}
               >
-                {ruleOf40Score >= 40 ? 'Elite (40%+)' : 'Growth Phase'}
+                {monthlyRevenue > 0 ? (ruleOf40Score >= 40 ? 'Elite (40%+)' : 'Growth Phase') : 'Zero Revenue'}
               </span>
             </div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
               {ruleOf40Score}%
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
-              Growth Rate (~{estimatedGrowthPct}%) + Profit Margin ({profitMarginPct}%)
+              {monthlyRevenue > 0 ? `Growth Rate (~${estimatedGrowthPct}%) + Profit Margin (${profitMarginPct}%)` : 'Awaiting revenue data'}
             </div>
           </SpotlightCard>
         </div>

@@ -16,9 +16,11 @@ import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createProject, updateProject, deleteProject } from '../db/services/taskProjectService';
 import { formatDate } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Project, ProjectStatus, Priority } from '../types';
 
 export const ProjectsPage: React.FC = () => {
+  const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 

@@ -19,9 +19,11 @@ import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createTask, updateTask, deleteTask } from '../db/services/taskProjectService';
 import { formatDate } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Task, TaskStatus, Priority } from '../types';
 
 export const TasksPage: React.FC = () => {
+  const { showToast } = useToast();
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
   const [searchQuery, setSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
@@ -133,6 +135,7 @@ export const TasksPage: React.FC = () => {
         projectName: proj?.name || undefined,
         tags: parsedTags,
       });
+      showToast('success', 'Task Updated', `Task "${title}" saved successfully.`);
     } else {
       await createTask({
         title,
@@ -145,6 +148,7 @@ export const TasksPage: React.FC = () => {
         projectName: proj?.name || undefined,
         tags: parsedTags,
       });
+      showToast('success', 'Task Created', `Task "${title}" added to queue.`);
     }
 
     setIsModalOpen(false);
@@ -153,6 +157,7 @@ export const TasksPage: React.FC = () => {
   const handleDeleteTask = async (id: string) => {
     if (confirm('Delete this task?')) {
       await deleteTask(id);
+      showToast('info', 'Task Deleted', 'Task removed from queue.');
     }
   };
 

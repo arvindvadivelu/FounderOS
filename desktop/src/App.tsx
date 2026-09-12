@@ -24,6 +24,7 @@ import { CashPage } from './pages/management/CashPage';
 import { BalanceSheetPage } from './pages/management/BalanceSheetPage';
 import { UploadsPage } from './pages/management/UploadsPage';
 import { initFreshDatabase } from './db/seed';
+import { ToastProvider } from './components/common/Toast';
 
 export function App() {
   // Simple hash/state based client-side routing
@@ -129,15 +130,17 @@ export function App() {
   };
 
   return (
-    <AppShell
-      currentRoute={currentRoute}
-      onNavigate={handleNavigate}
-      onRequestCreateTask={() => handleNavigate('/tasks')}
-      onRequestCreateCustomer={() => handleNavigate('/customers')}
-      onRequestCreateExpense={() => handleNavigate('/finance')}
-    >
-      {renderCurrentPage()}
-    </AppShell>
+    <ToastProvider>
+      <AppShell
+        currentRoute={currentRoute}
+        onNavigate={handleNavigate}
+        onRequestCreateTask={() => handleNavigate('/tasks')}
+        onRequestCreateCustomer={() => handleNavigate('/customers')}
+        onRequestCreateExpense={() => handleNavigate('/finance')}
+      >
+        {renderCurrentPage()}
+      </AppShell>
+    </ToastProvider>
   );
 }
 
