@@ -29,9 +29,11 @@ import {
   getAllBankAccounts,
 } from '../../db/services/managementService';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useToast } from '../../components/common/Toast';
 import type { BalanceSheetItem, BalanceSheetCategory, Currency } from '../../types';
 
 export const BalanceSheetPage: React.FC = () => {
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<'all' | 'assets' | 'liabilities'>('all');
 
   // Modal State
@@ -122,6 +124,7 @@ export const BalanceSheetPage: React.FC = () => {
         creditorOrVendor: fCreditor || undefined,
         notes: fNotes || undefined,
       });
+      showToast('success', 'Balance Item Updated', `Entry "${fName}" updated successfully.`);
     } else {
       await createBalanceSheetItem({
         name: fName,
@@ -135,6 +138,7 @@ export const BalanceSheetPage: React.FC = () => {
         creditorOrVendor: fCreditor || undefined,
         notes: fNotes || undefined,
       });
+      showToast('success', 'Balance Item Added', `Entry "${fName}" recorded on balance sheet.`);
     }
 
     setIsModalOpen(false);
@@ -143,6 +147,7 @@ export const BalanceSheetPage: React.FC = () => {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Delete balance sheet entry "${name}"?`)) {
       await deleteBalanceSheetItem(id);
+      showToast('info', 'Balance Item Deleted', `Entry "${name}" removed.`);
     }
   };
 

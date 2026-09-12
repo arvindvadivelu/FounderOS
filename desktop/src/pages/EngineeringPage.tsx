@@ -17,9 +17,11 @@ import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createBug, updateBug, deleteBug } from '../db/services/productEngineeringService';
 import { formatDate } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Bug, BugSeverity, BugStatus, Priority } from '../types';
 
 export const EngineeringPage: React.FC = () => {
+  const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBug, setEditingBug] = useState<Bug | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,6 +95,7 @@ export const EngineeringPage: React.FC = () => {
         environment,
         projectId: projectId || undefined,
       });
+      showToast('success', 'Bug Updated', `Bug report "${title}" updated.`);
     } else {
       await createBug({
         title,
@@ -103,6 +106,7 @@ export const EngineeringPage: React.FC = () => {
         environment,
         projectId: projectId || undefined,
       });
+      showToast('success', 'Bug Reported', `Bug "${title}" logged successfully.`);
     }
 
     setIsModalOpen(false);
@@ -111,6 +115,7 @@ export const EngineeringPage: React.FC = () => {
   const handleDeleteBug = async (id: string) => {
     if (confirm('Delete this bug report?')) {
       await deleteBug(id);
+      showToast('info', 'Bug Deleted', 'Bug report removed.');
     }
   };
 

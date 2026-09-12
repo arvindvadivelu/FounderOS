@@ -44,12 +44,14 @@ import type {
   SyncLog,
   IntegrationConfig,
 } from '../types';
+import { useToast } from '../components/common/Toast';
 
 interface IntegrationsPageProps {
   onNavigate?: (route: string) => void;
 }
 
 export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }) => {
+  const { showToast } = useToast();
   const [selectedIntegration, setSelectedIntegration] = useState<IntegrationRecord | null>(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [isItemsDrawerOpen, setIsItemsDrawerOpen] = useState(false);
@@ -151,9 +153,10 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
         await syncIntegration(selectedIntegration.id, { force: true });
       }
 
+      showToast('success', 'Integration Connected', `Settings saved for ${selectedIntegration.name}.`);
       setIsConfigModalOpen(false);
     } catch (err: any) {
-      alert(`Failed to save integration: ${err?.message}`);
+      showToast('error', 'Integration Error', err?.message || 'Failed to save integration configuration.');
     } finally {
       setIsSaving(false);
     }
@@ -164,7 +167,9 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
     try {
       const res = await syncIntegration(id, { force: true });
       if (!res.success) {
-        alert(`Sync warning: ${res.error}`);
+        showToast('error', 'Sync Warning', res.error || 'Sync failed.');
+      } else {
+        showToast('success', 'Sync Completed', 'Records synchronized successfully.');
       }
     } finally {
       setActiveSyncId(null);

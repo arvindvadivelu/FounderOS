@@ -29,9 +29,11 @@ import {
   deleteUploadedFile,
 } from '../../db/services/managementService';
 import { formatDate } from '../../utils/formatters';
+import { useToast } from '../../components/common/Toast';
 import type { UploadedFile, UploadCategory } from '../../types';
 
 export const UploadsPage: React.FC = () => {
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,11 +79,12 @@ export const UploadsPage: React.FC = () => {
     setIsUploading(true);
     try {
       await createUploadedFile(selectedFile, fCategory, fDescription);
+      showToast('success', 'Document Uploaded', `Document "${selectedFile.name}" stored securely.`);
       setIsUploadModalOpen(false);
       setSelectedFile(null);
       setFDescription('');
     } catch (err: any) {
-      alert(`Upload failed: ${err.message}`);
+      showToast('error', 'Upload Failed', err?.message || 'Failed to upload document.');
     } finally {
       setIsUploading(false);
     }
@@ -99,6 +102,7 @@ export const UploadsPage: React.FC = () => {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Permanently delete document "${name}" from local storage?`)) {
       await deleteUploadedFile(id);
+      showToast('info', 'Document Removed', `File "${name}" removed from vault.`);
     }
   };
 

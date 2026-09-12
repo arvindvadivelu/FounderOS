@@ -79,6 +79,7 @@ export const ProjectsPage: React.FC = () => {
         targetDate: targetDate || undefined,
         progress: Number(progress),
       });
+      showToast('success', 'Project Updated', `Project "${name}" updated successfully.`);
     } else {
       await createProject({
         name,
@@ -89,6 +90,7 @@ export const ProjectsPage: React.FC = () => {
         targetDate: targetDate || undefined,
         progress: Number(progress),
       });
+      showToast('success', 'Project Created', `Project "${name}" created.`);
     }
 
     setIsModalOpen(false);
@@ -97,6 +99,7 @@ export const ProjectsPage: React.FC = () => {
   const handleDeleteProject = async (id: string) => {
     if (confirm('Delete this project?')) {
       await deleteProject(id);
+      showToast('info', 'Project Deleted', 'Project removed.');
     }
   };
 

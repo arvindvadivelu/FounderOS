@@ -30,9 +30,11 @@ import {
   getCashPositionSummary,
 } from '../../db/services/managementService';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useToast } from '../../components/common/Toast';
 import type { BankAccount, BankAccountType, Currency } from '../../types';
 
 export const CashPage: React.FC = () => {
+  const { showToast } = useToast();
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<BankAccount | null>(null);
@@ -114,6 +116,7 @@ export const CashPage: React.FC = () => {
         notes: fNotes || undefined,
         lastReconciledAt: new Date().toISOString(),
       });
+      showToast('success', 'Bank Account Updated', `Account "${fName}" updated successfully.`);
     } else {
       await createBankAccount({
         accountName: fName,
@@ -127,6 +130,7 @@ export const CashPage: React.FC = () => {
         notes: fNotes || undefined,
         lastReconciledAt: new Date().toISOString(),
       });
+      showToast('success', 'Bank Account Added', `Account "${fName}" saved.`);
     }
 
     setIsModalOpen(false);
@@ -135,6 +139,7 @@ export const CashPage: React.FC = () => {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Remove bank account "${name}"?`)) {
       await deleteBankAccount(id);
+      showToast('info', 'Bank Account Removed', `Account "${name}" deleted.`);
     }
   };
 

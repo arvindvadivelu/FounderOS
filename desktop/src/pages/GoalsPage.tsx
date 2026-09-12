@@ -17,9 +17,11 @@ import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createGoal, updateGoal, deleteGoal } from '../db/services/goalNoteService';
 import { formatDate } from '../utils/formatters';
+import { useToast } from '../components/common/Toast';
 import type { Goal } from '../types';
 
 export const GoalsPage: React.FC = () => {
+  const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
 
@@ -83,6 +85,7 @@ export const GoalsPage: React.FC = () => {
         status: isNowAchieved ? 'achieved' : status,
         deadline: deadline || undefined,
       });
+      showToast('success', 'Goal Updated', `Milestone "${title}" updated.`);
     } else {
       await createGoal({
         title,
@@ -94,6 +97,7 @@ export const GoalsPage: React.FC = () => {
         status: isNowAchieved ? 'achieved' : status,
         deadline: deadline || undefined,
       });
+      showToast('success', 'Goal Created', `Strategic goal "${title}" set.`);
     }
 
     if (isNowAchieved) {
@@ -106,6 +110,7 @@ export const GoalsPage: React.FC = () => {
   const handleDeleteGoal = async (id: string) => {
     if (confirm('Delete this goal?')) {
       await deleteGoal(id);
+      showToast('info', 'Goal Deleted', 'Milestone removed.');
     }
   };
 

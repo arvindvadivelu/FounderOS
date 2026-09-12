@@ -25,9 +25,11 @@ import {
   getAllEmployees,
 } from '../../db/services/managementService';
 import { formatCurrency } from '../../utils/formatters';
+import { useToast } from '../../components/common/Toast';
 import type { Department, Employee, Currency } from '../../types';
 
 export const DepartmentsPage: React.FC = () => {
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
 
   // Modal State
@@ -79,6 +81,7 @@ export const DepartmentsPage: React.FC = () => {
         headEmployeeName: fHeadName || undefined,
         budget: Number(fBudget),
       });
+      showToast('success', 'Department Updated', `Department "${fName}" updated successfully.`);
     } else {
       await createDepartment({
         name: fName,
@@ -87,6 +90,7 @@ export const DepartmentsPage: React.FC = () => {
         budget: Number(fBudget),
         currency,
       });
+      showToast('success', 'Department Created', `Department "${fName}" added.`);
     }
 
     setIsModalOpen(false);
@@ -95,6 +99,7 @@ export const DepartmentsPage: React.FC = () => {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Delete department "${name}"? Assigned employees will become unassigned.`)) {
       await deleteDepartment(id);
+      showToast('info', 'Department Deleted', `Department "${name}" removed.`);
     }
   };
 

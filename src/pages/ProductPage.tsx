@@ -14,9 +14,11 @@ import { Badge, getStatusBadgeVariant } from '../components/common/Badge';
 import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createFeature, updateFeature, deleteFeature } from '../db/services/productEngineeringService';
+import { useToast } from '../components/common/Toast';
 import type { Feature, FeatureStatus, Priority } from '../types';
 
 export const ProductPage: React.FC = () => {
+  const { showToast } = useToast();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFeature, setEditingFeature] = useState<Feature | null>(null);
 
@@ -78,6 +80,7 @@ export const ProductPage: React.FC = () => {
         effort,
         projectId: projectId || undefined,
       });
+      showToast('success', 'Feature Updated', `Feature "${title}" updated successfully.`);
     } else {
       await createFeature({
         title,
@@ -88,6 +91,7 @@ export const ProductPage: React.FC = () => {
         effort,
         projectId: projectId || undefined,
       });
+      showToast('success', 'Feature Created', `Feature "${title}" added to roadmap.`);
     }
 
     setIsModalOpen(false);
@@ -96,6 +100,7 @@ export const ProductPage: React.FC = () => {
   const handleDeleteFeature = async (id: string) => {
     if (confirm('Delete this feature item?')) {
       await deleteFeature(id);
+      showToast('info', 'Feature Deleted', 'Feature removed from roadmap.');
     }
   };
 

@@ -32,9 +32,11 @@ import {
   getAllDepartments,
 } from '../../db/services/managementService';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useToast } from '../../components/common/Toast';
 import type { Employee, EmploymentType, EmployeeStatus, Currency } from '../../types';
 
 export const EmployeesPage: React.FC = () => {
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [deptFilter, setDeptFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -132,6 +134,7 @@ export const EmployeesPage: React.FC = () => {
         startDate: fStartDate,
         notes: fNotes || undefined,
       });
+      showToast('success', 'Employee Updated', `Profile for "${fName}" updated.`);
     } else {
       await createEmployee({
         name: fName,
@@ -148,6 +151,7 @@ export const EmployeesPage: React.FC = () => {
         startDate: fStartDate,
         notes: fNotes || undefined,
       });
+      showToast('success', 'Employee Added', `Employee "${fName}" added.`);
     }
 
     setIsModalOpen(false);
@@ -156,6 +160,7 @@ export const EmployeesPage: React.FC = () => {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Remove employee record for "${name}"?`)) {
       await deleteEmployee(id);
+      showToast('info', 'Employee Removed', `Record for "${name}" deleted.`);
     }
   };
 
