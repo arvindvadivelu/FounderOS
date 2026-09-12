@@ -4,10 +4,8 @@ node_modules/
 # Production build
 dist/
 dist-ssr/
-desktop/node_modules/
-desktop/dist/
-desktop/dist-electron/
-desktop/release/
+dist-electron/
+release/
 
 # Environment variables & secrets
 .env
