@@ -33,7 +33,7 @@ import {
 import { saveCompany, updateSettings } from '../db/services/companyService';
 import { testProviderConnection, type TestConnectionResult } from '../ai/providerClient';
 import { exportAllData, downloadJsonFile, importDataFromPayload } from '../utils/exportImport';
-import { seedDemoData, clearAllCompanyData } from '../db/seed';
+import { clearAllCompanyData } from '../db/seed';
 import { formatDate } from '../utils/formatters';
 import type { AIProvider, AIProviderType, Currency } from '../types';
 
@@ -237,13 +237,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       alert(`Import error: ${err.message}`);
     } finally {
       e.target.value = '';
-    }
-  };
-
-  const handleLoadDemoData = async () => {
-    if (confirm('Load realistic demo company data (Solvst AI)? This will replace current local records.')) {
-      await seedDemoData();
-      alert('Demo company data loaded!');
     }
   };
 
@@ -529,14 +522,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
                   style={{ display: 'none' }}
                 />
               </label>
-
-              <button
-                type="button"
-                onClick={handleLoadDemoData}
-                className="btn-secondary"
-              >
-                <Sparkles size={15} /> Load Demo Company Data
-              </button>
             </div>
           </SpotlightCard>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Minus, Square, Copy, X } from 'lucide-react';
 import { useDesktopBridge } from './useDesktopBridge';
+import founderosLogo from '../assets/founderos-logo.jpg';
 
 export const DesktopTitlebar: React.FC = () => {
   const { isDesktop, isMaximized, minimize, maximize, close } = useDesktopBridge();
@@ -28,7 +29,7 @@ export const DesktopTitlebar: React.FC = () => {
       {/* Left: App Emblem & Title */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <img
-          src="/founderos-logo.jpg"
+          src={founderosLogo}
           alt="Logo"
           style={{ width: '18px', height: '18px', borderRadius: '4px', objectFit: 'cover' }}
         />

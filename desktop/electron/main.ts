@@ -19,9 +19,22 @@ if (!gotTheLock) {
   });
 }
 
+function getAppLogoPath(): string {
+  const candidates = [
+    path.join(__dirname, '../dist/founderos-logo.jpg'),
+    path.join(__dirname, '../public/founderos-logo.jpg'),
+    path.join(app.getAppPath(), 'dist/founderos-logo.jpg'),
+    path.join(app.getAppPath(), 'public/founderos-logo.jpg'),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return '';
+}
+
 function createWindow() {
-  const iconPath = path.join(__dirname, '../public/founderos-logo.jpg');
-  const appIcon = fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : undefined;
+  const iconPath = getAppLogoPath();
+  const appIcon = iconPath ? nativeImage.createFromPath(iconPath) : undefined;
 
   mainWindow = new BrowserWindow({
     width: 1440,
@@ -72,8 +85,8 @@ function createWindow() {
 }
 
 function createTray() {
-  const iconPath = path.join(__dirname, '../public/founderos-logo.jpg');
-  if (!fs.existsSync(iconPath)) return;
+  const iconPath = getAppLogoPath();
+  if (!iconPath) return;
 
   const trayImage = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
   tray = new Tray(trayImage);
@@ -163,11 +176,11 @@ ipcMain.handle('window-is-maximized', () => {
 });
 
 ipcMain.on('show-notification', (_event, { title, body }) => {
-  const iconPath = path.join(__dirname, '../public/founderos-logo.jpg');
+  const iconPath = getAppLogoPath();
   new Notification({
     title: title || 'FounderOS',
     body: body || '',
-    icon: fs.existsSync(iconPath) ? iconPath : undefined,
+    icon: iconPath || undefined,
   }).show();
 });
 

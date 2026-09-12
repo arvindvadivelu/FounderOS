@@ -25,8 +25,8 @@ import {
   Sun,
   Bot,
   Zap,
-  Sliders,
 } from 'lucide-react';
+import founderosLogo from '../../assets/founderos-logo.jpg';
 import type { Company } from '../../types';
 
 interface SidebarProps {
@@ -192,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }}
             >
               <img
-                src="/founderos-logo.jpg"
+                src={founderosLogo}
                 alt="FounderOS"
                 style={{
                   width: '100%',
