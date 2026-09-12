@@ -30,13 +30,19 @@ import { CustomerIntelligencePage } from './pages/CustomerIntelligencePage';
 import { ProductIntelligencePage } from './pages/ProductIntelligencePage';
 import { AutonomousOperationsPage } from './pages/AutonomousOperationsPage';
 import { V2ComingSoonPage } from './pages/V2ComingSoonPage';
+import { LandingPage } from './pages/LandingPage';
 import { initFreshDatabase } from './db/seed';
 import { ToastProvider } from './components/common/Toast';
 
 export function App() {
+  const isDesktop = typeof window !== 'undefined' && Boolean((window as any).desktopBridge?.isDesktop);
+
   // Simple hash/state based client-side routing
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
-    return window.location.hash ? window.location.hash.slice(1) : '/';
+    if (window.location.hash) {
+      return window.location.hash.slice(1);
+    }
+    return isDesktop ? '/app' : '/';
   });
 
   // Ensure fresh database initialization without seeding demo company records
@@ -62,11 +68,31 @@ export function App() {
     setCurrentRoute(route);
   };
 
+  const handleDownloadSetup = () => {
+    const link = document.createElement('a');
+    link.href = '/downloads/FounderOS-Setup.exe';
+    link.download = 'FounderOS-Setup.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadPortable = () => {
+    const link = document.createElement('a');
+    link.href = '/downloads/FounderOS-Portable.exe';
+    link.download = 'FounderOS-Portable.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const renderCurrentPage = () => {
     const route = currentRoute.split('?')[0];
 
     switch (route) {
       case '/':
+      case '/app':
+      case '/overview':
         return (
           <OverviewPage
             onNavigate={handleNavigate}
@@ -149,6 +175,21 @@ export function App() {
         );
     }
   };
+
+  const route = currentRoute.split('?')[0];
+  const isLanding = route === '/landing' || (!isDesktop && (route === '/' || route === ''));
+
+  if (isLanding) {
+    return (
+      <ToastProvider>
+        <LandingPage
+          onLaunchApp={() => handleNavigate('/app')}
+          onDownloadSetup={handleDownloadSetup}
+          onDownloadPortable={handleDownloadPortable}
+        />
+      </ToastProvider>
+    );
+  }
 
   return (
     <ToastProvider>

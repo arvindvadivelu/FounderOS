@@ -25,6 +25,7 @@ import {
   Sun,
   Bot,
   Zap,
+  Globe,
 } from 'lucide-react';
 import founderosLogo from '../../assets/founderos-logo.jpg';
 import type { Company } from '../../types';
@@ -117,6 +118,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: '/health', label: 'Data Health', icon: <Activity size={16} /> },
         { id: '/settings?tab=providers', label: 'AI Providers', icon: <Cpu size={16} /> },
         { id: '/settings', label: 'Settings', icon: <Settings size={16} /> },
+        { id: '/landing', label: 'Landing Page', icon: <Globe size={16} color="#38bdf8" /> },
       ],
     },
   ];
@@ -255,7 +257,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 {sec.items.map((item) => {
-                  const isActive = currentRoute === item.id;
+                  const isActive = currentRoute === item.id || (item.id === '/' && currentRoute === '/app') || (item.id === '/app' && currentRoute === '/');
                   const isDisabled = Boolean(item.disabled);
                   return (
                     <button

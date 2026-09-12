@@ -9,6 +9,7 @@ import {
   Loader2,
   MonitorDown,
   Check,
+  Globe,
 } from 'lucide-react';
 import { useAIChatState } from '../../ai/aiChatService';
 import type { Company } from '../../types';
@@ -19,6 +20,7 @@ interface TopbarProps {
   onOpenAiCopilot: () => void;
   onNavigateToAi?: () => void;
   onGenerateBriefing: () => void;
+  onNavigateToLanding?: () => void;
   company: Company | null;
   currentRoute: string;
 }
@@ -29,6 +31,7 @@ export const Topbar: React.FC<TopbarProps> = ({
   onOpenAiCopilot,
   onNavigateToAi,
   onGenerateBriefing,
+  onNavigateToLanding,
   currentRoute,
 }) => {
   const { anyActive, status: aiStatus } = useAIChatState();
@@ -280,6 +283,26 @@ export const Topbar: React.FC<TopbarProps> = ({
             >
               EXE
             </span>
+          </button>
+        )}
+
+        {/* Landing Page Link */}
+        {onNavigateToLanding && (
+          <button
+            type="button"
+            onClick={onNavigateToLanding}
+            className="btn-secondary"
+            style={{
+              padding: '6px 12px',
+              fontSize: '12px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            title="View FounderOS Product Landing Page"
+          >
+            <Globe size={13} color="#38bdf8" />
+            <span>Landing Page</span>
           </button>
         )}
 

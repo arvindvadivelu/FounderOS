@@ -116,6 +116,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           onOpenAiCopilot={() => setIsAiCopilotOpen(true)}
           onNavigateToAi={() => onNavigate('/ai')}
+          onNavigateToLanding={() => onNavigate('/landing')}
           onGenerateBriefing={() => {
             setIsAiCopilotOpen(true);
           }}
