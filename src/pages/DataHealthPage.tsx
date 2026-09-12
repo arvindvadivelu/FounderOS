@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { db } from '../db';
 import { SpotlightCard } from '../components/common/SpotlightCard';
-import { Badge } from '../components/common/Badge';
+import { MetricCard } from '../components/common/MetricCard';
 import { getDataHealthReport, fixDataAnomaly } from '../db/services/dataHealthService';
 import { exportAllData, downloadJsonFile, importDataFromPayload } from '../utils/exportImport';
 import type { DataHealthReport, DataAnomaly } from '../types';
@@ -118,15 +118,9 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
   };
 
   const getStatusColor = (st?: string) => {
-    if (st === 'healthy') return '#34d399';
-    if (st === 'warning') return '#fbbf24';
-    return '#fb7185';
-  };
-
-  const getStatusBg = (st?: string) => {
-    if (st === 'healthy') return 'rgba(16, 185, 129, 0.15)';
-    if (st === 'warning') return 'rgba(245, 158, 11, 0.15)';
-    return 'rgba(244, 63, 94, 0.15)';
+    if (st === 'healthy') return '#10b981';
+    if (st === 'warning') return '#f59e0b';
+    return '#ef4444';
   };
 
   return (
@@ -140,83 +134,222 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
         style={{ display: 'none' }}
       />
 
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '10px', letterSpacing: '-0.035em' }}>
-              <Activity size={22} color="var(--brand-accent)" /> Data Health & Diagnostics
-            </h2>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            SYSTEM RELIABILITY • LOCAL STORAGE INTEGRITY & DIAGNOSTICS
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <h1
+              style={{
+                fontSize: 'clamp(24px, 3vw, 32px)',
+                fontWeight: 800,
+                color: '#f8fafc',
+                letterSpacing: '-0.04em',
+                margin: 0,
+              }}
+            >
+              Data Health & Diagnostics
+            </h1>
             {report && (
               <span
                 style={{
                   fontSize: '11px',
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.8px',
-                  padding: '3px 10px',
-                  borderRadius: '10px',
-                  backgroundColor: getStatusBg(report.status),
+                  letterSpacing: '0.04em',
+                  padding: '4px 10px',
+                  borderRadius: '10px', // DESIGN.md --radius-small: 10px
+                  backgroundColor: `rgba(${
+                    report.status === 'healthy' ? '16, 185, 129' : report.status === 'warning' ? '245, 158, 11' : '239, 68, 68'
+                  }, 0.12)`,
                   color: getStatusColor(report.status),
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '5px',
-                  border: `1px solid ${getStatusColor(report.status)}40`,
+                  gap: '6px',
+                  border: `1px solid rgba(${
+                    report.status === 'healthy' ? '16, 185, 129' : report.status === 'warning' ? '245, 158, 11' : '239, 68, 68'
+                  }, 0.28)`,
                 }}
               >
-                {report.status === 'healthy' && <ShieldCheck size={13} />}
-                {report.status === 'warning' && <AlertTriangle size={13} />}
-                {report.status === 'error' && <XCircle size={13} />}
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: getStatusColor(report.status),
+                    boxShadow: `0 0 8px ${getStatusColor(report.status)}`,
+                  }}
+                />
                 {report.status}
               </span>
             )}
           </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '680px' }}>
             Real-time IndexedDB schema verification, entity record audits, orphan reference detection, and backup health.
           </p>
         </div>
 
-        {/* Top Actions */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <button
-            type="button"
-            onClick={runScan}
-            disabled={isScanning}
-            className="btn-secondary"
-            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
-          >
-            <RefreshCw size={14} className={isScanning ? 'animate-spin' : ''} />
-            <span>{isScanning ? 'Auditing DB...' : 'Run Health Check'}</span>
-          </button>
-
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             onClick={handleExport}
-            className="btn-secondary"
-            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 18px',
+              borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#f8fafc',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            }}
           >
-            <Download size={14} /> Export Backup
+            <Download size={15} color="#94a3b8" />
+            <span>Export Backup</span>
           </button>
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="btn-secondary"
-            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 18px',
+              borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#f8fafc',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            }}
           >
-            <Upload size={14} /> Restore
+            <Upload size={15} color="#94a3b8" />
+            <span>Restore</span>
           </button>
 
           {onNavigate && (
             <button
               type="button"
               onClick={() => onNavigate('/settings')}
-              className="btn-primary"
-              style={{ padding: '9px 18px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '10px 18px',
+                borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+                backgroundColor: 'rgba(0, 80, 255, 0.1)',
+                border: '1px solid rgba(0, 80, 255, 0.25)',
+                color: '#38bdf8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 80, 255, 0.18)';
+                e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 80, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.25)';
+              }}
             >
-              Configure DB <ArrowUpRight size={14} />
+              <span>Configure DB</span>
+              <ArrowUpRight size={14} />
             </button>
           )}
+
+          {/* Primary CTA with Action Indicator Dot */}
+          <button
+            type="button"
+            onClick={runScan}
+            disabled={isScanning}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 22px',
+              borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+              backgroundColor: '#0050FF',
+              border: 'none',
+              color: '#ffffff',
+              fontSize: '13.5px',
+              fontWeight: 700,
+              cursor: isScanning ? 'not-allowed' : 'pointer',
+              opacity: isScanning ? 0.7 : 1,
+              boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (!isScanning) e.currentTarget.style.backgroundColor = '#1a66ff';
+            }}
+            onMouseLeave={(e) => {
+              if (!isScanning) e.currentTarget.style.backgroundColor = '#0050FF';
+            }}
+          >
+            <RefreshCw size={15} className={isScanning ? 'animate-spin' : ''} />
+            <span>{isScanning ? 'Auditing DB...' : 'Run Health Check'}</span>
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                opacity: 0.9,
+              }}
+            />
+          </button>
         </div>
       </div>
 
@@ -224,18 +357,19 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
       {actionMessage && (
         <div
           style={{
-            padding: '12px 16px',
-            borderRadius: 'var(--radius-md)',
-            backgroundColor: actionMessage.type === 'success' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
-            border: `1px solid ${actionMessage.type === 'success' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
-            color: actionMessage.type === 'success' ? '#34d399' : '#fb7185',
-            fontSize: '13px',
+            padding: '14px 18px',
+            borderRadius: '16px', // DESIGN.md inner rounded container
+            backgroundColor: actionMessage.type === 'success' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            border: `1px solid ${actionMessage.type === 'success' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
+            color: actionMessage.type === 'success' ? '#10b981' : '#ef4444',
+            fontSize: '13.5px',
+            fontWeight: 500,
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '10px',
           }}
         >
-          {actionMessage.type === 'success' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
+          {actionMessage.type === 'success' ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
           <span>{actionMessage.text}</span>
         </div>
       )}
@@ -248,95 +382,73 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
           gap: '16px',
         }}
       >
-        {/* Card 1: Health Score */}
-        <SpotlightCard style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-              Integrity Score
-            </span>
-            <Activity size={16} color="var(--brand-accent)" />
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: getStatusColor(report?.status) }}>
-            {report ? `${report.healthScore}/100` : '...'}
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Status: <strong style={{ color: getStatusColor(report?.status), textTransform: 'capitalize' }}>{report?.status || 'Scanning'}</strong>
-          </div>
-        </SpotlightCard>
+        <MetricCard
+          title="Integrity Score"
+          value={report ? `${report.healthScore}/100` : '...'}
+          subtitle={`Status: ${report?.status || 'Scanning'}`}
+          icon={<Activity size={18} color={getStatusColor(report?.status)} />}
+        />
 
-        {/* Card 2: Total Records */}
-        <SpotlightCard style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-              Total Records
-            </span>
-            <Database size={16} color="#38bdf8" />
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-main)' }}>
-            {report ? report.totalRecords.toLocaleString() : '...'}
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Across <strong>21 IndexedDB tables</strong>
-          </div>
-        </SpotlightCard>
+        <MetricCard
+          title="Total Records"
+          value={report ? report.totalRecords.toLocaleString() : '...'}
+          subtitle="Across 21 IndexedDB tables"
+          icon={<Database size={18} color="#38bdf8" />}
+        />
 
-        {/* Card 3: Storage Usage */}
-        <SpotlightCard style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-              Storage Estimate
-            </span>
-            <HardDrive size={16} color="#a855f7" />
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-main)' }}>
-            {report?.storage ? formatBytes(report.storage.usageBytes) : '< 5 MB'}
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            {report?.storage ? `${report.storage.usagePercent}% of quota (${formatBytes(report.storage.quotaBytes)})` : 'Local Origin Storage Active'}
-          </div>
-        </SpotlightCard>
+        <MetricCard
+          title="Storage Usage"
+          value={report?.storage ? formatBytes(report.storage.usageBytes) : '< 5 MB'}
+          subtitle={report?.storage ? `${report.storage.usagePercent}% quota (${formatBytes(report.storage.quotaBytes)})` : 'Local Origin Storage Active'}
+          icon={<HardDrive size={18} color="#a855f7" />}
+        />
 
-        {/* Card 4: Backup Status */}
-        <SpotlightCard style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-              Last Backup
-            </span>
-            <ShieldCheck size={16} color="#34d399" />
-          </div>
-          <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginTop: '6px' }}>
-            {report?.lastBackupAt ? new Date(report.lastBackupAt).toLocaleDateString() : 'No Backup Yet'}
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            {report?.lastBackupAt ? new Date(report.lastBackupAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Export recommended'}
-          </div>
-        </SpotlightCard>
+        <MetricCard
+          title="Last Backup"
+          value={report?.lastBackupAt ? new Date(report.lastBackupAt).toLocaleDateString() : 'No Backup Yet'}
+          subtitle={report?.lastBackupAt ? new Date(report.lastBackupAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Export recommended'}
+          icon={<ShieldCheck size={18} color="#10b981" />}
+        />
       </div>
 
       {/* Main Grid: Data Integrity Audit Log & Engine Specs */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }} className="health-grid-layout">
         {/* Left Column: Integrity Checks & Anomalies */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <SpotlightCard style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>
+                <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', margin: '0 0 4px 0' }}>
                   Data Integrity & Anomaly Audit
                 </h3>
-                <p style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
+                <p style={{ fontSize: '12.5px', color: '#94a3b8', margin: 0 }}>
                   Deep inspection of foreign-key links, duplicate keys, missing required fields, and invariant rules.
                 </p>
               </div>
               <span
                 style={{
                   fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: report?.anomalies.length === 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)',
-                  color: report?.anomalies.length === 0 ? '#34d399' : '#fb7185',
+                  fontWeight: 700,
+                  letterSpacing: '0.02em',
+                  padding: '4px 10px',
+                  borderRadius: '10px', // DESIGN.md --radius-small: 10px
+                  backgroundColor: report?.anomalies.length === 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                  color: report?.anomalies.length === 0 ? '#10b981' : '#ef4444',
+                  border: `1px solid ${report?.anomalies.length === 0 ? 'rgba(16, 185, 129, 0.28)' : 'rgba(239, 68, 68, 0.28)'}`,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
                 }}
               >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: report?.anomalies.length === 0 ? '#10b981' : '#ef4444',
+                    boxShadow: `0 0 8px ${report?.anomalies.length === 0 ? '#10b981' : '#ef4444'}`,
+                  }}
+                />
                 {report?.anomalies.length === 0 ? '0 Anomalies Found' : `${report?.anomalies.length} Issues Detected`}
               </span>
             </div>
@@ -344,72 +456,85 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
             {report && report.anomalies.length === 0 ? (
               <div
                 style={{
-                  padding: '32px 20px',
+                  padding: '36px 20px',
                   textAlign: 'center',
                   backgroundColor: 'rgba(16, 185, 129, 0.05)',
-                  border: '1px dashed rgba(16, 185, 129, 0.25)',
-                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid rgba(16, 185, 129, 0.2)',
+                  borderRadius: '16px', // DESIGN.md inner container
                 }}
               >
                 <div
                   style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '12px',
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%', // Circular emblem
                     backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                    color: '#34d399',
+                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                    color: '#10b981',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '0 auto 12px',
+                    margin: '0 auto 14px',
+                    boxShadow: '0 0 16px rgba(16, 185, 129, 0.25)',
                   }}
                 >
-                  <ShieldCheck size={24} />
+                  <ShieldCheck size={26} />
                 </div>
-                <h4 style={{ fontSize: '15px', fontWeight: 700, color: '#34d399', marginBottom: '4px' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#10b981', marginBottom: '6px', letterSpacing: '-0.02em' }}>
                   Database 100% Intact & Synchronized
                 </h4>
-                <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto' }}>
+                <p style={{ fontSize: '13px', color: '#94a3b8', maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
                   All foreign-key references, customer links, ledger transaction balances, department bindings, and invariant configs are healthy.
                 </p>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {report?.anomalies.map((anom) => (
                   <div
                     key={anom.id}
                     style={{
-                      padding: '14px 16px',
-                      borderRadius: 'var(--radius-md)',
-                      backgroundColor: 'var(--bg-surface-elevated)',
+                      padding: '16px 18px',
+                      borderRadius: '16px', // DESIGN.md inner rounded container
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
                       border: `1px solid ${
-                        anom.severity === 'high' ? 'rgba(244, 63, 94, 0.3)' : 'var(--border-faint)'
+                        anom.severity === 'high' ? 'rgba(239, 68, 68, 0.35)' : 'rgba(245, 158, 11, 0.35)'
                       }`,
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      gap: '12px',
+                      gap: '14px',
                       flexWrap: 'wrap',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', flex: 1, minWidth: '240px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flex: 1, minWidth: '240px' }}>
                       <div style={{ marginTop: '2px' }}>
                         {anom.severity === 'high' ? (
-                          <XCircle size={16} color="#fb7185" />
+                          <XCircle size={18} color="#ef4444" />
                         ) : (
-                          <AlertTriangle size={16} color="#fbbf24" />
+                          <AlertTriangle size={18} color="#f59e0b" />
                         )}
                       </div>
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                          <h5 style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main)' }}>
+                          <h5 style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc', margin: 0 }}>
                             {anom.title}
                           </h5>
-                          <Badge variant={anom.severity === 'high' ? 'red' : 'amber'}>
+                          <span
+                            style={{
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: '10px',
+                              backgroundColor: anom.severity === 'high' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                              color: anom.severity === 'high' ? '#ef4444' : '#f59e0b',
+                              border: `1px solid ${anom.severity === 'high' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(245, 158, 11, 0.3)'}`,
+                              textTransform: 'uppercase',
+                            }}
+                          >
                             {anom.entity}
-                          </Badge>
+                          </span>
                         </div>
-                        <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '3px' }}>
+                        <p style={{ fontSize: '12.5px', color: '#94a3b8', marginTop: '4px', margin: '4px 0 0 0', lineHeight: 1.45 }}>
                           {anom.description}
                         </p>
                       </div>
@@ -420,11 +545,33 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
                         type="button"
                         onClick={() => handleFix(anom)}
                         disabled={fixingId === anom.id}
-                        className="btn-secondary"
-                        style={{ padding: '6px 12px', fontSize: '12px', flexShrink: 0 }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+                          backgroundColor: '#0050FF',
+                          border: 'none',
+                          color: '#ffffff',
+                          fontSize: '12.5px',
+                          fontWeight: 700,
+                          cursor: fixingId === anom.id ? 'not-allowed' : 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: '0 4px 12px rgba(0, 80, 255, 0.3)',
+                          flexShrink: 0,
+                        }}
                       >
                         <Wrench size={13} className={fixingId === anom.id ? 'animate-spin' : ''} />
                         <span>{fixingId === anom.id ? 'Fixing...' : 'Auto-Fix'}</span>
+                        <span
+                          style={{
+                            width: '5px',
+                            height: '5px',
+                            borderRadius: '50%',
+                            backgroundColor: '#ffffff',
+                            opacity: 0.9,
+                          }}
+                        />
                       </button>
                     )}
                   </div>
@@ -434,40 +581,44 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
           </SpotlightCard>
 
           {/* Record Counts Breakdown by Entity Category */}
-          <SpotlightCard style={{ padding: '20px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '14px' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '24px' }}>
+            <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', margin: '0 0 6px 0' }}>
               Entity Record Counts ({report?.entityCounts.length || 20} Tables)
             </h3>
+            <p style={{ fontSize: '12.5px', color: '#94a3b8', margin: '0 0 18px 0' }}>
+              Real-time ledger counts across company models and operational tables in IndexedDB.
+            </p>
 
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))',
-                gap: '10px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                gap: '12px',
               }}
             >
               {report?.entityCounts.map((item) => (
                 <div
                   key={item.tableName}
                   style={{
-                    padding: '10px 12px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--bg-surface-elevated)',
-                    border: '1px solid var(--border-faint)',
+                    padding: '12px 14px',
+                    borderRadius: '14px', // Replaces sharp var(--radius-sm)
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '2px',
+                    gap: '4px',
+                    transition: 'all 0.15s ease',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--text-dim)', fontWeight: 600 }}>
+                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       {item.category}
                     </span>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: item.count > 0 ? 'var(--brand-accent)' : 'var(--text-dim)' }}>
+                    <span style={{ fontSize: '13.5px', fontWeight: 800, letterSpacing: '-0.02em', color: item.count > 0 ? '#38bdf8' : '#64748b' }}>
                       {item.count.toLocaleString()}
                     </span>
                   </div>
-                  <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-main)' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#f8fafc' }}>
                     {item.entity}
                   </span>
                 </div>
@@ -477,64 +628,88 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
         </div>
 
         {/* Right Column: Database Engine & Architecture Specs */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <SpotlightCard style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Cpu size={16} color="var(--brand-accent)" /> Database Engine Specs
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+              <Cpu size={18} color="#38bdf8" /> Database Engine Specs
             </h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid var(--border-faint)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Database Name:</span>
-                <strong style={{ color: 'var(--text-main)' }}>{report?.databaseName || 'FounderOS'}</strong>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                <span style={{ color: '#94a3b8' }}>Database Name:</span>
+                <strong style={{ color: '#f8fafc' }}>{report?.databaseName || 'FounderOS'}</strong>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid var(--border-faint)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Schema Version:</span>
-                <strong style={{ color: 'var(--brand-accent)' }}>v{report?.schemaVersion || 2}</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                <span style={{ color: '#94a3b8' }}>Schema Version:</span>
+                <strong style={{ color: '#38bdf8' }}>v{report?.schemaVersion || 2}</strong>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid var(--border-faint)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Engine Standard:</span>
-                <strong style={{ color: 'var(--text-main)' }}>IndexedDB (W3C)</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                <span style={{ color: '#94a3b8' }}>Engine Standard:</span>
+                <strong style={{ color: '#f8fafc' }}>IndexedDB (W3C)</strong>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid var(--border-faint)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Architecture:</span>
-                <strong style={{ color: '#34d399' }}>100% Frontend-Only</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                <span style={{ color: '#94a3b8' }}>Architecture:</span>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                    color: '#10b981',
+                    border: '1px solid rgba(16, 185, 129, 0.25)',
+                  }}
+                >
+                  100% Frontend-Only
+                </span>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid var(--border-faint)' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Offline Persistence:</span>
-                <strong style={{ color: report?.storage?.persisted ? '#34d399' : 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                <span style={{ color: '#94a3b8' }}>Persistence:</span>
+                <strong style={{ color: report?.storage?.persisted ? '#10b981' : '#94a3b8' }}>
                   {report?.storage?.persisted ? 'Persisted Active' : 'Standard'}
                 </strong>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: 'var(--text-dim)' }}>Backend Dependency:</span>
-                <strong style={{ color: '#34d399' }}>Zero Servers Required</strong>
+                <span style={{ color: '#94a3b8' }}>Backend Dependency:</span>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                    color: '#10b981',
+                    border: '1px solid rgba(16, 185, 129, 0.25)',
+                  }}
+                >
+                  Zero Servers Required
+                </span>
               </div>
             </div>
 
-            {/* Security Guarantee */}
+            {/* Security Guarantee Box (replaces sharp var(--radius-sm)) */}
             <div
               style={{
-                marginTop: '6px',
-                padding: '12px',
-                borderRadius: 'var(--radius-sm)',
+                marginTop: '4px',
+                padding: '14px',
+                borderRadius: '16px', // DESIGN.md inner container
                 backgroundColor: 'rgba(0, 80, 255, 0.08)',
                 border: '1px solid rgba(0, 80, 255, 0.2)',
-                fontSize: '11.5px',
-                color: 'var(--text-dim)',
-                lineHeight: 1.45,
+                fontSize: '12px',
+                color: '#94a3b8',
+                lineHeight: 1.5,
                 display: 'flex',
-                gap: '8px',
+                gap: '10px',
               }}
             >
-              <Lock size={15} color="var(--brand-accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <Lock size={16} color="#38bdf8" style={{ flexShrink: 0, marginTop: '2px' }} />
               <div>
-                <strong style={{ color: 'var(--text-main)', display: 'block', marginBottom: '2px' }}>
+                <strong style={{ color: '#f8fafc', display: 'block', marginBottom: '3px' }}>
                   Zero-Telemetry Local Privacy:
                 </strong>
                 All analytics, financials, invoices, and company strategy notes remain 100% inside your browser device.
@@ -543,43 +718,103 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
           </SpotlightCard>
 
           {/* Quick Management Shortcuts */}
-          <SpotlightCard style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <h4 style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-main)' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', margin: 0 }}>
               Data Control Shortcuts
             </h4>
 
             {onNavigate && (
-              <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <button
                   type="button"
                   onClick={() => onNavigate('/settings?tab=data')}
-                  className="btn-secondary"
-                  style={{ justifyContent: 'space-between', fontSize: '12px', padding: '8px 12px' }}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '10px 16px',
+                    borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#f8fafc',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  }}
                 >
                   <span>Backup & Data Portability</span>
-                  <ArrowUpRight size={13} />
+                  <ArrowUpRight size={14} color="#94a3b8" />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => onNavigate('/settings?tab=providers')}
-                  className="btn-secondary"
-                  style={{ justifyContent: 'space-between', fontSize: '12px', padding: '8px 12px' }}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '10px 16px',
+                    borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#f8fafc',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  }}
                 >
                   <span>AI Model & Provider Config</span>
-                  <ArrowUpRight size={13} />
+                  <ArrowUpRight size={14} color="#94a3b8" />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => onNavigate('/')}
-                  className="btn-secondary"
-                  style={{ justifyContent: 'space-between', fontSize: '12px', padding: '8px 12px' }}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '10px 16px',
+                    borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#f8fafc',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  }}
                 >
                   <span>Founder Command Center</span>
-                  <ArrowUpRight size={13} />
+                  <ArrowUpRight size={14} color="#94a3b8" />
                 </button>
-              </>
+              </div>
             )}
           </SpotlightCard>
         </div>

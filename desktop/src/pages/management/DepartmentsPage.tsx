@@ -111,42 +111,88 @@ export const DepartmentsPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header Banner */}
-      <SpotlightCard
-        style={{
-          padding: '26px 30px',
-          background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.15) 0%, rgba(15, 23, 42, 0.88) 100%)',
-          borderColor: 'rgba(0, 80, 255, 0.25)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}
-      >
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              MANAGEMENT / ORGANIZATIONAL UNITS
-            </span>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            MANAGEMENT • ORGANIZATIONAL UNITS & TEAMS
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+            }}
+          >
             Departments & Functional Units
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
+          </h1>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '640px' }}>
             Structure team responsibilities, track department budgets, and monitor functional headcount distribution.
           </p>
         </div>
 
+        {/* Primary CTA Button with Action Indicator Dot */}
         <button
           type="button"
           onClick={openCreateModal}
-          className="btn-primary"
-          style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          style={{
+            borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+            padding: '10px 22px',
+            backgroundColor: '#0050FF',
+            color: '#ffffff',
+            border: 'none',
+            fontSize: '13.5px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
         >
-          <Plus size={16} /> Create Department
+          <Plus size={16} />
+          <span>Create Department</span>
+          <span
+            style={{
+              width: '7px',
+              height: '7px',
+              borderRadius: '50%',
+              backgroundColor: '#ffffff',
+              opacity: 0.9,
+            }}
+          />
         </button>
-      </SpotlightCard>
+      </div>
 
       {/* Metrics */}
       <div
@@ -179,19 +225,28 @@ export const DepartmentsPage: React.FC = () => {
       </div>
 
       {/* Search Bar */}
-      <SpotlightCard style={{ padding: '14px 20px' }}>
-        <div style={{ position: 'relative', maxWidth: '420px' }}>
-          <Search size={15} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+      <div style={{ maxWidth: '420px' }}>
+        <div style={{ position: 'relative', width: '100%' }}>
+          <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '16px', top: '12px' }} />
           <input
             type="text"
             placeholder="Search departments..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="input-field"
-            style={{ paddingLeft: '36px' }}
+            style={{
+              width: '100%',
+              borderRadius: '50px', // DESIGN.md 50px pill
+              padding: '9px 16px 9px 40px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#f8fafc',
+              fontSize: '13px',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
           />
         </div>
-      </SpotlightCard>
+      </div>
 
       {/* Department Cards Grid */}
       {filteredDepartments.length === 0 ? (
@@ -224,34 +279,41 @@ export const DepartmentsPage: React.FC = () => {
                 key={dept.id}
                 style={{
                   padding: '24px',
+                  borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+                  backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                  backdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '16px',
+                  gap: '18px',
                   position: 'relative',
+                  transition: 'all 0.2s ease',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '10px',
-                        backgroundColor: 'var(--primary-blue-surface)',
-                        color: 'var(--brand-accent)',
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                        border: '1px solid rgba(0, 80, 255, 0.35)',
+                        color: '#38bdf8',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        flexShrink: 0,
                       }}
                     >
                       <Building2 size={20} />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-main)' }}>
+                      <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: '#f8fafc', margin: 0, letterSpacing: '-0.02em' }}>
                         {dept.name}
                       </h3>
-                      <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '2px' }}>
-                        Lead: <strong style={{ color: 'var(--text-muted)' }}>{dept.headEmployeeName || 'Unassigned'}</strong>
+                      <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '3px' }}>
+                        Lead: <strong style={{ color: '#cbd5e1' }}>{dept.headEmployeeName || 'Unassigned'}</strong>
                       </div>
                     </div>
                   </div>
@@ -260,26 +322,64 @@ export const DepartmentsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => openEditModal(dept)}
-                      className="btn-secondary"
-                      style={{ padding: '6px 10px', fontSize: '12px' }}
-                      title="Edit"
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50px', // DESIGN.md 50px pill button
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        color: '#94a3b8',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+                        e.currentTarget.style.color = '#ffffff';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                        e.currentTarget.style.color = '#94a3b8';
+                      }}
+                      title="Edit Department"
                     >
-                      <Edit2 size={13} />
+                      <Edit2 size={12.5} />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDelete(dept.id, dept.name)}
-                      className="btn-secondary"
-                      style={{ padding: '6px 10px', fontSize: '12px', color: 'var(--accent-rose)' }}
-                      title="Delete"
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50px', // DESIGN.md 50px pill button
+                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                        color: '#f87171',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                        e.currentTarget.style.color = '#fca5a5';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
+                        e.currentTarget.style.color = '#f87171';
+                      }}
+                      title="Delete Department"
                     >
-                      <Trash2 size={13} />
+                      <Trash2 size={12.5} />
                     </button>
                   </div>
                 </div>
 
                 {dept.description && (
-                  <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '12.5px', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
                     {dept.description}
                   </p>
                 )}
@@ -287,51 +387,52 @@ export const DepartmentsPage: React.FC = () => {
                 {/* Budget & Headcount Bar */}
                 <div
                   style={{
-                    padding: '12px 14px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--bg-surface-elevated)',
+                    padding: '14px 16px',
+                    borderRadius: '16px', // Eliminates sharp 4px/8px corners
+                    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '8px',
+                    gap: '10px',
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-                    <span style={{ color: 'var(--text-dim)' }}>Annual Budget:</span>
-                    <strong style={{ color: 'var(--text-main)' }}>{formatCurrency(dept.budget, currency)}</strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px' }}>
+                    <span style={{ color: '#94a3b8' }}>Annual Budget:</span>
+                    <strong style={{ color: '#f8fafc', fontFamily: 'var(--font-mono)' }}>{formatCurrency(dept.budget, currency)}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-                    <span style={{ color: 'var(--text-dim)' }}>Allocated Salaries:</span>
-                    <strong style={{ color: 'var(--brand-accent)' }}>{formatCurrency(deptPayroll, currency)}/yr</strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px' }}>
+                    <span style={{ color: '#94a3b8' }}>Allocated Salaries:</span>
+                    <strong style={{ color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>{formatCurrency(deptPayroll, currency)}/yr</strong>
                   </div>
 
                   {/* Progress bar */}
-                  <div style={{ width: '100%', height: '6px', borderRadius: '999px', backgroundColor: 'var(--bg-page)', overflow: 'hidden', marginTop: '4px' }}>
+                  <div style={{ width: '100%', height: '6px', borderRadius: '999px', backgroundColor: 'rgba(255, 255, 255, 0.08)', overflow: 'hidden', marginTop: '2px' }}>
                     <div
                       style={{
                         width: `${budgetUtilization}%`,
                         height: '100%',
-                        backgroundColor: budgetUtilization > 90 ? '#f87171' : 'var(--brand-accent)',
+                        background: budgetUtilization > 90 ? '#ef4444' : 'linear-gradient(90deg, #0050FF 0%, #38bdf8 100%)',
                         borderRadius: '999px',
                         transition: 'width 0.3s ease',
                       }}
                     />
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-dim)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b' }}>
                     <span>Utilization</span>
-                    <span>{budgetUtilization}% of budget</span>
+                    <span style={{ fontWeight: 600, color: budgetUtilization > 90 ? '#f87171' : '#34d399' }}>{budgetUtilization}% of budget</span>
                   </div>
                 </div>
 
                 {/* Team Members in Department */}
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '11.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', color: 'var(--text-dim)' }}>
+                    <span style={{ fontSize: '11.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#64748b' }}>
                       Team Members ({deptEmployees.length})
                     </span>
                   </div>
 
                   {deptEmployees.length === 0 ? (
-                    <div style={{ fontSize: '12px', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontStyle: 'italic' }}>
                       No members assigned to this department yet.
                     </div>
                   ) : (
@@ -340,18 +441,18 @@ export const DepartmentsPage: React.FC = () => {
                         <span
                           key={emp.id}
                           style={{
-                            fontSize: '11.5px',
+                            fontSize: '11px',
                             padding: '3px 10px',
-                            borderRadius: '999px',
-                            backgroundColor: 'var(--bg-surface-elevated)',
-                            border: '1px solid var(--border-faint)',
-                            color: 'var(--text-main)',
+                            borderRadius: '10px', // DESIGN.md 10px tag chip
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            color: '#cbd5e1',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
+                            gap: '5px',
                           }}
                         >
-                          <span style={{ width: '6px', height: '6px', borderRadius: '999px', backgroundColor: 'var(--brand-accent)' }} />
+                          <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#38bdf8' }} />
                           {emp.name} ({emp.role})
                         </span>
                       ))}
@@ -372,9 +473,9 @@ export const DepartmentsPage: React.FC = () => {
         subtitle="Configure organizational division and budget ceiling"
         maxWidth="500px"
       >
-        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Department Name *
             </label>
             <input
@@ -384,12 +485,22 @@ export const DepartmentsPage: React.FC = () => {
               value={fName}
               onChange={(e) => setFName(e.target.value)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
               autoFocus
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Department Lead / Head of Unit
             </label>
             <input
@@ -398,11 +509,21 @@ export const DepartmentsPage: React.FC = () => {
               value={fHeadName}
               onChange={(e) => setFHeadName(e.target.value)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Annual Allocated Budget ({currency}) *
             </label>
             <input
@@ -413,11 +534,21 @@ export const DepartmentsPage: React.FC = () => {
               value={fBudget}
               onChange={(e) => setFBudget(Number(e.target.value))}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Mission & Responsibilities
             </label>
             <textarea
@@ -426,15 +557,70 @@ export const DepartmentsPage: React.FC = () => {
               value={fDescription}
               onChange={(e) => setFDescription(e.target.value)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+                resize: 'vertical',
+              }}
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
-            <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 20px',
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#94a3b8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
-              {editingDept ? 'Update Department' : 'Create Department'}
+            <button
+              type="submit"
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 22px',
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
+            >
+              <span>{editingDept ? 'Update Department' : 'Create Department'}</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  opacity: 0.9,
+                }}
+              />
             </button>
           </div>
         </form>

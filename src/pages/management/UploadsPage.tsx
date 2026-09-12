@@ -20,7 +20,6 @@ import {
 import { db } from '../../db';
 import { SpotlightCard } from '../../components/common/SpotlightCard';
 import { MetricCard } from '../../components/common/MetricCard';
-import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { EmptyState } from '../../components/common/EmptyState';
 import {
@@ -124,42 +123,88 @@ export const UploadsPage: React.FC = () => {
         style={{ display: 'none' }}
       />
 
-      {/* Header Banner */}
-      <SpotlightCard
-        style={{
-          padding: '26px 30px',
-          background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.15) 0%, rgba(15, 23, 42, 0.88) 100%)',
-          borderColor: 'rgba(0, 80, 255, 0.25)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}
-      >
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              MANAGEMENT / DOCUMENT VAULT
-            </span>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            MANAGEMENT • CORPORATE VAULT & COMPLIANCE LEDGER
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+            }}
+          >
             Uploads & Corporate Vault
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
+          </h1>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '640px' }}>
             Secure local-first document repository for founder contracts, MSAs, receipts, tax returns, and pitch decks.
           </p>
         </div>
 
+        {/* Primary CTA Button with Action Indicator Dot */}
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="btn-primary"
-          style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          style={{
+            borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+            padding: '10px 22px',
+            backgroundColor: '#0050FF',
+            color: '#ffffff',
+            border: 'none',
+            fontSize: '13.5px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
         >
-          <Upload size={16} /> Upload Document
+          <Upload size={16} />
+          <span>Upload Document</span>
+          <span
+            style={{
+              width: '7px',
+              height: '7px',
+              borderRadius: '50%',
+              backgroundColor: '#ffffff',
+              opacity: 0.9,
+            }}
+          />
         </button>
-      </SpotlightCard>
+      </div>
 
       {/* Metrics */}
       <div
@@ -199,17 +244,33 @@ export const UploadsPage: React.FC = () => {
       </div>
 
       {/* Search & Category Filter */}
-      <SpotlightCard style={{ padding: '16px 20px' }}>
+      <SpotlightCard
+        style={{
+          padding: '16px 20px',
+          borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+          backgroundColor: '#0b0f19',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
-            <Search size={15} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+          <div style={{ position: 'relative', width: '100%', maxWidth: '420px' }}>
+            <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '16px', top: '12px' }} />
             <input
               type="text"
               placeholder="Search documents by name or notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-field"
-              style={{ paddingLeft: '36px' }}
+              style={{
+                width: '100%',
+                borderRadius: '50px', // DESIGN.md 50px pill
+                padding: '9px 16px 9px 40px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13px',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
@@ -217,8 +278,16 @@ export const UploadsPage: React.FC = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="input-field"
-              style={{ width: 'auto', fontSize: '12.5px' }}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill
+                padding: '8px 18px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
             >
               <option value="all">All Categories</option>
               <option value="contract">Contracts</option>
@@ -243,7 +312,15 @@ export const UploadsPage: React.FC = () => {
           onAction={() => fileInputRef.current?.click()}
         />
       ) : (
-        <SpotlightCard style={{ padding: 0, overflow: 'hidden' }}>
+        <SpotlightCard
+          style={{
+            padding: 0,
+            borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+            backgroundColor: '#0b0f19',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            overflow: 'hidden',
+          }}
+        >
           <div style={{ overflowX: 'auto' }}>
             <table className="data-table">
               <thead>
@@ -260,25 +337,27 @@ export const UploadsPage: React.FC = () => {
                 {filteredFiles.map((file) => (
                   <tr key={file.id}>
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <div
                           style={{
-                            width: '32px',
-                            height: '32px',
-                            borderRadius: '8px',
-                            backgroundColor: 'var(--primary-blue-surface)',
-                            color: 'var(--brand-accent)',
+                            width: '34px',
+                            height: '34px',
+                            borderRadius: '12px', // DESIGN.md 12px soft rounded container (replaces 8px)
+                            background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                            border: '1px solid rgba(0, 80, 255, 0.35)',
+                            color: '#38bdf8',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            flexShrink: 0,
                           }}
                         >
                           {file.mimeType.startsWith('image/') ? <Image size={16} /> : <FileText size={16} />}
                         </div>
                         <div>
-                          <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{file.name}</div>
+                          <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '14px' }}>{file.name}</div>
                           {file.description && (
-                            <div style={{ fontSize: '11.5px', color: 'var(--text-dim)' }}>
+                            <div style={{ fontSize: '11.5px', color: '#94a3b8', marginTop: '2px', fontStyle: 'italic' }}>
                               {file.description}
                             </div>
                           )}
@@ -288,30 +367,56 @@ export const UploadsPage: React.FC = () => {
                     <td>
                       <span
                         style={{
-                          fontSize: '11.5px',
-                          padding: '2px 8px',
-                          borderRadius: '4px',
-                          backgroundColor: 'var(--bg-surface-elevated)',
-                          border: '1px solid var(--border-faint)',
-                          color: 'var(--text-muted)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          fontSize: '11px',
+                          padding: '3px 9px',
+                          borderRadius: '10px', // DESIGN.md 10px tag chip (replaces 4px)
+                          backgroundColor: 'rgba(0, 80, 255, 0.1)',
+                          border: '1px solid rgba(0, 80, 255, 0.25)',
+                          color: '#38bdf8',
                           textTransform: 'capitalize',
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
                         }}
                       >
-                        {file.category.replace('_', ' ')}
+                        <span
+                          style={{
+                            width: '5px',
+                            height: '5px',
+                            borderRadius: '50%',
+                            backgroundColor: '#38bdf8',
+                            boxShadow: '0 0 6px #38bdf8',
+                          }}
+                        />
+                        {file.category.replace(/_/g, ' ')}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px', textTransform: 'uppercase', color: 'var(--text-dim)' }}>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '11px',
+                          textTransform: 'uppercase',
+                          color: '#94a3b8',
+                          padding: '2px 8px',
+                          borderRadius: '10px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                          border: '1px solid rgba(255, 255, 255, 0.08)',
+                          fontWeight: 600,
+                        }}
+                      >
                         {file.fileType}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '12.5px', color: '#cbd5e1', fontFamily: 'var(--font-mono)' }}>
                         {formatBytes(file.sizeBytes)}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
+                      <span style={{ fontSize: '12.5px', color: '#94a3b8' }}>
                         {formatDate(file.createdAt)}
                       </span>
                     </td>
@@ -320,29 +425,86 @@ export const UploadsPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setPreviewFile(file)}
-                          className="btn-secondary"
-                          style={{ padding: '6px 10px', fontSize: '12px' }}
-                          title="Preview"
+                          style={{
+                            width: '30px',
+                            height: '30px',
+                            borderRadius: '50px', // DESIGN.md 50px pill button
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            color: '#94a3b8',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+                            e.currentTarget.style.color = '#ffffff';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                            e.currentTarget.style.color = '#94a3b8';
+                          }}
+                          title="Preview Document"
                         >
-                          <Eye size={13} />
+                          <Eye size={12.5} />
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDownload(file)}
-                          className="btn-secondary"
-                          style={{ padding: '6px 10px', fontSize: '12px' }}
-                          title="Download"
+                          style={{
+                            width: '30px',
+                            height: '30px',
+                            borderRadius: '50px', // DESIGN.md 50px pill button
+                            backgroundColor: 'rgba(0, 80, 255, 0.1)',
+                            border: '1px solid rgba(0, 80, 255, 0.25)',
+                            color: '#38bdf8',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(0, 80, 255, 0.2)';
+                            e.currentTarget.style.color = '#ffffff';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(0, 80, 255, 0.1)';
+                            e.currentTarget.style.color = '#38bdf8';
+                          }}
+                          title="Download Document"
                         >
-                          <Download size={13} />
+                          <Download size={12.5} />
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(file.id, file.name)}
-                          className="btn-secondary"
-                          style={{ padding: '6px 10px', fontSize: '12px', color: 'var(--accent-rose)' }}
-                          title="Delete"
+                          style={{
+                            width: '30px',
+                            height: '30px',
+                            borderRadius: '50px', // DESIGN.md 50px pill button
+                            backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                            border: '1px solid rgba(239, 68, 68, 0.2)',
+                            color: '#f87171',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                            e.currentTarget.style.color = '#fca5a5';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
+                            e.currentTarget.style.color = '#f87171';
+                          }}
+                          title="Delete Document"
                         >
-                          <Trash2 size={13} />
+                          <Trash2 size={12.5} />
                         </button>
                       </div>
                     </td>
@@ -365,15 +527,25 @@ export const UploadsPage: React.FC = () => {
         subtitle={`Selected: ${selectedFile?.name} (${selectedFile ? formatBytes(selectedFile.size) : ''})`}
         maxWidth="480px"
       >
-        <form onSubmit={handleUploadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleUploadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Document Category *
             </label>
             <select
               value={fCategory}
               onChange={(e) => setFCategory(e.target.value as UploadCategory)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: '#0f172a',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
             >
               <option value="contract">Contract / MSA</option>
               <option value="nda">Non-Disclosure Agreement (NDA)</option>
@@ -387,7 +559,7 @@ export const UploadsPage: React.FC = () => {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Description / Notes (Optional)
             </label>
             <textarea
@@ -396,22 +568,75 @@ export const UploadsPage: React.FC = () => {
               value={fDescription}
               onChange={(e) => setFDescription(e.target.value)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+                resize: 'vertical',
+              }}
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
             <button
               type="button"
               onClick={() => {
                 setIsUploadModalOpen(false);
                 setSelectedFile(null);
               }}
-              className="btn-secondary"
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 20px',
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#94a3b8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
             >
               Cancel
             </button>
-            <button type="submit" disabled={isUploading} className="btn-primary">
-              {isUploading ? 'Encrypting & Saving...' : 'Save to Vault'}
+            <button
+              type="submit"
+              disabled={isUploading}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 22px',
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: isUploading ? 'not-allowed' : 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+                opacity: isUploading ? 0.7 : 1,
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => !isUploading && (e.currentTarget.style.backgroundColor = '#1a66ff')}
+              onMouseLeave={(e) => !isUploading && (e.currentTarget.style.backgroundColor = '#0050FF')}
+            >
+              <span>{isUploading ? 'Encrypting & Saving...' : 'Save to Vault'}</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  opacity: 0.9,
+                }}
+              />
             </button>
           </div>
         </form>
@@ -428,37 +653,86 @@ export const UploadsPage: React.FC = () => {
         {previewFile && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {previewFile.mimeType.startsWith('image/') ? (
-              <div style={{ textAlign: 'center', backgroundColor: '#000000', padding: '16px', borderRadius: 'var(--radius-md)' }}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  backgroundColor: '#000000',
+                  padding: '16px',
+                  borderRadius: '16px', // Eliminates sharp radius
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                }}
+              >
                 <img
                   src={previewFile.dataBase64}
                   alt={previewFile.name}
-                  style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }}
+                  style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: '8px' }}
                 />
               </div>
             ) : (
               <div
                 style={{
-                  padding: '24px',
-                  borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'var(--bg-surface-elevated)',
-                  border: '1px solid var(--border-subtle)',
+                  padding: '28px 24px',
+                  borderRadius: '16px', // Eliminates sharp radius
+                  backgroundColor: 'rgba(15, 23, 42, 0.65)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
                   textAlign: 'center',
                 }}
               >
-                <FileText size={48} color="var(--brand-accent)" style={{ margin: '0 auto 12px' }} />
-                <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>
+                <div
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                    border: '1px solid rgba(0, 80, 255, 0.3)',
+                    color: '#38bdf8',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                  }}
+                >
+                  <FileText size={32} />
+                </div>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', margin: 0 }}>
                   {previewFile.name}
                 </h4>
-                <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '400px', margin: '4px auto 16px' }}>
+                <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '6px', maxWidth: '420px', margin: '6px auto 20px' }}>
                   {previewFile.description || 'This document is safely stored locally in your browser IndexedDB.'}
                 </p>
                 <button
                   type="button"
                   onClick={() => handleDownload(previewFile)}
-                  className="btn-primary"
-                  style={{ margin: '0 auto' }}
+                  style={{
+                    borderRadius: '50px', // DESIGN.md 50px pill button
+                    padding: '10px 22px',
+                    backgroundColor: '#0050FF',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+                    margin: '0 auto',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
                 >
-                  <Download size={15} /> Download Document
+                  <Download size={15} />
+                  <span>Download Document</span>
+                  <span
+                    style={{
+                      width: '6px',
+                      height: '6px',
+                      borderRadius: '50%',
+                      backgroundColor: '#ffffff',
+                      opacity: 0.9,
+                    }}
+                  />
                 </button>
               </div>
             )}

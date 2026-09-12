@@ -21,7 +21,6 @@ import {
 import { db } from '../../db';
 import { SpotlightCard } from '../../components/common/SpotlightCard';
 import { MetricCard } from '../../components/common/MetricCard';
-import { Badge, getStatusBadgeVariant } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { EmptyState } from '../../components/common/EmptyState';
 import {
@@ -179,42 +178,88 @@ export const EmployeesPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header Banner */}
-      <SpotlightCard
-        style={{
-          padding: '26px 30px',
-          background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.15) 0%, rgba(15, 23, 42, 0.88) 100%)',
-          borderColor: 'rgba(0, 80, 255, 0.25)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px',
-        }}
-      >
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              MANAGEMENT / HUMAN CAPITAL
-            </span>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            MANAGEMENT • HUMAN CAPITAL & HEADCOUNT LEDGER
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+            }}
+          >
             Employee & Team Directory
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
+          </h1>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '640px' }}>
             Manage startup headcount, roles, department assignments, and track monthly payroll obligations.
           </p>
         </div>
 
+        {/* Primary CTA Button with Action Indicator Dot */}
         <button
           type="button"
           onClick={openCreateModal}
-          className="btn-primary"
-          style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+          style={{
+            borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+            padding: '10px 22px',
+            backgroundColor: '#0050FF',
+            color: '#ffffff',
+            border: 'none',
+            fontSize: '13.5px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px',
+            boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
         >
-          <UserPlus size={16} /> Add Team Member
+          <UserPlus size={16} />
+          <span>Add Team Member</span>
+          <span
+            style={{
+              width: '7px',
+              height: '7px',
+              borderRadius: '50%',
+              backgroundColor: '#ffffff',
+              opacity: 0.9,
+            }}
+          />
         </button>
-      </SpotlightCard>
+      </div>
 
       {/* Metrics Row */}
       <div
@@ -254,18 +299,34 @@ export const EmployeesPage: React.FC = () => {
       </div>
 
       {/* Controls Bar: Search & Filters */}
-      <SpotlightCard style={{ padding: '16px 20px' }}>
+      <SpotlightCard
+        style={{
+          padding: '16px 20px',
+          borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+          backgroundColor: '#0b0f19',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: '12px', flex: 1, minWidth: '280px', maxWidth: '450px' }}>
             <div style={{ position: 'relative', width: '100%' }}>
-              <Search size={15} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
+              <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '16px', top: '12px' }} />
               <input
                 type="text"
                 placeholder="Search by name, role, email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="input-field"
-                style={{ paddingLeft: '36px' }}
+                style={{
+                  width: '100%',
+                  borderRadius: '50px', // DESIGN.md 50px pill
+                  padding: '9px 16px 9px 40px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
           </div>
@@ -275,8 +336,16 @@ export const EmployeesPage: React.FC = () => {
             <select
               value={deptFilter}
               onChange={(e) => setDeptFilter(e.target.value)}
-              className="input-field"
-              style={{ width: 'auto', fontSize: '12.5px' }}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill
+                padding: '8px 16px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
             >
               <option value="all">All Departments</option>
               {departments.map((d) => (
@@ -288,8 +357,16 @@ export const EmployeesPage: React.FC = () => {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="input-field"
-              style={{ width: 'auto', fontSize: '12.5px' }}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill
+                padding: '8px 16px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
             >
               <option value="all">All Types</option>
               <option value="full_time">Full-Time</option>
@@ -303,8 +380,16 @@ export const EmployeesPage: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="input-field"
-              style={{ width: 'auto', fontSize: '12.5px' }}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill
+                padding: '8px 16px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -324,7 +409,15 @@ export const EmployeesPage: React.FC = () => {
           onAction={openCreateModal}
         />
       ) : (
-        <SpotlightCard style={{ padding: 0, overflow: 'hidden' }}>
+        <SpotlightCard
+          style={{
+            padding: 0,
+            borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+            backgroundColor: '#0b0f19',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            overflow: 'hidden',
+          }}
+        >
           <div style={{ overflowX: 'auto' }}>
             <table className="data-table">
               <thead>
@@ -344,73 +437,103 @@ export const EmployeesPage: React.FC = () => {
                   const dept = departments.find((d) => d.id === emp.departmentId);
                   const initials = emp.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
 
+                  const statusConfig = {
+                    active: { bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.28)', color: '#34d399', dot: '#10b981', label: 'Active' },
+                    on_leave: { bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.28)', color: '#fbbf24', dot: '#f59e0b', label: 'On Leave' },
+                    terminated: { bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.28)', color: '#f87171', dot: '#ef4444', label: 'Terminated' },
+                  }[emp.status] || { bg: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.28)', color: '#94a3b8', dot: '#94a3b8', label: emp.status };
+
                   return (
                     <tr key={emp.id}>
                       <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           <div
                             style={{
-                              width: '32px',
-                              height: '32px',
-                              borderRadius: '999px',
-                              backgroundColor: 'var(--primary-blue-surface)',
-                              color: 'var(--brand-accent)',
+                              width: '34px',
+                              height: '34px',
+                              borderRadius: '50%',
+                              background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                              border: '1px solid rgba(0, 80, 255, 0.35)',
+                              color: '#38bdf8',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               fontWeight: 700,
                               fontSize: '12px',
+                              flexShrink: 0,
                             }}
                           >
                             {initials}
                           </div>
                           <div>
-                            <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{emp.name}</div>
-                            <div style={{ fontSize: '11.5px', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '14px' }}>{emp.name}</div>
+                            <div style={{ fontSize: '11.5px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                               <Mail size={11} /> {emp.email}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td>
-                        <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{emp.role}</span>
+                        <span style={{ fontWeight: 600, color: '#f8fafc', fontSize: '13px' }}>{emp.role}</span>
                       </td>
                       <td>
                         <span
                           style={{
                             fontSize: '11.5px',
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            backgroundColor: 'var(--bg-surface-elevated)',
-                            border: '1px solid var(--border-faint)',
-                            color: 'var(--text-muted)',
+                            padding: '3px 9px',
+                            borderRadius: '10px', // DESIGN.md 10px tag chip (replaces 4px)
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            color: '#94a3b8',
+                            fontWeight: 600,
                           }}
                         >
                           {dept?.name || emp.departmentName || 'General'}
                         </span>
                       </td>
                       <td>
-                        <span style={{ textTransform: 'capitalize', fontSize: '12px', color: 'var(--text-muted)' }}>
-                          {emp.employmentType.replace('_', ' ')}
+                        <span style={{ textTransform: 'capitalize', fontSize: '12.5px', color: '#cbd5e1' }}>
+                          {emp.employmentType.replace(/_/g, ' ')}
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontWeight: 700, color: 'var(--brand-accent)' }}>
+                        <span style={{ fontWeight: 700, color: '#38bdf8', fontFamily: 'var(--font-mono)' }}>
                           {formatCurrency(emp.salary, currency)}
                         </span>
-                        <span style={{ fontSize: '11px', color: 'var(--text-dim)', marginLeft: '4px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', marginLeft: '4px' }}>
                           /{emp.salaryPeriod === 'annual' ? 'yr' : emp.salaryPeriod === 'monthly' ? 'mo' : 'hr'}
                         </span>
                       </td>
                       <td>
-                        <Badge
-                          variant={emp.status === 'active' ? 'green' : emp.status === 'on_leave' ? 'amber' : 'red'}
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                            padding: '3px 9px',
+                            borderRadius: '10px', // DESIGN.md 10px tag chip
+                            backgroundColor: statusConfig.bg,
+                            border: `1px solid ${statusConfig.border}`,
+                            color: statusConfig.color,
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            letterSpacing: '0.04em',
+                          }}
                         >
-                          {emp.status.replace('_', ' ')}
-                        </Badge>
+                          <span
+                            style={{
+                              width: '5px',
+                              height: '5px',
+                              borderRadius: '50%',
+                              backgroundColor: statusConfig.dot,
+                              boxShadow: `0 0 6px ${statusConfig.dot}`,
+                            }}
+                          />
+                          {statusConfig.label.toUpperCase()}
+                        </span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
+                        <span style={{ fontSize: '12.5px', color: '#94a3b8' }}>
                           {formatDate(emp.startDate)}
                         </span>
                       </td>
@@ -419,20 +542,58 @@ export const EmployeesPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => openEditModal(emp)}
-                            className="btn-secondary"
-                            style={{ padding: '6px 10px', fontSize: '12px' }}
-                            title="Edit"
+                            style={{
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '50px', // DESIGN.md 50px pill button
+                              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                              border: '1px solid rgba(255, 255, 255, 0.1)',
+                              color: '#94a3b8',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+                              e.currentTarget.style.color = '#ffffff';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                              e.currentTarget.style.color = '#94a3b8';
+                            }}
+                            title="Edit Team Member"
                           >
-                            <Edit2 size={13} />
+                            <Edit2 size={12.5} />
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(emp.id, emp.name)}
-                            className="btn-secondary"
-                            style={{ padding: '6px 10px', fontSize: '12px', color: 'var(--accent-rose)' }}
-                            title="Delete"
+                            style={{
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '50px', // DESIGN.md 50px pill button
+                              backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                              border: '1px solid rgba(239, 68, 68, 0.2)',
+                              color: '#f87171',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                              e.currentTarget.style.color = '#fca5a5';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
+                              e.currentTarget.style.color = '#f87171';
+                            }}
+                            title="Delete Record"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={12.5} />
                           </button>
                         </div>
                       </td>
@@ -453,10 +614,10 @@ export const EmployeesPage: React.FC = () => {
         subtitle="Manage employee profile, compensation, and department assignment"
         maxWidth="560px"
       >
-        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Full Name *
               </label>
               <input
@@ -466,12 +627,22 @@ export const EmployeesPage: React.FC = () => {
                 value={fName}
                 onChange={(e) => setFName(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
                 autoFocus
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Job Title / Role *
               </label>
               <input
@@ -481,13 +652,23 @@ export const EmployeesPage: React.FC = () => {
                 value={fRole}
                 onChange={(e) => setFRole(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Email Address *
               </label>
               <input
@@ -497,11 +678,21 @@ export const EmployeesPage: React.FC = () => {
                 value={fEmail}
                 onChange={(e) => setFEmail(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Phone Number
               </label>
               <input
@@ -510,19 +701,39 @@ export const EmployeesPage: React.FC = () => {
                 value={fPhone}
                 onChange={(e) => setFPhone(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Department
               </label>
               <select
                 value={fDeptId}
                 onChange={(e) => setFDeptId(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: '#0f172a',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               >
                 <option value="">No Department Assigned</option>
                 {departments.map((d) => (
@@ -532,13 +743,23 @@ export const EmployeesPage: React.FC = () => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Employment Type
               </label>
               <select
                 value={fType}
                 onChange={(e) => setFType(e.target.value as EmploymentType)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: '#0f172a',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               >
                 <option value="full_time">Full-Time</option>
                 <option value="part_time">Part-Time</option>
@@ -551,7 +772,7 @@ export const EmployeesPage: React.FC = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Compensation ({currency}) *
               </label>
               <input
@@ -562,17 +783,37 @@ export const EmployeesPage: React.FC = () => {
                 value={fSalary}
                 onChange={(e) => setFSalary(Number(e.target.value))}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Period
               </label>
               <select
                 value={fSalaryPeriod}
                 onChange={(e) => setFSalaryPeriod(e.target.value as any)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: '#0f172a',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               >
                 <option value="annual">Annual</option>
                 <option value="monthly">Monthly</option>
@@ -583,13 +824,23 @@ export const EmployeesPage: React.FC = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Status
               </label>
               <select
                 value={fStatus}
                 onChange={(e) => setFStatus(e.target.value as EmployeeStatus)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: '#0f172a',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               >
                 <option value="active">Active</option>
                 <option value="on_leave">On Leave</option>
@@ -598,7 +849,7 @@ export const EmployeesPage: React.FC = () => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
                 Start Date
               </label>
               <input
@@ -606,12 +857,22 @@ export const EmployeesPage: React.FC = () => {
                 value={fStartDate}
                 onChange={(e) => setFStartDate(e.target.value)}
                 className="input-field"
+                style={{
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '13.5px',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
               />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#94a3b8', marginBottom: '6px' }}>
               Notes & Background
             </label>
             <textarea
@@ -620,15 +881,70 @@ export const EmployeesPage: React.FC = () => {
               value={fNotes}
               onChange={(e) => setFNotes(e.target.value)}
               className="input-field"
+              style={{
+                borderRadius: '12px',
+                padding: '10px 14px',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13.5px',
+                width: '100%',
+                boxSizing: 'border-box',
+                resize: 'vertical',
+              }}
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
-            <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 20px',
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#94a3b8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
-              {editingEmployee ? 'Update Member' : 'Add Member'}
+            <button
+              type="submit"
+              style={{
+                borderRadius: '50px', // DESIGN.md 50px pill button
+                padding: '9px 22px',
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
+            >
+              <span>{editingEmployee ? 'Update Member' : 'Add Member'}</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  opacity: 0.9,
+                }}
+              />
             </button>
           </div>
         </form>
