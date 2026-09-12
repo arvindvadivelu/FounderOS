@@ -1458,6 +1458,17 @@ export async function clearAllCompanyData(): Promise<void> {
  * Does NOT populate any demo company, customers, deals, tasks, or transactions.
  */
 export async function initFreshDatabase(): Promise<void> {
+  // Purge any legacy pre-loaded demo company records or unpurged demo data
+  const demoCompany = await db.companies.get('comp_default');
+  const hasPurgedFlag = typeof localStorage !== 'undefined' ? localStorage.getItem('founderos_preloaded_purged_v2') : 'true';
+
+  if (demoCompany || !hasPurgedFlag) {
+    await clearAllCompanyData();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('founderos_preloaded_purged_v2', 'true');
+    }
+  }
+
   const settingsCount = await db.settings.count();
   if (settingsCount === 0) {
     await db.settings.put({

@@ -346,7 +346,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 textOverflow: 'ellipsis',
               }}
             >
-              {company?.name || 'Solvst AI'}
+              {company?.name || 'Founder Workspace'}
             </div>
             <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
               {company?.currency || 'USD'} • V1.0.0
