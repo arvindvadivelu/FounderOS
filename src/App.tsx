@@ -123,6 +123,8 @@ export function App() {
         return <DataHealthPage onNavigate={handleNavigate} />;
       case '/integrations':
         return <IntegrationsPage onNavigate={handleNavigate} />;
+      case '/v2':
+        return <V2ComingSoonPage featureName="FounderOS V2" onNavigate={handleNavigate} />;
       case '/workflows':
         return <V2ComingSoonPage featureName="Automated Workflows" onNavigate={handleNavigate} />;
       case '/boardroom':

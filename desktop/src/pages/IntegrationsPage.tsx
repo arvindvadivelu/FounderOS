@@ -24,6 +24,8 @@ import {
   Sparkles,
   Check,
   X,
+  Zap,
+  Play,
 } from 'lucide-react';
 import { db } from '../db';
 import {
@@ -56,6 +58,11 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [isItemsDrawerOpen, setIsItemsDrawerOpen] = useState(false);
   const [isLogsDrawerOpen, setIsLogsDrawerOpen] = useState(false);
+  const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
+  const [webhookProvider, setWebhookProvider] = useState<'stripe' | 'github' | 'hubspot' | 'slack'>('stripe');
+  const [webhookEventType, setWebhookEventType] = useState('charge.failed');
+  const [webhookPayload, setWebhookPayload] = useState('{\n  "amount": 4800,\n  "currency": "usd",\n  "customer": "cust_1",\n  "failure_reason": "card_declined"\n}');
+  const [webhookFeedback, setWebhookFeedback] = useState<string | null>(null);
 
   // Config modal state
   const [apiKeyInput, setApiKeyInput] = useState('');
@@ -265,6 +272,26 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
           >
             <Database size={15} />
             View Synced Items ({totalSyncedItemsCount || 0})
+          </button>
+
+          <button
+            onClick={() => setIsWebhookModalOpen(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '9px 14px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(59, 130, 246, 0.15)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              color: '#38bdf8',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            <Zap size={15} />
+            Webhook Simulator (V2)
           </button>
 
           <button
@@ -970,6 +997,224 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Webhook Simulator Modal (V2) */}
+      {isWebhookModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(3, 7, 18, 0.75)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1300,
+          }}
+          onClick={() => setIsWebhookModalOpen(false)}
+        >
+          <div
+            style={{
+              backgroundColor: 'var(--bg-surface)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '12px',
+              width: '100%',
+              maxWidth: '540px',
+              padding: '24px',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Zap size={18} color="#38bdf8" />
+                <h2 style={{ fontSize: '18px', fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>
+                  External Webhook Simulator
+                </h2>
+              </div>
+              <button
+                onClick={() => setIsWebhookModalOpen(false)}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '18px' }}>
+              Simulate inbound webhook payloads from Stripe, GitHub, or CRM to verify automated workflow reactions.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
+                  PROVIDER
+                </label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {(['stripe', 'github', 'hubspot', 'slack'] as const).map((prov) => (
+                    <button
+                      key={prov}
+                      onClick={() => {
+                        setWebhookProvider(prov);
+                        if (prov === 'stripe') {
+                          setWebhookEventType('charge.failed');
+                          setWebhookPayload('{\n  "amount": 4800,\n  "currency": "usd",\n  "customer": "cust_1",\n  "failure_reason": "card_declined"\n}');
+                        } else if (prov === 'github') {
+                          setWebhookEventType('pull_request.merged');
+                          setWebhookPayload('{\n  "pr_number": 42,\n  "title": "feat: RICE prioritization engine",\n  "author": "lead-eng",\n  "merged": true\n}');
+                        } else {
+                          setWebhookEventType('deal.won');
+                          setWebhookPayload('{\n  "deal_name": "Enterprise BioHealth",\n  "amount": 18500,\n  "owner": "Damian Sterling"\n}');
+                        }
+                      }}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '6px',
+                        border: '1px solid',
+                        borderColor: webhookProvider === prov ? 'var(--brand-accent)' : 'var(--border-subtle)',
+                        backgroundColor: webhookProvider === prov ? 'rgba(59, 130, 246, 0.15)' : 'var(--bg-card)',
+                        color: webhookProvider === prov ? '#38bdf8' : 'var(--text-muted)',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        textTransform: 'capitalize',
+                      }}
+                    >
+                      {prov}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
+                  EVENT TYPE
+                </label>
+                <input
+                  type="text"
+                  value={webhookEventType}
+                  onChange={(e) => setWebhookEventType(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border-subtle)',
+                    color: 'var(--text-main)',
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-dim)', display: 'block', marginBottom: '6px' }}>
+                  JSON PAYLOAD
+                </label>
+                <textarea
+                  rows={5}
+                  value={webhookPayload}
+                  onChange={(e) => setWebhookPayload(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    backgroundColor: 'var(--bg-card)',
+                    border: '1px solid var(--border-subtle)',
+                    color: 'var(--text-main)',
+                    fontSize: '12.5px',
+                    fontFamily: 'monospace',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              </div>
+
+              {webhookFeedback && (
+                <div
+                  style={{
+                    padding: '10px 14px',
+                    borderRadius: '6px',
+                    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                    border: '1px solid rgba(16, 185, 129, 0.35)',
+                    color: '#10b981',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                  }}
+                >
+                  {webhookFeedback}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '8px' }}>
+                <button
+                  onClick={() => setIsWebhookModalOpen(false)}
+                  style={{
+                    padding: '8px 14px',
+                    borderRadius: '6px',
+                    border: 'none',
+                    background: 'none',
+                    color: 'var(--text-muted)',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                  }}
+                >
+                  Close
+                </button>
+                <button
+                  onClick={async () => {
+                    let parsed: any = {};
+                    try {
+                      parsed = JSON.parse(webhookPayload);
+                    } catch (e) {
+                      parsed = { raw: webhookPayload };
+                    }
+
+                    await db.webhookEvents.add({
+                      id: `wh-${Date.now()}`,
+                      provider: webhookProvider,
+                      eventType: webhookEventType,
+                      payload: parsed,
+                      receivedAt: new Date().toISOString(),
+                      processed: true,
+                      statusMessage: `Ingested ${webhookProvider} ${webhookEventType} successfully.`,
+                    });
+
+                    // Trigger task or notification
+                    await db.tasks.add({
+                      id: `task-wh-${Date.now()}`,
+                      title: `[Webhook Event] ${webhookProvider.toUpperCase()}: ${webhookEventType}`,
+                      description: `Processed incoming external payload: ${JSON.stringify(parsed)}`,
+                      priority: 'high',
+                      status: 'todo',
+                      tags: ['webhook', 'integration', webhookProvider],
+                      createdAt: new Date().toISOString(),
+                      updatedAt: new Date().toISOString(),
+                    });
+
+                    setWebhookFeedback(`Dispatched! Webhook event logged and automated workflow triggered.`);
+                  }}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: '6px',
+                    backgroundColor: 'var(--brand-accent)',
+                    color: '#fff',
+                    border: 'none',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                >
+                  <Play size={14} />
+                  Dispatch Test Webhook
+                </button>
+              </div>
             </div>
           </div>
         </div>

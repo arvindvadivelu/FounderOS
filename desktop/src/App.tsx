@@ -23,6 +23,13 @@ import { DepartmentsPage } from './pages/management/DepartmentsPage';
 import { CashPage } from './pages/management/CashPage';
 import { BalanceSheetPage } from './pages/management/BalanceSheetPage';
 import { UploadsPage } from './pages/management/UploadsPage';
+import { WorkflowsPage } from './pages/WorkflowsPage';
+import { ExecutiveBoardroomPage } from './pages/ExecutiveBoardroomPage';
+import { FinancialForecastingPage } from './pages/FinancialForecastingPage';
+import { CustomerIntelligencePage } from './pages/CustomerIntelligencePage';
+import { ProductIntelligencePage } from './pages/ProductIntelligencePage';
+import { AutonomousOperationsPage } from './pages/AutonomousOperationsPage';
+import { V2ComingSoonPage } from './pages/V2ComingSoonPage';
 import { initFreshDatabase } from './db/seed';
 import { ToastProvider } from './components/common/Toast';
 
@@ -116,6 +123,20 @@ export function App() {
         return <DataHealthPage onNavigate={handleNavigate} />;
       case '/integrations':
         return <IntegrationsPage onNavigate={handleNavigate} />;
+      case '/v2':
+        return <V2ComingSoonPage featureName="FounderOS V2" onNavigate={handleNavigate} />;
+      case '/workflows':
+        return <V2ComingSoonPage featureName="Automated Workflows" onNavigate={handleNavigate} />;
+      case '/boardroom':
+        return <V2ComingSoonPage featureName="Executive Boardroom" onNavigate={handleNavigate} />;
+      case '/forecasting':
+        return <V2ComingSoonPage featureName="Financial Forecasting" onNavigate={handleNavigate} />;
+      case '/customer-intelligence':
+        return <V2ComingSoonPage featureName="Customer Intelligence" onNavigate={handleNavigate} />;
+      case '/product-intelligence':
+        return <V2ComingSoonPage featureName="Product Intelligence" onNavigate={handleNavigate} />;
+      case '/autopilot':
+        return <V2ComingSoonPage featureName="Autonomous Operations" onNavigate={handleNavigate} />;
       case '/settings':
         return <SettingsPage initialTab={currentRoute.includes('tab=providers') ? 'providers' : 'company'} />;
       default:

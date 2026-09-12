@@ -6,6 +6,7 @@ import { Topbar } from './Topbar';
 import { AmbientOrbs } from '../common/AmbientOrbs';
 import { CommandPalette } from '../command/CommandPalette';
 import { AICopilotDrawer } from '../ai/AICopilotDrawer';
+import { DesktopTitlebar } from '../../desktop/DesktopTitlebar';
 import { updateSettings } from '../../db/services/companyService';
 import type { Company, AppSettings } from '../../types';
 
@@ -79,6 +80,9 @@ export const AppShell: React.FC<AppShellProps> = ({
         overflowX: 'hidden',
       }}
     >
+      {/* Native Desktop Titlebar (Electron Only) */}
+      <DesktopTitlebar />
+
       {/* Background ambient lighting */}
       <AmbientOrbs />
 

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { CheckCircle2, AlertCircle, Trash2, Info, X } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Trash2, Info, X, ShieldAlert } from 'lucide-react';
 
 export type ToastType = 'success' | 'error' | 'danger' | 'info';
 

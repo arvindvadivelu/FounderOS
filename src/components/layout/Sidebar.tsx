@@ -59,6 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile,
   onCloseMobile,
 }) => {
+  const isDesktop = typeof window !== 'undefined' && Boolean((window as any).desktopBridge?.isDesktop);
   const sections: NavSection[] = [
     {
       title: 'COMMAND CENTER',
@@ -106,12 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'FOUNDEROS V2',
       items: [
-        { id: '/workflows', label: 'Automated Workflows', icon: <Zap size={16} color="#38bdf8" />, disabled: true, badge: 'Coming Soon' },
-        { id: '/boardroom', label: 'Executive Boardroom', icon: <Users size={16} color="#a78bfa" />, disabled: true, badge: 'Coming Soon' },
-        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" />, disabled: true, badge: 'Coming Soon' },
-        { id: '/customer-intelligence', label: 'Customer Intelligence', icon: <Target size={16} color="#0ea5e9" />, disabled: true, badge: 'Coming Soon' },
-        { id: '/product-intelligence', label: 'Product Intelligence', icon: <FolderKanban size={16} color="#f59e0b" />, disabled: true, badge: 'Coming Soon' },
-        { id: '/autopilot', label: 'Autonomous Operations', icon: <Cpu size={16} color="#10b981" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/v2', label: 'FounderOS V2', icon: <Sparkles size={16} color="#c084fc" />, disabled: true, badge: 'Coming Soon' },
       ],
     },
     {
@@ -144,13 +140,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <aside
         style={{
           width: '260px',
-          height: '100vh',
+          height: isDesktop ? 'calc(100vh - 36px)' : '100vh',
           backgroundColor: 'var(--bg-surface)',
           borderRight: '1px solid var(--border-faint)',
           display: 'flex',
           flexDirection: 'column',
           position: 'fixed',
-          top: 0,
+          top: isDesktop ? '36px' : 0,
           left: 0,
           zIndex: 1100,
           transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',

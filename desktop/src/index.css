@@ -56,30 +56,6 @@
   --shadow-glow: 0 0 25px -3px var(--primary-blue-glow);
 }
 
-/* Light Theme Overrides */
-[data-theme="light"] {
-  --bg-page: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-surface-elevated: #f1f5f9;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-
-  --border-faint: rgba(0, 0, 0, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.14);
-  --border-active: rgba(0, 80, 255, 0.5);
-
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --text-dim: #94a3b8;
-  --text-inverse: #ffffff;
-
-  --primary-blue-surface: rgba(0, 80, 255, 0.08);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 0 20px -3px rgba(0, 80, 255, 0.2);
-}
-
 /* Base resets */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -145,10 +121,6 @@ button {
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-full);
-}
-
-[data-theme="light"] ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -382,10 +354,6 @@ button {
   background: rgba(255, 255, 255, 0.02);
 }
 
-[data-theme="light"] .data-table tr:hover td {
-  background: rgba(0, 0, 0, 0.02);
-}
-
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
@@ -424,7 +392,7 @@ button {
     display: flex !important;
   }
 
-  .search-label, .briefing-label {
+  .search-label, .briefing-label, .desktop-download-label {
     display: none;
   }
 

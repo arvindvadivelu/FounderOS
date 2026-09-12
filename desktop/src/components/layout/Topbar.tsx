@@ -3,15 +3,14 @@ import {
   Menu,
   Search,
   Sparkles,
-  Sun,
-  Moon,
   Database,
   Wifi,
   FileCheck,
   Loader2,
+  MonitorDown,
+  Check,
 } from 'lucide-react';
 import { useAIChatState } from '../../ai/aiChatService';
-import { useDesktopBridge } from '../../desktop/useDesktopBridge';
 import type { Company } from '../../types';
 
 interface TopbarProps {
@@ -20,8 +19,6 @@ interface TopbarProps {
   onOpenAiCopilot: () => void;
   onNavigateToAi?: () => void;
   onGenerateBriefing: () => void;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
   company: Company | null;
   currentRoute: string;
 }
@@ -32,12 +29,28 @@ export const Topbar: React.FC<TopbarProps> = ({
   onOpenAiCopilot,
   onNavigateToAi,
   onGenerateBriefing,
-  theme,
-  onToggleTheme,
   currentRoute,
 }) => {
   const { anyActive, status: aiStatus } = useAIChatState();
-  const { isDesktop } = useDesktopBridge();
+  const isDesktop = typeof window !== 'undefined' && Boolean((window as any).desktopBridge);
+  const [downloadStatus, setDownloadStatus] = React.useState<'idle' | 'downloading' | 'done'>('idle');
+
+  const handleDownloadDesktop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDownloadStatus('downloading');
+
+    const link = document.createElement('a');
+    link.href = '/downloads/FounderOS-Setup.exe';
+    link.download = 'FounderOS-Setup.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(() => {
+      setDownloadStatus('done');
+      setTimeout(() => setDownloadStatus('idle'), 3500);
+    }, 1200);
+  };
   const getPageTitle = (route: string) => {
     switch (route) {
       case '/': return 'Command Center';
@@ -79,7 +92,7 @@ export const Topbar: React.FC<TopbarProps> = ({
         justifyContent: 'space-between',
         padding: '0 24px',
         position: 'sticky',
-        top: isDesktop ? '36px' : 0,
+        top: 0,
         zIndex: 1000,
       }}
     >
@@ -222,6 +235,54 @@ export const Topbar: React.FC<TopbarProps> = ({
           <span className="briefing-label">Daily Briefing</span>
         </button>
 
+        {/* Download Desktop App CTA */}
+        {!isDesktop && (
+          <button
+            type="button"
+            onClick={handleDownloadDesktop}
+            className="btn-secondary"
+            style={{
+              padding: '6px 12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              borderColor: downloadStatus !== 'idle' ? 'var(--brand-accent)' : undefined,
+              backgroundColor: downloadStatus !== 'idle' ? 'rgba(0, 80, 255, 0.08)' : undefined,
+              transition: 'all 0.2s ease',
+            }}
+            title="Download FounderOS Native Desktop App for Windows (.exe setup)"
+          >
+            {downloadStatus === 'downloading' ? (
+              <Loader2 size={14} className="animate-spin" color="var(--brand-accent)" />
+            ) : downloadStatus === 'done' ? (
+              <Check size={14} color="#10b981" />
+            ) : (
+              <MonitorDown size={14} color="var(--brand-accent)" />
+            )}
+            <span className="desktop-download-label">
+              {downloadStatus === 'downloading'
+                ? 'Downloading...'
+                : downloadStatus === 'done'
+                ? 'Setup Ready!'
+                : 'Download Desktop'}
+            </span>
+            <span
+              style={{
+                fontSize: '9px',
+                padding: '1px 5px',
+                borderRadius: '4px',
+                backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                color: 'var(--brand-accent)',
+                fontWeight: 700,
+                letterSpacing: '0.5px',
+              }}
+            >
+              EXE
+            </span>
+          </button>
+        )}
+
         {/* Ask AI CEO Button */}
         <button
           type="button"
@@ -246,21 +307,6 @@ export const Topbar: React.FC<TopbarProps> = ({
           >
             Ctrl /
           </kbd>
-        </button>
-
-        {/* Theme Toggle */}
-        <button
-          type="button"
-          onClick={onToggleTheme}
-          className="btn-secondary"
-          style={{
-            padding: '7px',
-            borderRadius: '999px',
-            color: 'var(--text-muted)',
-          }}
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        >
-          {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
         </button>
       </div>
     </header>

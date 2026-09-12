@@ -990,6 +990,431 @@ export async function seedDemoData(): Promise<void> {
     await db.bankAccounts.bulkPut(bankAccounts);
     await db.balanceSheetItems.bulkPut(balanceSheetItems);
     await db.uploadedFiles.bulkPut(uploadedFiles);
+
+    // ==========================================
+    // FounderOS V2 Demo Seeding
+    // ==========================================
+
+    // 1. Workflows
+    const workflows = [
+      {
+        id: 'wf-1',
+        name: 'Overdue Invoice Sentinel',
+        description: 'Flags overdue invoices (>7 days), creates urgent collection tasks, and logs reminder notes.',
+        category: 'finance' as const,
+        triggerType: 'invoice_overdue' as const,
+        triggerConfig: { daysOverdue: 7 },
+        conditions: [{ field: 'amount', operator: 'greater_than' as const, value: 1000 }],
+        actions: [
+          {
+            type: 'create_task' as const,
+            params: { title: 'Chase overdue invoice payment from client', priority: 'high' },
+            description: 'Auto-create high-priority founder collection task',
+          },
+          {
+            type: 'generate_note' as const,
+            params: { title: 'Payment Collection Notice Drafted', category: 'Finance' },
+            description: 'Auto-draft formal invoice follow-up note',
+          },
+        ],
+        isActive: true,
+        runCount: 8,
+        lastRunAt: new Date(Date.now() - 3600000).toISOString(),
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'wf-2',
+        name: 'Churn Preemption Shield',
+        description: 'Triggers executive check-in when customer health drops below 50 or activity goes cold.',
+        category: 'retention' as const,
+        triggerType: 'churn_risk_high' as const,
+        triggerConfig: { minHealthScore: 50 },
+        conditions: [{ field: 'healthScore', operator: 'less_than' as const, value: 50 }],
+        actions: [
+          {
+            type: 'create_task' as const,
+            params: { title: 'Conduct founder VIP check-in call with at-risk account', priority: 'critical' },
+            description: 'Schedule founder VIP intervention call',
+          },
+          {
+            type: 'update_customer_status' as const,
+            params: { status: 'at_risk' },
+            description: 'Update customer status to At-Risk',
+          },
+        ],
+        isActive: true,
+        runCount: 3,
+        lastRunAt: new Date(Date.now() - 7200000).toISOString(),
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'wf-3',
+        name: 'VIP Deal Won Concierge',
+        description: 'When a deal over $10,000 is marked Won, kickstarts customer onboarding sprint.',
+        category: 'sales' as const,
+        triggerType: 'deal_won' as const,
+        triggerConfig: { minValue: 10000 },
+        conditions: [{ field: 'value', operator: 'greater_than' as const, value: 9999 }],
+        actions: [
+          {
+            type: 'create_task' as const,
+            params: { title: 'Send VIP Welcome Kit & Schedule Kickoff', priority: 'high' },
+            description: 'Spawn executive onboarding tasks',
+          },
+        ],
+        isActive: true,
+        runCount: 5,
+        lastRunAt: new Date(Date.now() - 86400000).toISOString(),
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'wf-4',
+        name: 'Runway Guard Alert',
+        description: 'Evaluates monthly burn. If runway drops under 6 months, triggers expense audit.',
+        category: 'finance' as const,
+        triggerType: 'runway_alert' as const,
+        triggerConfig: { minRunwayMonths: 6 },
+        conditions: [{ field: 'runwayMonths', operator: 'less_than' as const, value: 6 }],
+        actions: [
+          {
+            type: 'create_task' as const,
+            params: { title: 'Conduct Emergency SaaS & Contractor Cost Audit', priority: 'critical' },
+            description: 'Create cost-cutting review task',
+          },
+          {
+            type: 'trigger_ai_audit' as const,
+            params: { agentRole: 'cfo', auditType: 'runway_conservation' },
+            description: 'Dispatch AI CFO Runway Conservation Audit',
+          },
+        ],
+        isActive: true,
+        runCount: 1,
+        lastRunAt: new Date(Date.now() - 172800000).toISOString(),
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'wf-5',
+        name: 'Stale Bug Auto-Escalation',
+        description: 'Escalates critical unresolved bugs that have been open for over 48 hours.',
+        category: 'engineering' as const,
+        triggerType: 'task_blocked' as const,
+        triggerConfig: { hoursBlocked: 48 },
+        conditions: [{ field: 'severity', operator: 'equals' as const, value: 'critical' }],
+        actions: [
+          {
+            type: 'create_task' as const,
+            params: { title: 'Unblock Critical Customer P0 Bug Sprint', priority: 'critical' },
+            description: 'Create unblock sprint task',
+          },
+        ],
+        isActive: true,
+        runCount: 2,
+        lastRunAt: new Date(Date.now() - 259200000).toISOString(),
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+    ];
+    await db.workflows.bulkPut(workflows);
+
+    // 2. Forecast Scenarios & Hiring Plans
+    const forecastScenarios = [
+      {
+        id: 'sc-base',
+        name: 'Base Case (Expected)',
+        type: 'base' as const,
+        description: 'Realistic growth matching current pipeline velocity and churn baseline.',
+        mrrGrowthRatePct: 8,
+        churnRatePct: 2,
+        grossMarginPct: 80,
+        isDefault: true,
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'sc-best',
+        name: 'Best Case (Aggressive Growth)',
+        type: 'best' as const,
+        description: 'High enterprise conversion, negative net churn, and expansion retainers.',
+        mrrGrowthRatePct: 15,
+        churnRatePct: 0.8,
+        grossMarginPct: 85,
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+      {
+        id: 'sc-worst',
+        name: 'Worst Case (Bear Market)',
+        type: 'worst' as const,
+        description: 'Elongated enterprise procurement cycles and increased downsell churn.',
+        mrrGrowthRatePct: 3,
+        churnRatePct: 4.5,
+        grossMarginPct: 75,
+        createdAt: isoNow,
+        updatedAt: isoNow,
+      },
+    ];
+    await db.forecastScenarios.bulkPut(forecastScenarios);
+
+    const hiringPlans = [
+      {
+        id: 'hire-1',
+        title: 'Senior Full-Stack AI Engineer',
+        department: 'Engineering',
+        monthlySalary: 11000,
+        startDate: '2026-10-01',
+        priority: 'critical' as const,
+        status: 'approved' as const,
+        impactJustification: 'Double core workflow engine velocity and eliminate backend backlog.',
+      },
+      {
+        id: 'hire-2',
+        title: 'Enterprise Account Executive (AE)',
+        department: 'Sales',
+        monthlySalary: 8500,
+        startDate: '2026-11-01',
+        priority: 'high' as const,
+        status: 'planned' as const,
+        impactJustification: 'Uncap pipeline capacity and handle inbound enterprise pilots.',
+      },
+      {
+        id: 'hire-3',
+        title: 'Growth Marketing Lead',
+        department: 'Marketing',
+        monthlySalary: 7500,
+        startDate: '2026-12-01',
+        priority: 'medium' as const,
+        status: 'planned' as const,
+        impactJustification: 'Establish automated SEO acquisition loops and product-led signups.',
+      },
+    ];
+    await db.hiringPlans.bulkPut(hiringPlans);
+
+    // 3. Customer Health & Expansion Radar
+    const customerHealthScores = [
+      {
+        id: 'chm-cust_1',
+        customerId: 'cust_1',
+        companyName: 'Acme Global Corp',
+        mrr: 4800,
+        plan: 'Enterprise Tier',
+        healthScore: 92,
+        churnRiskScore: 8,
+        quadrant: 'champion' as const,
+        activityRecencyDays: 2,
+        openBugsCount: 0,
+        overdueInvoicesCount: 0,
+        npsScore: 10,
+        churnRiskFactors: ['Highly active daily usage', 'Consistent on-time billing'],
+        recommendedIntervention: 'Propose multi-seat enterprise upgrade with 15% annual savings.',
+        updatedAt: isoNow,
+      },
+      {
+        id: 'chm-cust_2',
+        customerId: 'cust_2',
+        companyName: 'Nexus BioHealth',
+        mrr: 2400,
+        plan: 'Growth Pro',
+        healthScore: 78,
+        churnRiskScore: 22,
+        quadrant: 'loyalist' as const,
+        activityRecencyDays: 5,
+        openBugsCount: 0,
+        overdueInvoicesCount: 0,
+        npsScore: 8,
+        churnRiskFactors: ['Stable usage', 'Pending HIPAA audit report'],
+        recommendedIntervention: 'Send quarterly business review and security compliance pack.',
+        updatedAt: isoNow,
+      },
+      {
+        id: 'chm-cust_4',
+        customerId: 'cust_4',
+        companyName: 'FinVantage Group',
+        mrr: 1800,
+        plan: 'Starter Pro',
+        healthScore: 42,
+        churnRiskScore: 58,
+        quadrant: 'at_risk' as const,
+        activityRecencyDays: 26,
+        openBugsCount: 1,
+        overdueInvoicesCount: 1,
+        npsScore: 5,
+        churnRiskFactors: ['Engagement dropped 40% in last 3 weeks', 'Overdue invoice #INV-2026-004'],
+        recommendedIntervention: 'Conduct urgent founder check-in call and offer payment plan.',
+        updatedAt: isoNow,
+      },
+    ];
+    await db.customerHealthScores.bulkPut(customerHealthScores);
+
+    const expansionOpportunities = [
+      {
+        id: 'exp-cust_1',
+        customerId: 'cust_1',
+        companyName: 'Acme Global Corp',
+        currentMrr: 4800,
+        targetMrr: 7200,
+        upsideArr: 28800,
+        expansionType: 'retainer' as const,
+        confidencePct: 88,
+        strategicAngle: 'Pitch dedicated enterprise sprint retainer and 99.9% uptime SLA.',
+        suggestedAction: 'Draft AI CRO expansion proposal with +$2,400/mo upside',
+      },
+      {
+        id: 'exp-cust_2',
+        customerId: 'cust_2',
+        companyName: 'Nexus BioHealth',
+        currentMrr: 2400,
+        targetMrr: 3600,
+        upsideArr: 14400,
+        expansionType: 'tier_upgrade' as const,
+        confidencePct: 75,
+        strategicAngle: 'Upgrade from Growth Pro to Enterprise Tier with HIPAA dedicated vault.',
+        suggestedAction: 'Initiate tier upgrade sequence with founder discount',
+      },
+    ];
+    await db.expansionOpportunities.bulkPut(expansionOpportunities);
+
+    // 4. Product Intelligence & Priorities
+    const productPriorities = [
+      {
+        id: 'rice-1',
+        title: 'One-Click Stripe Billing & Auto-Receipts',
+        category: 'core' as const,
+        reach: 8,
+        impact: 5,
+        confidence: 90,
+        effort: 2,
+        riceScore: 180,
+        quadrant: 'quick_win' as const,
+        arrInfluenceEstimate: 48000,
+        engineeringEffortDays: 6,
+        status: 'in_progress' as const,
+        suggestedQuarter: 'Q1',
+      },
+      {
+        id: 'rice-2',
+        title: 'Multi-Seat Role-Based Access Controls (RBAC)',
+        category: 'growth' as const,
+        reach: 9,
+        impact: 4,
+        confidence: 85,
+        effort: 4,
+        riceScore: 76,
+        quadrant: 'major_bet' as const,
+        arrInfluenceEstimate: 72000,
+        engineeringEffortDays: 12,
+        status: 'planned' as const,
+        suggestedQuarter: 'Q2',
+      },
+      {
+        id: 'rice-3',
+        title: 'Autonomous Webhook Notification Dispatcher',
+        category: 'infrastructure' as const,
+        reach: 6,
+        impact: 3,
+        confidence: 95,
+        effort: 1.5,
+        riceScore: 114,
+        quadrant: 'quick_win' as const,
+        arrInfluenceEstimate: 24000,
+        engineeringEffortDays: 4,
+        status: 'backlog' as const,
+        suggestedQuarter: 'Q1',
+      },
+      {
+        id: 'rice-4',
+        title: 'AI Executive Boardroom Audio Synthesis',
+        category: 'growth' as const,
+        reach: 5,
+        impact: 4,
+        confidence: 70,
+        effort: 6,
+        riceScore: 23,
+        quadrant: 'major_bet' as const,
+        arrInfluenceEstimate: 36000,
+        engineeringEffortDays: 18,
+        status: 'idea' as const,
+        suggestedQuarter: 'Q3',
+      },
+    ];
+    await db.productPriorities.bulkPut(productPriorities);
+
+    // 5. Autonomous Routines & Anomalies
+    const autonomousRoutines = [
+      {
+        id: 'routine-morning',
+        name: 'Morning Executive Briefing & Standup',
+        timeSlot: '08:00' as const,
+        frequency: 'daily' as const,
+        description: 'Synthesizes overnight MRR changes, priorities, cash balance, and critical tasks.',
+        category: 'briefing' as const,
+        isEnabled: true,
+        autoHealEnabled: true,
+        lastStatus: 'healthy' as const,
+        lastRunAt: new Date(Date.now() - 14400000).toISOString(),
+        lastRunSummary: 'Executed with 0 blocking anomalies. All metrics nominal.',
+      },
+      {
+        id: 'routine-runway',
+        name: 'Cash Runway & Burn Sentinel',
+        timeSlot: '13:00' as const,
+        frequency: 'daily' as const,
+        description: 'Monitors net daily burn, flags spending spikes, and tracks runway horizon.',
+        category: 'runway_guard' as const,
+        isEnabled: true,
+        autoHealEnabled: true,
+        lastStatus: 'healthy' as const,
+        lastRunAt: new Date(Date.now() - 28800000).toISOString(),
+        lastRunSummary: 'Runway buffer verified at 14.8 months.',
+      },
+      {
+        id: 'routine-pipeline',
+        name: 'Sales Pipeline Hygiene & Deal Sweeper',
+        timeSlot: '18:00' as const,
+        frequency: 'daily' as const,
+        description: 'Detects stalled deals (>21 days) and initiates auto-reengagement workflows.',
+        category: 'pipeline_hygiene' as const,
+        isEnabled: true,
+        autoHealEnabled: true,
+        lastStatus: 'anomalies_detected' as const,
+        lastRunAt: new Date(Date.now() - 43200000).toISOString(),
+        lastRunSummary: '2 stalled deals identified in Negotiation stage.',
+      },
+    ];
+    await db.autonomousRoutines.bulkPut(autonomousRoutines);
+
+    const anomalies = [
+      {
+        id: 'anom-inv-1',
+        type: 'overdue_invoice' as const,
+        severity: 'warning' as const,
+        title: 'Overdue Invoice: #INV-2026-004 ($1,800)',
+        description: 'FinVantage Group has not cleared invoice due on March 1st.',
+        entityId: 'inv_4',
+        entityType: 'invoice',
+        detectedAt: isoNow,
+        resolved: false,
+        autoHealable: true,
+        autoHealActionName: 'Draft Payment Notice & Urgent Collection Task',
+      },
+      {
+        id: 'anom-deal-1',
+        type: 'stalled_deal' as const,
+        severity: 'warning' as const,
+        title: 'Stalled Deal: CloudOps Platform Migration ($18,500)',
+        description: 'Deal has been in Proposal stage for 28 days with zero customer activity.',
+        entityId: 'deal_3',
+        entityType: 'deal',
+        detectedAt: isoNow,
+        resolved: false,
+        autoHealable: true,
+        autoHealActionName: 'Trigger AI CRO Win-Back Blitz Task',
+      },
+    ];
+    await db.anomalies.bulkPut(anomalies);
   });
 }
 
