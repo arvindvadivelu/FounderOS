@@ -12,15 +12,27 @@ import {
   List as ListIcon,
 } from 'lucide-react';
 import { db } from '../db';
-import { SpotlightCard } from '../components/common/SpotlightCard';
 import { MetricCard } from '../components/common/MetricCard';
-import { Badge, getStatusBadgeVariant } from '../components/common/Badge';
 import { Modal } from '../components/common/Modal';
 import { EmptyState } from '../components/common/EmptyState';
 import { createTask, updateTask, deleteTask } from '../db/services/taskProjectService';
 import { formatDate } from '../utils/formatters';
 import { useToast } from '../components/common/Toast';
 import type { Task, TaskStatus, Priority } from '../types';
+
+const TASK_STATUS_CONFIG: Record<TaskStatus, { color: string; bg: string; border: string; label: string }> = {
+  todo: { color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.25)', label: 'Todo' },
+  in_progress: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.25)', label: 'In Progress' },
+  blocked: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.25)', label: 'Blocked' },
+  done: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.25)', label: 'Done' },
+};
+
+const TASK_PRIORITY_CONFIG: Record<Priority, { color: string; bg: string; border: string; label: string }> = {
+  low: { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.25)', label: 'Low' },
+  medium: { color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.25)', label: 'Medium' },
+  high: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.25)', label: 'High' },
+  critical: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.25)', label: 'Critical' },
+};
 
 export const TasksPage: React.FC = () => {
   const { showToast } = useToast();
@@ -163,41 +175,81 @@ export const TasksPage: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+      {/* Editorial Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 10px',
+              borderRadius: '10px', // DESIGN.md --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.1)',
+              border: '1px solid rgba(0, 80, 255, 0.25)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '8px',
+            }}
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+            DAILY EXECUTION • SPRINT & TASK BACKLOG
+          </div>
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+            }}
+          >
             Execution Tasks & Daily Workflow
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Manage daily founder tasks, priority assignments, and time estimations.
+          </h1>
+          <p style={{ fontSize: '13.5px', color: '#94a3b8', marginTop: '6px', maxWidth: '640px' }}>
+            Manage daily founder tasks, sprint assignments, priority queues, and time estimations.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        {/* Action Controls */}
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          {/* Segmented View Switcher — 50px Pill Style */}
           <div
             style={{
               display: 'flex',
-              backgroundColor: 'var(--bg-surface-elevated)',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
               borderRadius: '50px',
-              padding: '3px',
-              border: '1px solid var(--border-faint)',
+              padding: '4px',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}
           >
             <button
               type="button"
               onClick={() => setViewMode('kanban')}
               style={{
-                padding: '6px 14px',
+                padding: '6px 16px',
                 borderRadius: '50px',
-                backgroundColor: viewMode === 'kanban' ? 'var(--brand-accent)' : 'transparent',
-                color: viewMode === 'kanban' ? '#ffffff' : 'var(--text-muted)',
+                backgroundColor: viewMode === 'kanban' ? '#0050FF' : 'transparent',
+                color: viewMode === 'kanban' ? '#ffffff' : '#94a3b8',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 700,
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                cursor: 'pointer',
+                boxShadow: viewMode === 'kanban' ? '0 0 12px rgba(0, 80, 255, 0.4)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -207,16 +259,18 @@ export const TasksPage: React.FC = () => {
               type="button"
               onClick={() => setViewMode('list')}
               style={{
-                padding: '6px 14px',
+                padding: '6px 16px',
                 borderRadius: '50px',
-                backgroundColor: viewMode === 'list' ? 'var(--brand-accent)' : 'transparent',
-                color: viewMode === 'list' ? '#ffffff' : 'var(--text-muted)',
+                backgroundColor: viewMode === 'list' ? '#0050FF' : 'transparent',
+                color: viewMode === 'list' ? '#ffffff' : '#94a3b8',
                 fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 700,
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                cursor: 'pointer',
+                boxShadow: viewMode === 'list' ? '0 0 12px rgba(0, 80, 255, 0.4)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -224,13 +278,39 @@ export const TasksPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Primary CTA Button with Action Indicator Dot */}
           <button
             type="button"
             onClick={openAddModal}
-            className="btn-primary"
-            style={{ borderRadius: '50px', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              borderRadius: '50px', // DESIGN.md --radius-buttons: 50px
+              padding: '10px 22px',
+              backgroundColor: '#0050FF',
+              color: '#ffffff',
+              border: 'none',
+              fontSize: '13.5px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a66ff')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
           >
-            <Plus size={15} /> New Task
+            <Plus size={15} />
+            <span>New Task</span>
+            <span
+              style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                opacity: 0.9,
+              }}
+            />
           </button>
         </div>
       </div>
@@ -275,53 +355,108 @@ export const TasksPage: React.FC = () => {
         />
       </div>
 
-      {/* Quick Add Bar & Filters */}
-      <SpotlightCard style={{ padding: '16px 20px' }}>
+      {/* Quick Add Bar & Filters Card */}
+      <div
+        style={{
+          backgroundColor: '#0b0f19',
+          borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          padding: '18px 22px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)',
+        }}
+      >
         <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Inline Quick Add Form */}
+          {/* 50px Pill Inline Quick Add Form */}
           <form onSubmit={handleQuickAdd} style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '280px' }}>
             <input
               type="text"
               value={quickTitle}
               onChange={(e) => setQuickTitle(e.target.value)}
               placeholder="Quick add task and hit enter..."
-              className="input-field"
-              style={{ flex: 1 }}
+              style={{
+                flex: 1,
+                padding: '9px 18px',
+                borderRadius: '50px', // 50px pill input
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '13px',
+                outline: 'none',
+                transition: 'border-color 0.15s ease',
+              }}
+              onFocus={(e) => (e.target.style.borderColor = 'rgba(0, 80, 255, 0.4)')}
+              onBlur={(e) => (e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)')}
             />
-            <button type="submit" className="btn-secondary" style={{ padding: '8px 16px' }}>
+            <button
+              type="submit"
+              style={{
+                padding: '9px 18px',
+                borderRadius: '50px', // 50px pill button
+                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.15s ease',
+              }}
+            >
               <Plus size={14} /> Quick Add
             </button>
           </form>
 
           {/* Search & Priority Filters */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="input-field"
-              style={{ width: 'auto', padding: '6px 12px', fontSize: '12.5px' }}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '50px', // 50px pill select
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#f8fafc',
+                fontSize: '12.5px',
+                fontWeight: 600,
+                outline: 'none',
+                cursor: 'pointer',
+              }}
             >
-              <option value="all">All Priorities</option>
-              <option value="critical">Critical</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="all" style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>All Priorities</option>
+              <option value="critical" style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>Critical</option>
+              <option value="high" style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>High</option>
+              <option value="medium" style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>Medium</option>
+              <option value="low" style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>Low</option>
             </select>
 
             <div style={{ position: 'relative' }}>
-              <Search size={14} style={{ position: 'absolute', left: '10px', top: '10px', color: 'var(--text-dim)' }} />
+              <Search size={14} style={{ position: 'absolute', left: '14px', top: '11px', color: '#64748b' }} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search tasks..."
-                className="input-field"
-                style={{ paddingLeft: '32px', width: '180px', padding: '6px 10px 6px 32px', fontSize: '12.5px' }}
+                style={{
+                  padding: '8px 16px 8px 36px',
+                  borderRadius: '50px', // 50px pill search
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f8fafc',
+                  fontSize: '12.5px',
+                  width: '180px',
+                  outline: 'none',
+                  transition: 'border-color 0.15s ease',
+                }}
+                onFocus={(e) => (e.target.style.borderColor = 'rgba(0, 80, 255, 0.4)')}
+                onBlur={(e) => (e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)')}
               />
             </div>
           </div>
         </div>
-      </SpotlightCard>
+      </div>
 
       {/* Kanban View */}
       {viewMode === 'kanban' && (
@@ -337,24 +472,51 @@ export const TasksPage: React.FC = () => {
         >
           {statuses.map((st) => {
             const colTasks = filteredTasks.filter((t) => t.status === st);
+            const statusCfg = TASK_STATUS_CONFIG[st];
 
             return (
               <div
                 key={st}
                 style={{
-                  backgroundColor: 'var(--bg-surface-elevated)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border-faint)',
-                  padding: '16px',
+                  backgroundColor: '#0b0f19',
+                  borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '18px 16px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '12px',
-                  minHeight: '400px',
+                  gap: '14px',
+                  minHeight: '440px',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)',
                 }}
               >
+                {/* Column Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Badge variant={getStatusBadgeVariant(st)}>{st.replace('_', ' ')}</Badge>
-                  <span style={{ fontSize: '12px', color: 'var(--text-dim)', fontWeight: 600 }}>
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '3px 10px',
+                      borderRadius: '10px', // DESIGN.md --radius-small: 10px
+                      backgroundColor: statusCfg.bg,
+                      border: `1px solid ${statusCfg.border}`,
+                      color: statusCfg.color,
+                      fontSize: '11.5px',
+                      fontWeight: 700,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        backgroundColor: statusCfg.color,
+                        boxShadow: `0 0 6px ${statusCfg.color}`,
+                      }}
+                    />
+                    {statusCfg.label}
+                  </div>
+                  <span style={{ fontSize: '11.5px', color: '#64748b', fontWeight: 600 }}>
                     ({colTasks.length})
                   </span>
                 </div>
@@ -365,108 +527,204 @@ export const TasksPage: React.FC = () => {
                       style={{
                         margin: 'auto 0',
                         textAlign: 'center',
-                        padding: '24px 8px',
-                        color: 'var(--text-dim)',
+                        padding: '30px 12px',
+                        color: '#64748b',
                         fontSize: '12px',
-                        border: '1px dashed var(--border-faint)',
-                        borderRadius: 'var(--radius-md)',
+                        border: '1px dashed rgba(255, 255, 255, 0.1)',
+                        borderRadius: '16px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.01)',
                       }}
                     >
-                      No tasks in {st.replace('_', ' ')}
+                      No tasks in {statusCfg.label}
                     </div>
                   ) : (
-                    colTasks.map((task) => (
-                      <SpotlightCard
-                        key={task.id}
-                        style={{
-                          padding: '14px',
-                          backgroundColor: 'var(--bg-card)',
-                          borderRadius: 'var(--radius-md)',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '8px',
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', minWidth: 0 }}>
-                            <input
-                              type="checkbox"
-                              checked={task.status === 'done'}
-                              onChange={() => handleToggleTask(task)}
-                              style={{ marginTop: '2px', cursor: 'pointer' }}
-                            />
-                            <div
-                              style={{
-                                fontWeight: 600,
-                                fontSize: '13px',
-                                color: task.status === 'done' ? 'var(--text-dim)' : 'var(--text-main)',
-                                textDecoration: task.status === 'done' ? 'line-through' : 'none',
-                                wordBreak: 'break-word',
-                              }}
-                            >
-                              {task.title}
+                    colTasks.map((task) => {
+                      const priorityCfg = TASK_PRIORITY_CONFIG[task.priority] || {
+                        color: '#94a3b8',
+                        bg: 'rgba(148, 163, 184, 0.12)',
+                        border: 'rgba(148, 163, 184, 0.25)',
+                        label: task.priority,
+                      };
+
+                      return (
+                        <div
+                          key={task.id}
+                          style={{
+                            padding: '14px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                            borderRadius: '16px', // Modern 16px card inside column
+                            border: '1px solid rgba(255, 255, 255, 0.07)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '9px',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)';
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', minWidth: 0 }}>
+                              <input
+                                type="checkbox"
+                                checked={task.status === 'done'}
+                                onChange={() => handleToggleTask(task)}
+                                style={{ marginTop: '3px', cursor: 'pointer', accentColor: '#0050FF' }}
+                              />
+                              <div
+                                style={{
+                                  fontWeight: 600,
+                                  fontSize: '13px',
+                                  color: task.status === 'done' ? '#64748b' : '#f8fafc',
+                                  textDecoration: task.status === 'done' ? 'line-through' : 'none',
+                                  wordBreak: 'break-word',
+                                  lineHeight: 1.35,
+                                }}
+                              >
+                                {task.title}
+                              </div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                              <button
+                                type="button"
+                                onClick={() => openEditModal(task)}
+                                style={{
+                                  width: '26px',
+                                  height: '26px',
+                                  borderRadius: '50%',
+                                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                                  color: '#94a3b8',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.15s ease',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = '#38bdf8';
+                                  e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = '#94a3b8';
+                                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                }}
+                                title="Edit Task"
+                              >
+                                <Edit2 size={12} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteTask(task.id)}
+                                style={{
+                                  width: '26px',
+                                  height: '26px',
+                                  borderRadius: '50%',
+                                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                                  color: '#94a3b8',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.15s ease',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = '#ef4444';
+                                  e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = '#94a3b8';
+                                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                }}
+                                title="Delete Task"
+                              >
+                                <Trash2 size={12} />
+                              </button>
                             </div>
                           </div>
 
-                          <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-                            <button
-                              type="button"
-                              onClick={() => openEditModal(task)}
-                              style={{ color: 'var(--text-dim)', padding: '2px' }}
-                              title="Edit Task"
-                            >
-                              <Edit2 size={13} />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteTask(task.id)}
-                              style={{ color: 'var(--text-dim)', padding: '2px' }}
-                              title="Delete Task"
-                            >
-                              <Trash2 size={13} />
-                            </button>
-                          </div>
-                        </div>
+                          {task.projectName && (
+                            <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 600 }}>
+                              {task.projectName}
+                            </div>
+                          )}
 
-                        {task.projectName && (
-                          <div style={{ fontSize: '11px', color: 'var(--brand-accent)', fontWeight: 600 }}>
-                            {task.projectName}
-                          </div>
-                        )}
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-                          <Badge variant={getStatusBadgeVariant(task.priority)}>{task.priority}</Badge>
-
-                          {task.dueDate && (
-                            <span
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px' }}>
+                            <div
                               style={{
-                                fontSize: '11px',
-                                color: task.status !== 'done' && task.dueDate < today ? 'var(--accent-rose)' : 'var(--text-dim)',
-                                fontWeight: task.status !== 'done' && task.dueDate < today ? 700 : 400,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '2px 8px',
+                                borderRadius: '10px', // 10px tag chip
+                                backgroundColor: priorityCfg.bg,
+                                border: `1px solid ${priorityCfg.border}`,
+                                color: priorityCfg.color,
+                                fontSize: '10.5px',
+                                fontWeight: 700,
                               }}
                             >
-                              {formatDate(task.dueDate)}
-                            </span>
-                          )}
-                        </div>
+                              <span
+                                style={{
+                                  width: '5px',
+                                  height: '5px',
+                                  borderRadius: '50%',
+                                  backgroundColor: priorityCfg.color,
+                                }}
+                              />
+                              {priorityCfg.label}
+                            </div>
 
-                        {/* Status Move Selector */}
-                        <div style={{ marginTop: '4px', paddingTop: '6px', borderTop: '1px solid var(--border-faint)' }}>
-                          <select
-                            value={task.status}
-                            onChange={(e) => updateTask(task.id, { status: e.target.value as TaskStatus })}
-                            className="input-field"
-                            style={{ padding: '2px 6px', fontSize: '11px', width: '100%' }}
-                          >
-                            {statuses.map((s) => (
-                              <option key={s} value={s}>
-                                Move to {s.replace('_', ' ')}
-                              </option>
-                            ))}
-                          </select>
+                            {task.dueDate && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}>
+                                <Calendar size={11} color={task.status !== 'done' && task.dueDate < today ? '#f87171' : '#64748b'} />
+                                <span
+                                  style={{
+                                    color: task.status !== 'done' && task.dueDate < today ? '#f87171' : '#64748b',
+                                    fontWeight: task.status !== 'done' && task.dueDate < today ? 700 : 400,
+                                  }}
+                                >
+                                  {formatDate(task.dueDate)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Status Move Selector — 50px Pill Style */}
+                          <div style={{ marginTop: '2px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                            <select
+                              value={task.status}
+                              onChange={(e) => updateTask(task.id, { status: e.target.value as TaskStatus })}
+                              style={{
+                                width: '100%',
+                                padding: '5px 10px',
+                                fontSize: '11px',
+                                fontWeight: 600,
+                                borderRadius: '50px', // 50px pill selector
+                                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                color: '#f8fafc',
+                                cursor: 'pointer',
+                                outline: 'none',
+                              }}
+                            >
+                              {statuses.map((s) => (
+                                <option key={s} value={s} style={{ backgroundColor: '#0b0f19', color: '#f8fafc' }}>
+                                  Move to {s.replace('_', ' ')}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
-                      </SpotlightCard>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </div>
@@ -477,7 +735,15 @@ export const TasksPage: React.FC = () => {
 
       {/* List View */}
       {viewMode === 'list' && (
-        <SpotlightCard style={{ padding: '20px' }}>
+        <div
+          style={{
+            backgroundColor: '#0b0f19',
+            borderRadius: '24px', // DESIGN.md --radius-cards: 24px
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            padding: '22px 26px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.25)',
+          }}
+        >
           {filteredTasks.length === 0 ? (
             <EmptyState
               icon={<CheckSquare size={24} />}
@@ -488,7 +754,7 @@ export const TasksPage: React.FC = () => {
             />
           ) : (
             <div style={{ overflowX: 'auto' }}>
-              <table className="data-table">
+              <table className="data-table" style={{ width: '100%' }}>
                 <thead>
                   <tr>
                     <th style={{ width: '40px' }}></th>
@@ -502,71 +768,163 @@ export const TasksPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTasks.map((task) => (
-                    <tr key={task.id}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          checked={task.status === 'done'}
-                          onChange={() => handleToggleTask(task)}
-                          style={{ cursor: 'pointer' }}
-                        />
-                      </td>
-                      <td>
-                        <div
+                  {filteredTasks.map((task) => {
+                    const priorityCfg = TASK_PRIORITY_CONFIG[task.priority];
+                    const statusCfg = TASK_STATUS_CONFIG[task.status];
+
+                    return (
+                      <tr key={task.id}>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={task.status === 'done'}
+                            onChange={() => handleToggleTask(task)}
+                            style={{ cursor: 'pointer', accentColor: '#0050FF' }}
+                          />
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              color: task.status === 'done' ? '#64748b' : '#f8fafc',
+                              textDecoration: task.status === 'done' ? 'line-through' : 'none',
+                            }}
+                          >
+                            {task.title}
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              padding: '2px 8px',
+                              borderRadius: '10px', // 10px tag chip
+                              backgroundColor: priorityCfg.bg,
+                              border: `1px solid ${priorityCfg.border}`,
+                              color: priorityCfg.color,
+                              fontSize: '11px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: '5px',
+                                height: '5px',
+                                borderRadius: '50%',
+                                backgroundColor: priorityCfg.color,
+                              }}
+                            />
+                            {priorityCfg.label}
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              padding: '2px 8px',
+                              borderRadius: '10px', // 10px tag chip
+                              backgroundColor: statusCfg.bg,
+                              border: `1px solid ${statusCfg.border}`,
+                              color: statusCfg.color,
+                              fontSize: '11px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: '5px',
+                                height: '5px',
+                                borderRadius: '50%',
+                                backgroundColor: statusCfg.color,
+                              }}
+                            />
+                            {statusCfg.label}
+                          </div>
+                        </td>
+                        <td style={{ color: '#94a3b8' }}>{task.projectName || '—'}</td>
+                        <td
                           style={{
-                            fontWeight: 600,
-                            color: task.status === 'done' ? 'var(--text-dim)' : 'var(--text-main)',
-                            textDecoration: task.status === 'done' ? 'line-through' : 'none',
+                            color: task.status !== 'done' && task.dueDate && task.dueDate < today ? '#f87171' : '#94a3b8',
+                            fontWeight: task.status !== 'done' && task.dueDate && task.dueDate < today ? 700 : 400,
                           }}
                         >
-                          {task.title}
-                        </div>
-                      </td>
-                      <td>
-                        <Badge variant={getStatusBadgeVariant(task.priority)}>{task.priority}</Badge>
-                      </td>
-                      <td>
-                        <Badge variant={getStatusBadgeVariant(task.status)}>{task.status.replace('_', ' ')}</Badge>
-                      </td>
-                      <td style={{ color: 'var(--text-dim)' }}>{task.projectName || '—'}</td>
-                      <td
-                        style={{
-                          color: task.status !== 'done' && task.dueDate && task.dueDate < today ? 'var(--accent-rose)' : 'var(--text-muted)',
-                        }}
-                      >
-                        {formatDate(task.dueDate)}
-                      </td>
-                      <td style={{ color: 'var(--text-dim)' }}>
-                        {task.estimatedMinutes ? `${task.estimatedMinutes}m` : '—'}
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                          <button
-                            type="button"
-                            onClick={() => openEditModal(task)}
-                            style={{ color: 'var(--text-muted)', padding: '4px' }}
-                            title="Edit Task"
-                          >
-                            <Edit2 size={14} />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteTask(task.id)}
-                            style={{ color: 'var(--text-dim)', padding: '4px' }}
-                            title="Delete Task"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                          {formatDate(task.dueDate)}
+                        </td>
+                        <td style={{ color: '#64748b' }}>
+                          {task.estimatedMinutes ? `${task.estimatedMinutes}m` : '—'}
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                            <button
+                              type="button"
+                              onClick={() => openEditModal(task)}
+                              style={{
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '50%', // Circular 28px button
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                color: '#94a3b8',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.color = '#38bdf8';
+                                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.color = '#94a3b8';
+                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                              }}
+                              title="Edit Task"
+                            >
+                              <Edit2 size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteTask(task.id)}
+                              style={{
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '50%', // Circular 28px button
+                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                color: '#94a3b8',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.color = '#ef4444';
+                                e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.color = '#94a3b8';
+                                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                              }}
+                              title="Delete Task"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           )}
-        </SpotlightCard>
+        </div>
       )}
 
       {/* Add / Edit Task Modal */}
@@ -576,9 +934,9 @@ export const TasksPage: React.FC = () => {
         title={editingTask ? 'Edit Task' : 'Create New Task'}
         subtitle="Schedule execution tasks with priority and time estimations"
       >
-        <form onSubmit={handleSaveTask} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleSaveTask} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Task Title *
             </label>
             <input
@@ -588,11 +946,12 @@ export const TasksPage: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Description & Details
             </label>
             <textarea
@@ -601,18 +960,20 @@ export const TasksPage: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             />
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Priority
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Priority)}
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               >
                 <option value="critical">Critical</option>
                 <option value="high">High</option>
@@ -622,13 +983,14 @@ export const TasksPage: React.FC = () => {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               >
                 <option value="todo">Todo</option>
                 <option value="in_progress">In Progress</option>
@@ -640,7 +1002,7 @@ export const TasksPage: React.FC = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Due Date
               </label>
               <input
@@ -648,11 +1010,12 @@ export const TasksPage: React.FC = () => {
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Estimated Minutes
               </label>
               <input
@@ -663,18 +1026,20 @@ export const TasksPage: React.FC = () => {
                 onChange={(e) => setEstimatedMinutes(parseInt(e.target.value) || 0)}
                 placeholder="45"
                 className="input-field"
+                style={{ borderRadius: '12px' }}
               />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Linked Project
             </label>
             <select
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
               className="input-field"
+              style={{ borderRadius: '12px' }}
             >
               <option value="">None / Standalone Task</option>
               {projects.map((p) => (
@@ -685,12 +1050,49 @@ export const TasksPage: React.FC = () => {
             </select>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-            <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '8px' }}>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              style={{
+                borderRadius: '50px',
+                padding: '9px 18px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                color: '#94a3b8',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
-              {editingTask ? 'Update Task' : 'Create Task'}
+            <button
+              type="submit"
+              style={{
+                borderRadius: '50px',
+                padding: '9px 22px',
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(0, 80, 255, 0.35)',
+              }}
+            >
+              <span>{editingTask ? 'Update Task' : 'Create Task'}</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                }}
+              />
             </button>
           </div>
         </form>

@@ -164,78 +164,196 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
   }
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header Banner */}
-      <SpotlightCard
+    <div
+      className="animate-fade-in"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        maxWidth: '1600px',
+        margin: '0 auto',
+        width: '100%',
+      }}
+    >
+      {/* =========================================================================
+          1. EDITORIAL HEADER (DESIGN.md Typography & 50px Pill Actions)
+         ========================================================================= */}
+      <div
         style={{
-          padding: '26px 30px',
-          background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.16) 0%, rgba(15, 23, 42, 0.9) 100%)',
-          borderColor: 'rgba(0, 80, 255, 0.28)',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           flexWrap: 'wrap',
           gap: '16px',
         }}
       >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--brand-accent)', letterSpacing: '1.2px' }}>
-              EXECUTIVE SAAS KPI SUITE
-            </span>
-            <span
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {/* Tag Chip (10px radius) */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 12px',
+              borderRadius: '10px', // --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.12)',
+              border: '1px solid rgba(0, 80, 255, 0.3)',
+              color: '#38bdf8',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              width: 'fit-content',
+            }}
+          >
+            <div
               style={{
-                fontSize: '11px',
-                padding: '3px 10px',
-                borderRadius: '10px',
-                backgroundColor: 'rgba(16, 185, 129, 0.12)',
-                color: '#34d399',
-                fontWeight: 600,
-                border: '1px solid rgba(16, 185, 129, 0.25)',
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#10b981',
+                boxShadow: '0 0 8px #10b981',
               }}
-            >
-              ● Real-time Metrics
-            </span>
+            />
+            EXECUTIVE SAAS KPI SUITE • REAL-TIME BENCHMARKS
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
+
+          <h1
+            style={{
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 700,
+              color: '#f8fafc',
+              letterSpacing: '-0.04em',
+              margin: 0,
+              lineHeight: 1.15,
+            }}
+          >
             Company KPI Command Center
-          </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '650px' }}>
-            Holistic unit economics, revenue efficiency, growth momentum, and interactive runway scenario modeling.
+          </h1>
+
+          <p
+            style={{
+              fontSize: '14px',
+              color: '#94a3b8',
+              margin: 0,
+              maxWidth: '700px',
+              lineHeight: 1.5,
+            }}
+          >
+            Holistic unit economics, revenue efficiency, growth momentum, and interactive runway scenario modeling with deterministic rule-engine calculations.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        {/* 50px Pill Navigation Buttons with Embedded Action Dots */}
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
           <button
             type="button"
             onClick={() => onNavigate?.('/finance')}
-            className="btn-secondary"
-            style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              backgroundColor: '#0050FF',
+              color: '#ffffff',
+              border: '1px solid #1a62ff',
+              borderRadius: '50px', // --radius-buttons: 50px
+              padding: '11px 22px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              boxShadow: '0 0 16px rgba(0, 80, 255, 0.35)',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1a62ff';
+              e.currentTarget.style.boxShadow = '0 0 24px rgba(0, 80, 255, 0.55)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0050FF';
+              e.currentTarget.style.boxShadow = '0 0 16px rgba(0, 80, 255, 0.35)';
+            }}
           >
-            <DollarSign size={15} /> Financial Ledger
+            <span>Financial Ledger</span>
+            <div
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <DollarSign size={11} strokeWidth={2.5} color="#ffffff" />
+            </div>
           </button>
+
           <button
             type="button"
             onClick={() => onNavigate?.('/customers')}
-            className="btn-secondary"
-            style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+              color: '#f8fafc',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              borderRadius: '50px', // --radius-buttons: 50px
+              padding: '11px 20px',
+              fontSize: '14px',
+              fontWeight: 500,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.14)';
+            }}
           >
-            <Users size={15} /> Customer Base
+            <span>Customer Base</span>
+            <div
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                color: '#030712',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Users size={11} strokeWidth={2.5} />
+            </div>
           </button>
         </div>
-      </SpotlightCard>
+      </div>
 
-      {/* 1. Core Revenue & Growth Engine */}
+      {/* =========================================================================
+          2. CORE REVENUE & GROWTH ENGINE (MetricCards)
+         ========================================================================= */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Zap size={16} color="var(--brand-accent)" />
-            <h3 style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-dim)' }}>
+            <div
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#0050FF',
+                boxShadow: '0 0 6px #0050FF',
+              }}
+            />
+            <h2 style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8', margin: 0 }}>
               1. Revenue & Growth Engine
-            </h3>
+            </h2>
           </div>
-          <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
-            Currency: <strong>{currency}</strong>
+          <span style={{ fontSize: '12px', color: '#64748b' }}>
+            Currency: <strong style={{ color: '#cbd5e1' }}>{currency}</strong>
           </span>
         </div>
 
@@ -282,16 +400,26 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 2. Unit Economics & Efficiency Matrix */}
+      {/* =========================================================================
+          3. UNIT ECONOMICS & CAPITAL EFFICIENCY (DESIGN.md 24px Cards & 10px Chips)
+         ========================================================================= */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <BarChart3 size={16} color="#38bdf8" />
-            <h3 style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-dim)' }}>
+            <div
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 6px #38bdf8',
+              }}
+            />
+            <h2 style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#94a3b8', margin: 0 }}>
               2. Unit Economics & Capital Efficiency
-            </h3>
+            </h2>
           </div>
-          <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>
+          <span style={{ fontSize: '12px', color: '#64748b' }}>
             SaaS Benchmarks Included
           </span>
         </div>
@@ -299,146 +427,256 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: '16px',
           }}
         >
           {/* LTV : CAC */}
-          <SpotlightCard style={{ padding: '20px' }}>
+          <div
+            style={{
+              padding: '22px 24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              transition: 'border-color 0.2s, transform 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 LTV : CAC Ratio
               </span>
               <span
                 style={{
                   fontSize: '11px',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)') : 'rgba(100, 116, 139, 0.15)',
-                  color: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? '#34d399' : '#fbbf24') : 'var(--text-dim)',
+                  padding: '3px 9px',
+                  borderRadius: '10px', // 10px tag chip
+                  backgroundColor: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)') : 'rgba(255, 255, 255, 0.06)',
+                  color: ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? '#34d399' : '#fbbf24') : '#94a3b8',
+                  border: `1px solid ${ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(245, 158, 11, 0.25)') : 'rgba(255, 255, 255, 0.1)'}`,
                   fontWeight: 700,
                 }}
               >
                 {ltvCacRatio > 0 ? (ltvCacRatio >= 3 ? 'Top Tier (3x+)' : 'Improving') : 'No Data'}
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginTop: '10px', letterSpacing: '-0.04em' }}>
               {ltvCacRatio > 0 ? `${ltvCacRatio}x` : 'N/A'}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
-              LTV: <strong>{formatCurrency(ltv, currency)}</strong> | CAC: <strong>{formatCurrency(cac, currency)}</strong>
+            <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '6px' }}>
+              LTV: <strong style={{ color: '#cbd5e1' }}>{formatCurrency(ltv, currency)}</strong> | CAC: <strong style={{ color: '#cbd5e1' }}>{formatCurrency(cac, currency)}</strong>
             </div>
-          </SpotlightCard>
+          </div>
 
           {/* CAC Payback */}
-          <SpotlightCard style={{ padding: '20px' }}>
+          <div
+            style={{
+              padding: '22px 24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              transition: 'border-color 0.2s, transform 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 CAC Payback Period
               </span>
               <span
                 style={{
                   fontSize: '11px',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
-                  color: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? '#34d399' : 'var(--text-dim)',
+                  padding: '3px 9px',
+                  borderRadius: '10px', // 10px tag chip
+                  backgroundColor: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.06)',
+                  color: cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? '#34d399' : '#94a3b8',
+                  border: `1px solid ${cacPaybackMonths > 0 && cacPaybackMonths <= 12 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.1)'}`,
                   fontWeight: 700,
                 }}
               >
                 {cacPaybackMonths > 0 ? (cacPaybackMonths <= 12 ? '< 12 Months' : 'Monitor') : 'No Spend'}
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginTop: '10px', letterSpacing: '-0.04em' }}>
               {cacPaybackMonths > 0 ? `${cacPaybackMonths} mo` : 'N/A'}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
-              Gross Profit per client: <strong>{formatCurrency(Math.round(monthlyGrossProfitPerUser), currency)}/mo</strong>
+            <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '6px' }}>
+              Gross Profit per client: <strong style={{ color: '#cbd5e1' }}>{formatCurrency(Math.round(monthlyGrossProfitPerUser), currency)}/mo</strong>
             </div>
-          </SpotlightCard>
+          </div>
 
           {/* Gross Margin % */}
-          <SpotlightCard style={{ padding: '20px' }}>
+          <div
+            style={{
+              padding: '22px 24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              transition: 'border-color 0.2s, transform 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Gross Margin %
               </span>
               <span
                 style={{
                   fontSize: '11px',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: monthlyRevenue > 0 && grossMarginPct >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
-                  color: monthlyRevenue > 0 && grossMarginPct >= 80 ? '#34d399' : 'var(--text-dim)',
+                  padding: '3px 9px',
+                  borderRadius: '10px', // 10px tag chip
+                  backgroundColor: monthlyRevenue > 0 && grossMarginPct >= 80 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.06)',
+                  color: monthlyRevenue > 0 && grossMarginPct >= 80 ? '#34d399' : '#94a3b8',
+                  border: `1px solid ${monthlyRevenue > 0 && grossMarginPct >= 80 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.1)'}`,
                   fontWeight: 700,
                 }}
               >
                 {monthlyRevenue > 0 ? (grossMarginPct >= 80 ? 'Software Standard' : 'Services') : 'Zero Revenue'}
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginTop: '10px', letterSpacing: '-0.04em' }}>
               {grossMarginPct}%
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
-              COGS / AI & Cloud Spend: <strong>{formatCurrency(hostingAndAiSpend, currency)}/mo</strong>
+            <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '6px' }}>
+              COGS / AI & Cloud Spend: <strong style={{ color: '#cbd5e1' }}>{formatCurrency(hostingAndAiSpend, currency)}/mo</strong>
             </div>
-          </SpotlightCard>
+          </div>
 
           {/* Rule of 40 */}
-          <SpotlightCard style={{ padding: '20px' }}>
+          <div
+            style={{
+              padding: '22px 24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              transition: 'border-color 0.2s, transform 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.35)';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Rule of 40 Score
               </span>
               <span
                 style={{
                   fontSize: '11px',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: monthlyRevenue > 0 && ruleOf40Score >= 40 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
-                  color: monthlyRevenue > 0 && ruleOf40Score >= 40 ? '#34d399' : 'var(--text-dim)',
+                  padding: '3px 9px',
+                  borderRadius: '10px', // 10px tag chip
+                  backgroundColor: monthlyRevenue > 0 && ruleOf40Score >= 40 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(0, 80, 255, 0.12)',
+                  color: monthlyRevenue > 0 && ruleOf40Score >= 40 ? '#34d399' : '#38bdf8',
+                  border: `1px solid ${monthlyRevenue > 0 && ruleOf40Score >= 40 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(0, 80, 255, 0.25)'}`,
                   fontWeight: 700,
                 }}
               >
                 {monthlyRevenue > 0 ? (ruleOf40Score >= 40 ? 'Elite (40%+)' : 'Growth Phase') : 'Zero Revenue'}
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', marginTop: '8px', letterSpacing: '-0.5px' }}>
+            <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginTop: '10px', letterSpacing: '-0.04em' }}>
               {ruleOf40Score}%
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '6px' }}>
-              {monthlyRevenue > 0 ? `Growth Rate (~${estimatedGrowthPct}%) + Profit Margin (${profitMarginPct}%)` : 'Awaiting revenue data'}
+            <div style={{ fontSize: '12.5px', color: '#64748b', marginTop: '6px' }}>
+              {monthlyRevenue > 0 ? `Growth (~${estimatedGrowthPct}%) + Margin (${profitMarginPct}%)` : 'Awaiting revenue data'}
             </div>
-          </SpotlightCard>
+          </div>
         </div>
       </div>
 
-      {/* 3. Interactive Scenario Modeler & Plan Breakdown */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1.4fr) minmax(300px, 1fr)', gap: '20px' }}>
-        {/* Scenario Simulator */}
-        <SpotlightCard style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sliders size={18} color="var(--brand-accent)" />
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>
-                Interactive Growth & Runway Modeler
-              </h3>
+      {/* =========================================================================
+          4. INTERACTIVE SCENARIO MODELER & PLAN BREAKDOWN (DESIGN.md 24px Cards)
+         ========================================================================= */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.4fr) minmax(300px, 1fr)', gap: '20px' }}>
+        {/* Scenario Simulator Card */}
+        <div
+          style={{
+            padding: '28px',
+            borderRadius: '24px', // --radius-cards: 24px
+            backgroundColor: '#0b0f19',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                  border: '1px solid rgba(0, 80, 255, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#38bdf8',
+                }}
+              >
+                <Sliders size={18} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', margin: 0, letterSpacing: '-0.02em' }}>
+                  Interactive Growth & Runway Modeler
+                </h3>
+                <p style={{ fontSize: '12.5px', color: '#94a3b8', margin: '2px 0 0' }}>
+                  Simulate the financial outcome of signing new customers, changing pricing, or allocating marketing budget.
+                </p>
+              </div>
             </div>
-            <span style={{ fontSize: '11px', color: 'var(--brand-accent)', fontWeight: 600 }}>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '4px 10px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(0, 80, 255, 0.12)',
+                color: '#38bdf8',
+                border: '1px solid rgba(0, 80, 255, 0.3)',
+              }}
+            >
               Live Projection Engine
             </span>
           </div>
 
-          <p style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
-            Simulate the financial outcome of signing new customers, changing pricing, or allocating marketing budget.
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {/* Slider 1: New Customers */}
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Target New Customers / Month:</span>
-                <strong style={{ color: 'var(--brand-accent)' }}>+{simNewCustomers} clients</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '8px' }}>
+                <span style={{ color: '#94a3b8', fontWeight: 500 }}>Target New Customers / Month:</span>
+                <strong style={{ color: '#38bdf8' }}>+{simNewCustomers} clients</strong>
               </div>
               <input
                 type="range"
@@ -447,15 +685,19 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                 step="1"
                 value={simNewCustomers}
                 onChange={(e) => setSimNewCustomers(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--brand-accent)' }}
+                style={{
+                  width: '100%',
+                  accentColor: '#0050FF',
+                  cursor: 'pointer',
+                }}
               />
             </div>
 
             {/* Slider 2: Average ARPU */}
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Target ARPU ($ / client):</span>
-                <strong style={{ color: 'var(--brand-accent)' }}>{formatCurrency(simAvgArpu, currency)}/mo</strong>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '8px' }}>
+                <span style={{ color: '#94a3b8', fontWeight: 500 }}>Target ARPU ($ / client):</span>
+                <strong style={{ color: '#38bdf8' }}>{formatCurrency(simAvgArpu, currency)}/mo</strong>
               </div>
               <input
                 type="range"
@@ -464,14 +706,18 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                 step="50"
                 value={simAvgArpu}
                 onChange={(e) => setSimAvgArpu(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--brand-accent)' }}
+                style={{
+                  width: '100%',
+                  accentColor: '#0050FF',
+                  cursor: 'pointer',
+                }}
               />
             </div>
 
             {/* Slider 3: Marketing Spend */}
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                <span style={{ color: 'var(--text-muted)' }}>Additional Marketing Spend:</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '8px' }}>
+                <span style={{ color: '#94a3b8', fontWeight: 500 }}>Additional Marketing Spend:</span>
                 <strong style={{ color: '#f87171' }}>+{formatCurrency(simMarketingSpend, currency)}/mo</strong>
               </div>
               <input
@@ -481,68 +727,94 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                 step="250"
                 value={simMarketingSpend}
                 onChange={(e) => setSimMarketingSpend(Number(e.target.value))}
-                style={{ width: '100%', accentColor: 'var(--brand-accent)' }}
+                style={{
+                  width: '100%',
+                  accentColor: '#0050FF',
+                  cursor: 'pointer',
+                }}
               />
             </div>
           </div>
 
-          {/* Model Output Card */}
+          {/* Model Output Card (16px Card) */}
           <div
             style={{
-              padding: '16px',
-              borderRadius: 'var(--radius-md)',
-              backgroundColor: 'var(--bg-surface-elevated)',
-              border: '1px solid var(--border-subtle)',
+              padding: '18px 20px',
+              borderRadius: '16px',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '12px',
+              gap: '14px',
               textAlign: 'center',
             }}
           >
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Projected MRR</span>
-              <h4 style={{ fontSize: '18px', fontWeight: 800, color: '#34d399', marginTop: '4px' }}>
+              <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Projected MRR</span>
+              <h4 style={{ fontSize: '20px', fontWeight: 800, color: '#34d399', letterSpacing: '-0.03em', marginTop: '4px', margin: '4px 0 2px 0' }}>
                 {formatCurrency(simNewTotalMrr, currency)}
               </h4>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>
                 +{formatCurrency(simAddedMrr, currency)}/mo
               </span>
             </div>
 
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Projected ARR</span>
-              <h4 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)', marginTop: '4px' }}>
+              <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Projected ARR</span>
+              <h4 style={{ fontSize: '20px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.03em', marginTop: '4px', margin: '4px 0 2px 0' }}>
                 {formatCurrency(simNewArr, currency)}
               </h4>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>
                 Annualized rate
               </span>
             </div>
 
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Simulated Runway</span>
-              <h4 style={{ fontSize: '18px', fontWeight: 800, color: simNewRunway > 12 ? '#34d399' : '#fbbf24', marginTop: '4px' }}>
+              <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Simulated Runway</span>
+              <h4 style={{ fontSize: '20px', fontWeight: 800, color: simNewRunway > 12 ? '#34d399' : '#fbbf24', letterSpacing: '-0.03em', marginTop: '4px', margin: '4px 0 2px 0' }}>
                 {simNewRunway} mo
               </h4>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>
                 {simNewNetProfit >= 0 ? 'Cash Flow +' : 'Net Burn'}
               </span>
             </div>
           </div>
-        </SpotlightCard>
+        </div>
 
         {/* Plan Breakdown & Health Scorecard */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Customer Tier Distribution */}
-          <SpotlightCard style={{ padding: '20px', flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          {/* Customer Tier Distribution Card */}
+          <div
+            style={{
+              padding: '24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              flex: 1,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Layers size={16} color="var(--brand-accent)" />
-                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(0, 80, 255, 0.12)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#38bdf8',
+                  }}
+                >
+                  <Layers size={15} />
+                </div>
+                <h4 style={{ fontSize: '14.5px', fontWeight: 700, color: '#f8fafc', margin: 0 }}>
                   Revenue by Subscription Plan
                 </h4>
               </div>
-              <span style={{ fontSize: '11.5px', color: 'var(--text-dim)' }}>
+              <span style={{ fontSize: '12px', color: '#64748b' }}>
                 {activeCustomers.length} active clients
               </span>
             </div>
@@ -560,29 +832,42 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                     <div
                       key={tier}
                       style={{
-                        padding: '10px 14px',
-                        borderRadius: 'var(--radius-sm)',
-                        backgroundColor: 'var(--bg-surface-elevated)',
-                        border: '1px solid var(--border-faint)',
+                        padding: '12px 16px',
+                        borderRadius: '14px', // Replaced sharp radius with DESIGN.md rounded row
+                        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid rgba(255, 255, 255, 0.07)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
+                        transition: 'border-color 0.15s ease',
                       }}
+                      onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.3)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)')}
                     >
                       <div>
-                        <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
+                        <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#f8fafc' }}>
                           {tier}
                         </span>
-                        <span style={{ fontSize: '11.5px', color: 'var(--text-dim)', marginLeft: '8px' }}>
+                        <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '8px' }}>
                           ({data.count} clients)
                         </span>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--brand-accent)' }}>
+                      <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ fontSize: '14px', fontWeight: 800, color: '#38bdf8' }}>
                           {formatCurrency(data.revenue, currency)}
                         </div>
-                        <span style={{ fontSize: '10.5px', color: 'var(--text-dim)' }}>
-                          {share}% of MRR
+                        <span
+                          style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: '10px', // 10px tag chip
+                            backgroundColor: 'rgba(0, 80, 255, 0.12)',
+                            color: '#38bdf8',
+                            border: '1px solid rgba(0, 80, 255, 0.25)',
+                          }}
+                        >
+                          {share}%
                         </span>
                       </div>
                     </div>
@@ -590,46 +875,82 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
                 })}
               </div>
             )}
-          </SpotlightCard>
+          </div>
 
-          {/* Capital Runway Card */}
-          <SpotlightCard style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          {/* Capital Runway & Burn Card */}
+          <div
+            style={{
+              padding: '24px',
+              borderRadius: '24px', // --radius-cards: 24px
+              backgroundColor: '#0b0f19',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Flame size={16} color="#f87171" />
-                <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
+                <div
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#f87171',
+                  }}
+                >
+                  <Flame size={15} />
+                </div>
+                <h4 style={{ fontSize: '14.5px', fontWeight: 700, color: '#f8fafc', margin: 0 }}>
                   Capital Reserves & Net Burn
                 </h4>
               </div>
               <span
                 style={{
                   fontSize: '11px',
-                  padding: '2px 8px',
-                  borderRadius: '999px',
-                  backgroundColor: runwayMonths > 12 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                  padding: '3px 10px',
+                  borderRadius: '10px', // 10px tag chip
+                  backgroundColor: runwayMonths > 12 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
                   color: runwayMonths > 12 ? '#34d399' : '#f87171',
+                  border: `1px solid ${runwayMonths > 12 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`,
                   fontWeight: 700,
                 }}
               >
-                {runwayMonths > 12 ? 'Healthy' : runwayMonths > 0 ? 'Warning' : 'No Data'}
+                {runwayMonths > 12 ? 'Healthy Runway' : runwayMonths > 0 ? 'Warning: Monitor' : 'No Data'}
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
-              <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Cash Reserves</span>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-main)', marginTop: '2px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginTop: '14px' }}>
+              <div
+                style={{
+                  padding: '14px 16px',
+                  borderRadius: '16px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                }}
+              >
+                <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Cash Reserves</span>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.03em', marginTop: '4px' }}>
                   {formatCurrency(estimatedCash, currency)}
                 </div>
               </div>
-              <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Monthly Burn</span>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: '#f87171', marginTop: '2px' }}>
+              <div
+                style={{
+                  padding: '14px 16px',
+                  borderRadius: '16px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                }}
+              >
+                <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Monthly Burn</span>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#f87171', letterSpacing: '-0.03em', marginTop: '4px' }}>
                   {formatCurrency(totalExpenses, currency)}/mo
                 </div>
               </div>
             </div>
-          </SpotlightCard>
+          </div>
         </div>
       </div>
     </div>
