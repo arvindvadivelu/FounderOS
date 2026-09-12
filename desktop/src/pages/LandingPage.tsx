@@ -190,83 +190,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </div>
 
-          {/* Desktop Nav Links */}
-          <nav
-            style={{
-              display: 'none',
-              alignItems: 'center',
-              gap: '24px',
-            }}
-            className="nav-desktop-links"
-          >
-            <a
-              href="#chaos"
-              style={{
-                fontSize: '15px',
-                fontWeight: 500,
-                color: '#94a3b8',
-                textDecoration: 'none',
-                padding: '6px 4px',
-                borderBottom: '2px solid transparent',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#f8fafc';
-                e.currentTarget.style.borderBottomColor = '#0050FF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.borderBottomColor = 'transparent';
-              }}
-            >
-              The Chaos
-            </a>
-            <a
-              href="#capabilities"
-              style={{
-                fontSize: '15px',
-                fontWeight: 500,
-                color: '#94a3b8',
-                textDecoration: 'none',
-                padding: '6px 4px',
-                borderBottom: '2px solid transparent',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#f8fafc';
-                e.currentTarget.style.borderBottomColor = '#0050FF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.borderBottomColor = 'transparent';
-              }}
-            >
-              6 Core Pillars
-            </a>
-            <a
-              href="#downloads"
-              style={{
-                fontSize: '15px',
-                fontWeight: 500,
-                color: '#94a3b8',
-                textDecoration: 'none',
-                padding: '6px 4px',
-                borderBottom: '2px solid transparent',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#f8fafc';
-                e.currentTarget.style.borderBottomColor = '#0050FF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.borderBottomColor = 'transparent';
-              }}
-            >
-              Download Center
-            </a>
-          </nav>
-
           {/* Nav Right Action Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {/* Circular Blue Menu Toggle Button (#0050FF) */}
@@ -402,28 +325,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
             }}
           >
-            <a
-              href="#chaos"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                triggerDownload('setup');
+              }}
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                color: '#f8fafc',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '50px',
+                padding: '12px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
             >
-              • The Chaos vs. The Cure
-            </a>
-            <a
-              href="#capabilities"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
-            >
-              • 6 Core Capabilities
-            </a>
-            <a
-              href="#downloads"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
-            >
-              • Download Center (.exe & Web)
-            </a>
-            <div style={{ height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)' }} />
+              <Download size={15} />
+              <span>Download Setup (.exe)</span>
+            </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -2025,11 +1948,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         }
         .spin-icon {
           animation: spin 1s linear infinite;
-        }
-        @media (min-width: 768px) {
-          .nav-desktop-links {
-            display: flex !important;
-          }
         }
       `}</style>
     </div>
