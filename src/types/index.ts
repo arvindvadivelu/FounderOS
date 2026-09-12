@@ -956,4 +956,298 @@ export interface RevenueWarRoomResult {
   warRoomNote?: Note;
 }
 
+// ==========================================
+// FounderOS V2 — Core Architecture Interfaces
+// ==========================================
+
+// 1. Automated Workflows Engine
+export type WorkflowTriggerType =
+  | 'schedule'
+  | 'invoice_overdue'
+  | 'deal_won'
+  | 'deal_stalled'
+  | 'churn_risk_high'
+  | 'runway_alert'
+  | 'task_blocked'
+  | 'webhook_received'
+  | 'manual';
+
+export type WorkflowActionType =
+  | 'create_task'
+  | 'send_notification'
+  | 'create_invoice'
+  | 'generate_note'
+  | 'update_customer_status'
+  | 'trigger_ai_audit'
+  | 'auto_reconcile';
+
+export interface WorkflowCondition {
+  field: string;
+  operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in';
+  value: any;
+}
+
+export interface WorkflowActionConfig {
+  type: WorkflowActionType;
+  params: Record<string, any>;
+  description: string;
+}
+
+export interface WorkflowRule {
+  id: string;
+  name: string;
+  description: string;
+  category: 'finance' | 'sales' | 'retention' | 'engineering' | 'operations';
+  triggerType: WorkflowTriggerType;
+  triggerConfig?: Record<string, any>;
+  conditions: WorkflowCondition[];
+  actions: WorkflowActionConfig[];
+  isActive: boolean;
+  runCount: number;
+  lastRunAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowExecutionLog {
+  id: string;
+  workflowId: string;
+  workflowName: string;
+  status: 'success' | 'warning' | 'failed';
+  triggerSource: string;
+  actionsExecuted: number;
+  summary: string;
+  details?: Record<string, any>;
+  executedAt: string;
+  durationMs: number;
+}
+
+// 2. Advanced AI Agents & Executive Boardroom Deliberation
+export type ExecutiveAgentRole = 'ceo' | 'cfo' | 'cro' | 'cpo' | 'coo';
+
+export interface ExecutiveAgent {
+  id: string;
+  role: ExecutiveAgentRole;
+  name: string;
+  title: string;
+  avatarColor: string;
+  accentBadge: string;
+  focusAreas: string[];
+  keyMetrics: string[];
+  systemTone: string;
+}
+
+export interface DebateMessage {
+  id: string;
+  role: ExecutiveAgentRole;
+  agentName: string;
+  avatarColor: string;
+  content: string;
+  stance: 'support' | 'oppose' | 'caution' | 'neutral';
+  keyArguments: string[];
+  proposedAction: string;
+  timestamp: string;
+}
+
+export interface ConsensusDecision {
+  summary: string;
+  alignmentScore: number; // 0 - 100%
+  unanimousRecommendations: string[];
+  risksIdentified: string[];
+  actionChecklist: { taskTitle: string; ownerRole: ExecutiveAgentRole; priority: Priority }[];
+  cfoVote: string;
+  croVote: string;
+  cpoVote: string;
+  cooVote: string;
+}
+
+export interface AgentDebateSession {
+  id: string;
+  topic: string;
+  contextQuestion: string;
+  participants: ExecutiveAgentRole[];
+  status: 'deliberating' | 'consensus_reached' | 'split_decision';
+  messages: DebateMessage[];
+  consensus?: ConsensusDecision;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 3. External Integrations & Webhooks
+export interface WebhookEventRecord {
+  id: string;
+  provider: 'stripe' | 'github' | 'hubspot' | 'slack' | 'google_calendar';
+  eventType: string;
+  payload: Record<string, any>;
+  receivedAt: string;
+  processed: boolean;
+  statusMessage?: string;
+  linkedEntityId?: string;
+}
+
+// 4. Financial Forecasting & Scenario Modeling
+export interface ForecastScenario {
+  id: string;
+  name: string;
+  type: 'base' | 'best' | 'worst' | 'custom';
+  description: string;
+  mrrGrowthRatePct: number; // e.g. 8%
+  churnRatePct: number; // e.g. 2%
+  monthlyBurnOverride?: number;
+  grossMarginPct: number; // e.g. 78%
+  isDefault?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HiringPlanRole {
+  id: string;
+  title: string;
+  department: string;
+  monthlySalary: number;
+  startDate: string;
+  priority: Priority;
+  status: 'planned' | 'approved' | 'hired' | 'frozen';
+  impactJustification: string;
+}
+
+export interface MonthlyProjection {
+  monthIndex: number;
+  monthLabel: string;
+  projectedMrr: number;
+  projectedRevenue: number;
+  baseExpenses: number;
+  hiringExpenses: number;
+  totalExpenses: number;
+  netBurn: number;
+  endingCash: number;
+  runwayMonthsRemaining: number;
+}
+
+export interface ScenarioProjectionResult {
+  scenarioId: string;
+  scenarioName: string;
+  currentCash: number;
+  currentMrr: number;
+  projections: MonthlyProjection[];
+  runwayMonths: number;
+  breakevenMonth?: string;
+  totalHiringCostFirst12Mo: number;
+  cashExhaustionDate?: string;
+}
+
+// 5. Customer Intelligence & Churn Radar
+export type CustomerHealthQuadrant = 'champion' | 'loyalist' | 'at_risk' | 'sleeping_giant';
+
+export interface CustomerHealthMetric {
+  id: string;
+  customerId: string;
+  companyName: string;
+  mrr: number;
+  plan: string;
+  healthScore: number; // 0 - 100
+  churnRiskScore: number; // 0 - 100
+  quadrant: CustomerHealthQuadrant;
+  activityRecencyDays: number;
+  openBugsCount: number;
+  overdueInvoicesCount: number;
+  npsScore?: number;
+  churnRiskFactors: string[];
+  recommendedIntervention: string;
+  updatedAt: string;
+}
+
+export interface AccountExpansionOpportunity {
+  id: string;
+  customerId: string;
+  companyName: string;
+  currentMrr: number;
+  targetMrr: number;
+  upsideArr: number;
+  expansionType: 'tier_upgrade' | 'annual_commitment' | 'usage_expansion' | 'retainer';
+  confidencePct: number;
+  strategicAngle: string;
+  suggestedAction: string;
+}
+
+// 6. Product Intelligence & RICE Prioritization
+export type RiceQuadrant = 'quick_win' | 'major_bet' | 'fill_in' | 'time_sink';
+
+export interface ProductRiceScore {
+  id: string;
+  featureId?: string;
+  title: string;
+  category: 'core' | 'growth' | 'infrastructure' | 'retention';
+  reach: number; // e.g. 1-10 or number of users
+  impact: number; // 1 (minimal) to 5 (massive)
+  confidence: number; // 50 to 100 %
+  effort: number; // person-weeks (1 to 10)
+  riceScore: number; // (Reach * Impact * Confidence) / Effort
+  quadrant: RiceQuadrant;
+  arrInfluenceEstimate: number;
+  engineeringEffortDays: number;
+  status: FeatureStatus;
+  suggestedQuarter: string;
+}
+
+export interface FeedbackCluster {
+  id: string;
+  topic: string;
+  customerMentionsCount: number;
+  associatedArr: number;
+  sentiment: 'positive' | 'neutral' | 'frustrated' | 'critical';
+  sampleQuotes: string[];
+  suggestedRoadmapAction: string;
+  priority: Priority;
+}
+
+// 7. Autonomous Routine Operations
+export interface AutonomousRoutine {
+  id: string;
+  name: string;
+  timeSlot: '08:00' | '13:00' | '18:00' | '21:00' | 'continuous';
+  frequency: 'daily' | 'weekly' | 'hourly';
+  description: string;
+  category: 'briefing' | 'runway_guard' | 'pipeline_hygiene' | 'reconciliation' | 'churn_sweep';
+  isEnabled: boolean;
+  autoHealEnabled: boolean;
+  lastRunAt?: string;
+  lastStatus: 'healthy' | 'anomalies_detected' | 'auto_healed' | 'skipped';
+  lastRunSummary?: string;
+}
+
+export interface OperationalAnomaly {
+  id: string;
+  type:
+    | 'burn_spike'
+    | 'mrr_drop'
+    | 'overdue_invoice'
+    | 'stalled_deal'
+    | 'orphaned_task'
+    | 'runway_warning'
+    | 'unresolved_bug_critical';
+  severity: 'info' | 'warning' | 'critical';
+  title: string;
+  description: string;
+  entityId?: string;
+  entityType?: string;
+  detectedAt: string;
+  resolved: boolean;
+  resolvedAt?: string;
+  autoHealable: boolean;
+  autoHealActionName?: string;
+}
+
+export interface RoutineExecutionRecord {
+  id: string;
+  routineId: string;
+  routineName: string;
+  status: 'success' | 'warning' | 'error';
+  anomaliesDetectedCount: number;
+  anomaliesAutoHealedCount: number;
+  summary: string;
+  executedAt: string;
+  durationMs: number;
+}
+
 

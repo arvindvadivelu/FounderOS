@@ -24,6 +24,8 @@ import {
   Plug,
   Sun,
   Bot,
+  Zap,
+  Sliders,
 } from 'lucide-react';
 import type { Company } from '../../types';
 
@@ -65,6 +67,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: '/kpis', label: 'KPI Center', icon: <TrendingUp size={16} /> },
         { id: '/ai', label: 'AI CEO', icon: <Sparkles size={16} color="var(--brand-accent)" /> },
         { id: '/notes', label: 'Notes', icon: <FileText size={16} color="#38bdf8" /> },
+      ],
+    },
+    {
+      title: 'FOUNDEROS V2',
+      items: [
+        { id: '/workflows', label: 'Automated Workflows', icon: <Zap size={16} color="#38bdf8" /> },
+        { id: '/boardroom', label: 'Executive Boardroom', icon: <Users size={16} color="#a78bfa" />, badge: 'C-Suite' },
+        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" /> },
+        { id: '/customer-intelligence', label: 'Customer Intelligence', icon: <Target size={16} color="#0ea5e9" /> },
+        { id: '/product-intelligence', label: 'Product Intelligence', icon: <FolderKanban size={16} color="#f59e0b" /> },
+        { id: '/autopilot', label: 'Autonomous Operations', icon: <Cpu size={16} color="#10b981" />, badge: 'Autopilot' },
       ],
     },
     {

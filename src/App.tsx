@@ -23,6 +23,12 @@ import { DepartmentsPage } from './pages/management/DepartmentsPage';
 import { CashPage } from './pages/management/CashPage';
 import { BalanceSheetPage } from './pages/management/BalanceSheetPage';
 import { UploadsPage } from './pages/management/UploadsPage';
+import { WorkflowsPage } from './pages/WorkflowsPage';
+import { ExecutiveBoardroomPage } from './pages/ExecutiveBoardroomPage';
+import { FinancialForecastingPage } from './pages/FinancialForecastingPage';
+import { CustomerIntelligencePage } from './pages/CustomerIntelligencePage';
+import { ProductIntelligencePage } from './pages/ProductIntelligencePage';
+import { AutonomousOperationsPage } from './pages/AutonomousOperationsPage';
 import { seedDemoData } from './db/seed';
 
 export function App() {
@@ -118,6 +124,18 @@ export function App() {
         return <DataHealthPage onNavigate={handleNavigate} />;
       case '/integrations':
         return <IntegrationsPage onNavigate={handleNavigate} />;
+      case '/workflows':
+        return <WorkflowsPage />;
+      case '/boardroom':
+        return <ExecutiveBoardroomPage />;
+      case '/forecasting':
+        return <FinancialForecastingPage />;
+      case '/customer-intelligence':
+        return <CustomerIntelligencePage />;
+      case '/product-intelligence':
+        return <ProductIntelligencePage />;
+      case '/autopilot':
+        return <AutonomousOperationsPage />;
       case '/settings':
         return <SettingsPage initialTab={currentRoute.includes('tab=providers') ? 'providers' : 'company'} />;
       default:
