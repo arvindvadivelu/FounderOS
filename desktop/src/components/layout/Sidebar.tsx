@@ -25,7 +25,6 @@ import {
   Sun,
   Bot,
   Zap,
-  Globe,
 } from 'lucide-react';
 import founderosLogo from '../../assets/founderos-logo.jpg';
 import type { Company } from '../../types';
@@ -65,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'COMMAND CENTER',
       items: [
-        { id: '/', label: 'Overview', icon: <LayoutDashboard size={16} /> },
+        { id: '/app', label: 'Command Center', icon: <LayoutDashboard size={16} /> },
         { id: '/morning-intelligence', label: 'Morning Intelligence', icon: <Sun size={16} color="#f59e0b" /> },
         { id: '/kpis', label: 'KPI Center', icon: <TrendingUp size={16} /> },
         { id: '/ai', label: 'AI CEO', icon: <Sparkles size={16} color="var(--brand-accent)" /> },
@@ -118,7 +117,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: '/health', label: 'Data Health', icon: <Activity size={16} /> },
         { id: '/settings?tab=providers', label: 'AI Providers', icon: <Cpu size={16} /> },
         { id: '/settings', label: 'Settings', icon: <Settings size={16} /> },
-        { id: '/landing', label: 'Landing Page', icon: <Globe size={16} color="#38bdf8" /> },
       ],
     },
   ];
@@ -257,7 +255,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 {sec.items.map((item) => {
-                  const isActive = currentRoute === item.id || (item.id === '/' && currentRoute === '/app') || (item.id === '/app' && currentRoute === '/');
+                  const isActive = currentRoute === item.id || (item.id === '/app' && (currentRoute === '/' || currentRoute === '/app' || currentRoute === '/overview'));
                   const isDisabled = Boolean(item.disabled);
                   return (
                     <button

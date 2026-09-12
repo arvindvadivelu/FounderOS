@@ -25,13 +25,14 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       onClick={onClick}
       className={`p-5 transition-all ${onClick ? 'cursor-pointer hover:border-blue-500/40' : ''}`}
       style={{
-        padding: '20px 22px',
+        padding: '22px 24px',
+        borderRadius: '28px',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
         <span
           style={{
-            fontSize: '12px',
+            fontSize: '11.5px',
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.8px',
@@ -43,14 +44,16 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         {icon && (
           <div
             style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '8px',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               backgroundColor: 'var(--primary-blue-surface)',
               color: 'var(--brand-accent)',
+              border: '1px solid var(--border-subtle)',
+              flexShrink: 0,
             }}
           >
             {icon}
@@ -61,11 +64,11 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '6px' }}>
         <h3
           style={{
-            fontSize: '26px',
+            fontSize: '28px',
             fontWeight: 700,
-            letterSpacing: '-0.8px',
+            letterSpacing: '-0.04em',
             color: 'var(--text-main)',
-            lineHeight: 1.2,
+            lineHeight: 1.15,
           }}
         >
           {value}
@@ -73,10 +76,10 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         {change && (
           <span
             style={{
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 600,
               padding: '2px 8px',
-              borderRadius: '999px',
+              borderRadius: '10px', // MindMarket 10px tag chip
               backgroundColor:
                 changeType === 'positive'
                   ? 'rgba(16, 185, 129, 0.15)'

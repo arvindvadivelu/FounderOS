@@ -111,26 +111,27 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
       {/* Welcome Banner & Daily Briefing Banner */}
       <SpotlightCard
         style={{
-          padding: '24px 28px',
+          padding: '28px 32px',
+          borderRadius: '32px',
           background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.14) 0%, rgba(15, 23, 42, 0.85) 100%)',
           borderColor: 'rgba(0, 80, 255, 0.25)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
+          gap: '18px',
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--brand-accent)', letterSpacing: '1px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--brand-accent)', letterSpacing: '0.8px' }}>
               AUTONOMOUS FOUNDER OPERATING SYSTEM
             </span>
             <span
               style={{
                 fontSize: '11px',
-                padding: '1px 8px',
-                borderRadius: '999px',
+                padding: '2px 10px',
+                borderRadius: '10px', // MindMarket 10px tag chip
                 backgroundColor: 'rgba(16, 185, 129, 0.15)',
                 color: '#34d399',
                 fontWeight: 600,
@@ -139,32 +140,72 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               ● Local Database Sync Active
             </span>
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
             Welcome back, {company?.name || 'Founder'}
           </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '6px', maxWidth: '620px' }}>
             Your business is operating at <strong>{formatCurrency(mrr, currency)} MRR</strong> with approximately{' '}
             <strong>{runwayMonths} months</strong> of cash runway.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <button
             type="button"
             onClick={() => onNavigate('/morning-intelligence')}
             className="btn-secondary"
-            style={{ padding: '10px 18px', fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              padding: '8px 18px 8px 10px',
+              fontSize: '13px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              borderRadius: '50px',
+            }}
           >
-            <Sun size={16} color="#f59e0b" /> Morning Intelligence
+            <div
+              style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Sun size={13} color="#f59e0b" />
+            </div>
+            <span>Morning Intelligence</span>
           </button>
 
           <button
             type="button"
             onClick={onOpenAiBriefing}
             className="btn-primary"
-            style={{ padding: '10px 18px', fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              padding: '8px 18px 8px 10px',
+              fontSize: '13px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              borderRadius: '50px',
+            }}
           >
-            <Sparkles size={16} /> Open AI CEO
+            <div
+              style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Sparkles size={13} color="#ffffff" />
+            </div>
+            <span>Open AI CEO</span>
           </button>
         </div>
       </SpotlightCard>
@@ -236,7 +277,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         }}
       >
         {/* Left Column: Today's High-Leverage Tasks & Overdue Items */}
-        <SpotlightCard style={{ padding: '22px' }}>
+        <SpotlightCard style={{ padding: '24px', borderRadius: '28px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <CheckCircle2 size={18} color="var(--brand-accent)" />
@@ -248,9 +289,29 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               type="button"
               onClick={onCreateTask}
               className="btn-secondary"
-              style={{ padding: '4px 10px', fontSize: '11.5px' }}
+              style={{
+                padding: '4px 12px 4px 6px',
+                fontSize: '11.5px',
+                borderRadius: '50px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
             >
-              <Plus size={13} /> Add Task
+              <div
+                style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Plus size={11} color="var(--brand-accent)" />
+              </div>
+              <span>Add Task</span>
             </button>
           </div>
 
@@ -259,7 +320,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               style={{
                 marginBottom: '14px',
                 padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
+                borderRadius: '14px',
                 backgroundColor: 'rgba(244, 63, 94, 0.1)',
                 border: '1px solid rgba(244, 63, 94, 0.25)',
                 display: 'flex',
@@ -289,8 +350,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 12px',
-                    borderRadius: 'var(--radius-md)',
+                    padding: '10px 14px',
+                    borderRadius: '16px',
                     backgroundColor: 'var(--bg-surface-elevated)',
                     border: '1px solid var(--border-faint)',
                     transition: 'all 0.15s ease',
@@ -358,8 +419,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         {/* Right Column: Pipeline & Engineering Pulse */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Sales Pipeline Summary */}
-          <SpotlightCard style={{ padding: '22px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '28px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <TrendingUp size={18} color="var(--brand-accent)" />
                 <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>
@@ -370,9 +431,29 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                 type="button"
                 onClick={() => onNavigate('/sales')}
                 className="btn-secondary"
-                style={{ padding: '4px 10px', fontSize: '11.5px' }}
+                style={{
+                  padding: '4px 14px 4px 8px',
+                  fontSize: '11.5px',
+                  borderRadius: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
               >
-                Pipeline Kanban
+                <div
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <TrendingUp size={10} color="var(--brand-accent)" />
+                </div>
+                <span>Pipeline Kanban</span>
               </button>
             </div>
 
@@ -389,8 +470,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '8px 12px',
-                      borderRadius: 'var(--radius-sm)',
+                      padding: '10px 14px',
+                      borderRadius: '16px',
                       backgroundColor: 'var(--bg-surface-elevated)',
                     }}
                   >
@@ -411,7 +492,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </SpotlightCard>
 
           {/* Product & AI Pulse */}
-          <SpotlightCard style={{ padding: '22px' }}>
+          <SpotlightCard style={{ padding: '24px', borderRadius: '28px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Sparkles size={18} color="var(--brand-accent)" />
@@ -443,7 +524,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
       </div>
 
       {/* Activity Timeline Feed */}
-      <SpotlightCard style={{ padding: '22px' }}>
+      <SpotlightCard style={{ padding: '24px', borderRadius: '28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Clock size={17} color="var(--brand-accent)" />
@@ -469,8 +550,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '8px 12px',
-                  borderRadius: 'var(--radius-sm)',
+                  padding: '10px 14px',
+                  borderRadius: '14px',
                   backgroundColor: 'var(--bg-surface-elevated)',
                   fontSize: '12.5px',
                 }}

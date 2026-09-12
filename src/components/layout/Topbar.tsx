@@ -5,11 +5,10 @@ import {
   Sparkles,
   Database,
   Wifi,
-  FileCheck,
   Loader2,
   MonitorDown,
   Check,
-  Globe,
+  Home,
 } from 'lucide-react';
 import { useAIChatState } from '../../ai/aiChatService';
 import type { Company } from '../../types';
@@ -220,24 +219,6 @@ export const Topbar: React.FC<TopbarProps> = ({
           </kbd>
         </button>
 
-        {/* Generate Founder Briefing CTA */}
-        <button
-          type="button"
-          onClick={onGenerateBriefing}
-          className="btn-secondary"
-          style={{
-            padding: '6px 12px',
-            fontSize: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}
-          title="Generate Today's Founder Briefing"
-        >
-          <FileCheck size={14} color="var(--brand-accent)" />
-          <span className="briefing-label">Daily Briefing</span>
-        </button>
-
         {/* Download Desktop App CTA */}
         {!isDesktop && (
           <button
@@ -286,23 +267,23 @@ export const Topbar: React.FC<TopbarProps> = ({
           </button>
         )}
 
-        {/* Landing Page Link */}
+        {/* Home Icon Button (Replaces Landing Page text button) */}
         {onNavigateToLanding && (
           <button
             type="button"
             onClick={onNavigateToLanding}
             className="btn-secondary"
             style={{
-              padding: '6px 12px',
+              padding: '6px 10px',
               fontSize: '12px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
+              justifyContent: 'center',
             }}
-            title="View FounderOS Product Landing Page"
+            title="Home / Landing Page"
+            aria-label="Home"
           >
-            <Globe size={13} color="#38bdf8" />
-            <span>Landing Page</span>
+            <Home size={15} color="#38bdf8" />
           </button>
         )}
 

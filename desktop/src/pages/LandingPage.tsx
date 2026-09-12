@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
 import {
   Download,
-  ExternalLink,
-  Sparkles,
-  ShieldCheck,
-  Zap,
+  ArrowRight,
   TrendingUp,
+  Zap,
   Bot,
   Landmark,
   Users,
-  CheckCircle2,
-  ArrowRight,
-  Lock,
-  Laptop,
-  Globe,
-  RefreshCw,
-  Check,
-  LineChart,
   HardDrive,
-  ChevronRight,
-  Flame,
+  CheckCircle2,
+  Check,
+  RefreshCw,
+  Menu,
+  X,
+  Layers,
+  AlertTriangle,
 } from 'lucide-react';
 import founderosLogo from '../assets/founderos-logo.jpg';
 
@@ -36,7 +31,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const [downloadState, setDownloadState] = useState<'idle' | 'downloading' | 'completed'>('idle');
   const [downloadType, setDownloadType] = useState<'setup' | 'portable'>('setup');
-  const [activePreviewTab, setActivePreviewTab] = useState<'cockpit' | 'intelligence' | 'treasury' | 'ai'>('cockpit');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const triggerDownload = (type: 'setup' | 'portable') => {
     setDownloadType(type);
@@ -60,7 +55,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
     setTimeout(() => {
       setDownloadState('completed');
-      setTimeout(() => setDownloadState('idle'), 4000);
+      setTimeout(() => setDownloadState('idle'), 4500);
     }, 1200);
   };
 
@@ -68,23 +63,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#030712',
-        color: '#f8fafc',
+        backgroundColor: '#030712', // --bg-page (matching http://localhost:5173/#/app)
+        color: '#f8fafc', // --text-main
         fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         position: 'relative',
         overflowX: 'hidden',
         lineHeight: 1.5,
       }}
     >
-      {/* Background Chromatic Radial Glows */}
+      {/* Background Chromatic Radial Lighting (App Shell ambiance) */}
       <div
         style={{
           position: 'fixed',
-          top: '-15%',
+          top: '-10%',
           left: '20%',
           width: '650px',
           height: '650px',
-          background: 'radial-gradient(circle, rgba(0, 80, 255, 0.16) 0%, rgba(3, 7, 18, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(0, 80, 255, 0.14) 0%, rgba(3, 7, 18, 0) 70%)',
           borderRadius: '50%',
           filter: 'blur(90px)',
           pointerEvents: 'none',
@@ -94,11 +89,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <div
         style={{
           position: 'fixed',
-          top: '35%',
-          right: '-12%',
-          width: '550px',
-          height: '550px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(3, 7, 18, 0) 70%)',
+          top: '40%',
+          right: '-10%',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.10) 0%, rgba(3, 7, 18, 0) 70%)',
           borderRadius: '50%',
           filter: 'blur(100px)',
           pointerEvents: 'none',
@@ -106,38 +101,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         }}
       />
 
-      {/* =====================================================================
-          1. FLOATING PILL NAVIGATION BAR (DESIGN.md: 50px radius, generous margins)
-         ===================================================================== */}
-      <div
+      {/* =========================================================================
+          1. FLOATING PILL NAVIGATION BAR
+          - Matching app palette: #0b0f19 / rgba(15, 23, 42, 0.85)
+          - 50px border-radius
+          - Brand logo container (rounded square ~40px)
+          - 15px Inter 500 links in #94a3b8 -> #f8fafc
+          - Circular #0050FF blue menu toggle button (~40px)
+          - Primary pill action buttons with embedded circular icon dots
+         ========================================================================= */}
+      <header
         style={{
           position: 'sticky',
-          top: '18px',
+          top: '20px',
           zIndex: 100,
-          padding: '0 20px',
-          pointerEvents: 'none',
+          padding: '0 24px',
+          maxWidth: '1240px',
+          margin: '0 auto 20px auto',
         }}
       >
-        <header
+        <div
           style={{
-            maxWidth: '1140px',
-            margin: '0 auto',
-            height: '64px',
-            backgroundColor: 'rgba(11, 15, 25, 0.82)',
+            backgroundColor: 'rgba(11, 15, 25, 0.85)', // --bg-surface with glass
             backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderRadius: '50px', // DESIGN.md: 50px radius on nav
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 80, 255, 0.15)',
-            padding: '0 10px 0 16px',
+            borderRadius: '50px', // --radius-full
+            padding: '10px 18px',
+            border: '1px solid rgba(255, 255, 255, 0.10)', // --border-subtle
+            boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            pointerEvents: 'auto',
-            transition: 'box-shadow 0.3s ease',
+            gap: '16px',
           }}
         >
-          {/* Brand Logo Container (DESIGN.md: Rounded square 10-20px) */}
+          {/* Brand Logo Container */}
           <div
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             style={{
@@ -145,20 +142,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               alignItems: 'center',
               gap: '12px',
               cursor: 'pointer',
+              userSelect: 'none',
             }}
           >
             <div
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '12px', // DESIGN.md: 10-20px container
-                backgroundColor: 'rgba(0, 80, 255, 0.2)',
-                border: '1px solid rgba(0, 80, 255, 0.4)',
+                width: '40px',
+                height: '40px',
+                borderRadius: '12px', // rounded square 10-20px radius
+                backgroundColor: '#030712',
+                overflow: 'hidden',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                overflow: 'hidden',
-                boxShadow: '0 0 12px rgba(0, 80, 255, 0.35)',
+                border: '2px solid #0050FF', // Royal Blue brand stroke
+                boxShadow: '0 0 14px rgba(0, 80, 255, 0.4)',
               }}
             >
               <img
@@ -167,97 +165,149 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span
                 style={{
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  letterSpacing: '-0.3px',
-                  color: '#ffffff',
+                  fontSize: '17px',
+                  fontWeight: 600,
+                  letterSpacing: '-0.03em',
+                  color: '#f8fafc',
+                  lineHeight: 1.1,
                 }}
               >
                 FounderOS
               </span>
               <span
                 style={{
-                  fontSize: '9.5px',
-                  fontWeight: 700,
-                  padding: '2px 8px',
-                  borderRadius: '50px', // DESIGN.md: 50px pill tag
-                  backgroundColor: 'rgba(0, 80, 255, 0.2)',
-                  color: '#60a5fa',
-                  border: '1px solid rgba(0, 80, 255, 0.35)',
-                  letterSpacing: '0.4px',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  color: '#94a3b8', // text-muted
+                  letterSpacing: '0.02em',
                 }}
               >
-                v1.0
+                Executive Command
               </span>
             </div>
           </div>
 
-          {/* Navigation Links (DESIGN.md: 15px Inter 500 with generous padding) */}
+          {/* Desktop Nav Links */}
           <nav
             style={{
-              display: 'flex',
+              display: 'none',
               alignItems: 'center',
               gap: '24px',
-              fontSize: '14px',
-              fontWeight: 500,
-              color: '#94a3b8',
             }}
-            className="landing-nav-links"
+            className="nav-desktop-links"
           >
             <a
-              href="#features"
-              style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+              href="#chaos"
+              style={{
+                fontSize: '15px',
+                fontWeight: 500,
+                color: '#94a3b8',
+                textDecoration: 'none',
+                padding: '6px 4px',
+                borderBottom: '2px solid transparent',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#f8fafc';
+                e.currentTarget.style.borderBottomColor = '#0050FF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#94a3b8';
+                e.currentTarget.style.borderBottomColor = 'transparent';
+              }}
             >
-              Features
+              The Chaos
             </a>
             <a
-              href="#cockpit"
-              style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+              href="#capabilities"
+              style={{
+                fontSize: '15px',
+                fontWeight: 500,
+                color: '#94a3b8',
+                textDecoration: 'none',
+                padding: '6px 4px',
+                borderBottom: '2px solid transparent',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#f8fafc';
+                e.currentTarget.style.borderBottomColor = '#0050FF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#94a3b8';
+                e.currentTarget.style.borderBottomColor = 'transparent';
+              }}
             >
-              Cockpit
+              6 Core Pillars
             </a>
             <a
               href="#downloads"
-              style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+              style={{
+                fontSize: '15px',
+                fontWeight: 500,
+                color: '#94a3b8',
+                textDecoration: 'none',
+                padding: '6px 4px',
+                borderBottom: '2px solid transparent',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#f8fafc';
+                e.currentTarget.style.borderBottomColor = '#0050FF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#94a3b8';
+                e.currentTarget.style.borderBottomColor = 'transparent';
+              }}
             >
-              Downloads
-            </a>
-            <a
-              href="#v2"
-              style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s ease' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
-            >
-              V2 Platform
+              Download Center
             </a>
           </nav>
 
-          {/* Header Action Buttons (DESIGN.md: 50px pill buttons with circular icon dot) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {/* Download Setup Pill */}
+          {/* Nav Right Action Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* Circular Blue Menu Toggle Button (#0050FF) */}
             <button
-              type="button"
-              onClick={() => triggerDownload('setup')}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              title="Toggle Menu"
               style={{
-                display: 'inline-flex',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                backgroundColor: '#0050FF', // --brand-accent
+                border: 'none',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                padding: '8px 16px',
-                fontSize: '13px',
-                fontWeight: 600,
-                borderRadius: '50px', // DESIGN.md: 50px radius
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#ffffff',
+                boxShadow: '0 0 16px rgba(0, 80, 255, 0.45)',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.95)')}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              {mobileMenuOpen ? <X size={18} strokeWidth={2.5} /> : <Menu size={18} strokeWidth={2.5} />}
+            </button>
+
+            {/* Download Setup Pill Button (Dark glass pill with embedded Sky Pop dot) */}
+            <button
+              onClick={() => triggerDownload('setup')}
+              disabled={downloadState === 'downloading'}
+              style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                color: '#e2e8f0',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.14)',
+                borderRadius: '50px',
+                padding: '10px 18px',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: '#f8fafc',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
               }}
@@ -267,972 +317,1252 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.14)';
               }}
-              title="Download Windows Setup Installer (.exe)"
             >
+              <span>{downloadState === 'downloading' ? 'Downloading...' : 'Download Setup'}</span>
               <div
                 style={{
                   width: '20px',
                   height: '20px',
-                  borderRadius: '50%', // DESIGN.md: small chromatic circle icon
-                  backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                  borderRadius: '50%',
+                  backgroundColor: '#38bdf8', // --accent-cyan
+                  color: '#030712',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Download size={11} color="#38bdf8" />
+                {downloadState === 'downloading' ? (
+                  <RefreshCw size={11} className="spin-icon" />
+                ) : (
+                  <Download size={11} strokeWidth={2.5} />
+                )}
               </div>
-              <span>Download Setup</span>
             </button>
 
-            {/* Connect Web App Pill (DESIGN.md: Primary action pill with circle icon indicator) */}
+            {/* Connect Web App Pill Button (Royal Blue #0050FF) */}
             <button
-              type="button"
               onClick={onLaunchApp}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                fontSize: '13px',
-                fontWeight: 600,
-                borderRadius: '50px', // DESIGN.md: 50px radius
-                backgroundColor: '#0050FF',
+                backgroundColor: '#0050FF', // --brand-accent
+                border: '1px solid #1a62ff',
+                borderRadius: '50px',
+                padding: '10px 20px',
+                fontSize: '14px',
+                fontWeight: 500,
                 color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
                 cursor: 'pointer',
-                boxShadow: '0 0 20px rgba(0, 80, 255, 0.5)',
+                boxShadow: '0 0 20px rgba(0, 80, 255, 0.4)',
                 transition: 'all 0.2s ease',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#1a62ff';
-                e.currentTarget.style.boxShadow = '0 0 28px rgba(0, 80, 255, 0.7)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 0 28px rgba(0, 80, 255, 0.6)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#0050FF';
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 80, 255, 0.5)';
-                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 80, 255, 0.4)';
               }}
-              title="Connect Web Application"
             >
               <span>Connect Web App</span>
               <div
                 style={{
                   width: '20px',
                   height: '20px',
-                  borderRadius: '50%', // DESIGN.md: embedded circle action dot
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  color: '#0050FF',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <ArrowRight size={11} color="#ffffff" />
+                <ArrowRight size={11} strokeWidth={2.5} />
               </div>
             </button>
           </div>
-        </header>
-      </div>
-
-      {/* =====================================================================
-          2. HERO DISPLAY BLOCK (DESIGN.md: Giant display headline, tight tracking,
-             0.95-1.05 line height, confident breathable layout)
-         ===================================================================== */}
-      <section
-        style={{
-          position: 'relative',
-          padding: '90px 24px 80px 24px', // DESIGN.md: generous section spacing
-          maxWidth: '1200px', // DESIGN.md: page max-width: 1200px
-          margin: '0 auto',
-          textAlign: 'center',
-          zIndex: 1,
-        }}
-      >
-        {/* Soft Sticker Pill Badge (DESIGN.md: 50px radius, 10px tag style) */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '10px',
-            padding: '6px 18px',
-            borderRadius: '50px', // DESIGN.md: 50px pill shape
-            backgroundColor: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.14)',
-            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
-            marginBottom: '32px',
-          }}
-        >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#10b981',
-              boxShadow: '0 0 10px #10b981',
-            }}
-          />
-          <span style={{ fontSize: '13px', fontWeight: 500, color: '#e2e8f0' }}>
-            Production Release • 100% Local-First Autonomous Cockpit
-          </span>
         </div>
 
-        {/* Hero Display Headline (DESIGN.md: massive display scale, -0.06em tracking, 0.95 line height) */}
-        <h1
-          style={{
-            fontSize: 'clamp(44px, 7.5vw, 96px)', // DESIGN.md: massive scale 81px-140px display scale
-            fontWeight: 700,
-            lineHeight: 0.98, // DESIGN.md: aggressive line-height compression 0.95-1.15
-            letterSpacing: '-0.055em', // DESIGN.md: -0.06em tight tracking
-            margin: '0 auto 28px auto',
-            maxWidth: '1040px',
-            color: '#ffffff',
-          }}
-        >
-          The Autonomous Operating System for{' '}
-          <span
+        {/* Mobile Expandable Menu */}
+        {mobileMenuOpen && (
+          <div
             style={{
-              background: 'linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #c084fc 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'inline-block',
+              marginTop: '12px',
+              backgroundColor: '#0b0f19',
+              borderRadius: '24px',
+              padding: '20px',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+              boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
             }}
           >
-            High-Growth Founders
-          </span>
-        </h1>
+            <a
+              href="#chaos"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
+            >
+              • The Chaos vs. The Cure
+            </a>
+            <a
+              href="#capabilities"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
+            >
+              • 6 Core Capabilities
+            </a>
+            <a
+              href="#downloads"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 500, fontSize: '16px' }}
+            >
+              • Download Center (.exe & Web)
+            </a>
+            <div style={{ height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)' }} />
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onLaunchApp();
+              }}
+              style={{
+                backgroundColor: '#0050FF',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '50px',
+                padding: '12px',
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+            >
+              Launch Web Command Center →
+            </button>
+          </div>
+        )}
+      </header>
 
-        {/* Subtitle (DESIGN.md: 18px-20px Inter, line-height 1.5) */}
-        <p
+      {/* Main Container */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+        {/* =========================================================================
+            2. HERO DISPLAY BLOCK (DESIGN.md specification + App Palette)
+            - Headline at 140–144px Inter weight 500, #f8fafc
+            - Letter-spacing -0.06em (-8.4px), line-height 0.96
+            - Subheadline at 17–20px weight 400, #94a3b8
+            - Dual pill action buttons with embedded circular icon dots
+           ========================================================================= */}
+        <section
           style={{
-            fontSize: 'clamp(17px, 2vw, 20px)', // DESIGN.md: 18-20px subheading
-            color: '#94a3b8',
-            maxWidth: '740px',
-            margin: '0 auto 44px auto',
-            lineHeight: 1.5,
-            fontWeight: 400,
-          }}
-        >
-          Consolidate your financial runway, sales pipeline, executive KPIs, employee payroll,
-          corporate vault, and daily AI CEO intelligence into one ultra-fast, private cockpit.
-        </p>
-
-        {/* MAIN CALL TO ACTIONS (DESIGN.md: 50px pill buttons with circular icon badges) */}
-        <div
-          style={{
+            paddingTop: '60px',
+            paddingBottom: '60px',
+            textAlign: 'center',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: '16px',
-            flexWrap: 'wrap',
-            marginBottom: '20px',
           }}
         >
-          {/* PRIMARY BUTTON 1: DOWNLOAD SETUP FILE */}
-          <button
-            type="button"
-            onClick={() => triggerDownload('setup')}
-            disabled={downloadState === 'downloading'}
+          {/* Tag Chip (10px radius, app palette) */}
+          <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '14px',
-              padding: '14px 32px',
-              borderRadius: '50px', // DESIGN.md: 50px radius buttons
-              backgroundColor: '#ffffff',
-              color: '#030712',
-              fontSize: '15px',
-              fontWeight: 600,
-              border: 'none',
-              cursor: downloadState === 'downloading' ? 'wait' : 'pointer',
-              boxShadow: '0 10px 30px rgba(255, 255, 255, 0.18)',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 16px 40px rgba(255, 255, 255, 0.28)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 30px rgba(255, 255, 255, 0.18)';
+              gap: '8px',
+              padding: '6px 16px',
+              borderRadius: '10px', // --radius-small: 10px
+              backgroundColor: 'rgba(0, 80, 255, 0.12)', // --primary-blue-surface
+              color: '#38bdf8', // --accent-cyan
+              fontSize: '13px',
+              fontWeight: 500,
+              marginBottom: '28px',
+              border: '1px solid rgba(0, 80, 255, 0.35)',
             }}
           >
-            {/* Embedded circular icon dot (DESIGN.md: small chromatic circle icon affordance) */}
             <div
               style={{
-                width: '32px',
-                height: '32px',
+                width: '8px',
+                height: '8px',
                 borderRadius: '50%',
-                backgroundColor: 'rgba(0, 80, 255, 0.12)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                backgroundColor: '#0050FF', // Brand blue dot
+                boxShadow: '0 0 8px #0050FF',
               }}
-            >
-              {downloadState === 'downloading' && downloadType === 'setup' ? (
-                <RefreshCw size={16} className="animate-spin text-brand" />
-              ) : downloadState === 'completed' && downloadType === 'setup' ? (
-                <Check size={16} color="#10b981" />
-              ) : (
-                <Download size={16} color="#0050FF" />
-              )}
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ lineHeight: 1.2, fontWeight: 700 }}>Download Setup File</div>
-              <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>
-                Windows x64 (.exe) • 73 MB
-              </div>
-            </div>
-          </button>
-
-          {/* PRIMARY BUTTON 2: CONNECT WEB APPLICATION */}
-          <button
-            type="button"
-            onClick={onLaunchApp}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '14px',
-              padding: '14px 32px',
-              borderRadius: '50px', // DESIGN.md: 50px radius buttons
-              backgroundColor: '#0050FF',
-              color: '#ffffff',
-              fontSize: '15px',
-              fontWeight: 600,
-              border: '1px solid rgba(255, 255, 255, 0.25)',
-              cursor: 'pointer',
-              boxShadow: '0 10px 35px rgba(0, 80, 255, 0.5)',
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#1a62ff';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 16px 45px rgba(0, 80, 255, 0.7)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#0050FF';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 10px 35px rgba(0, 80, 255, 0.5)';
-            }}
-          >
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ lineHeight: 1.2, fontWeight: 700 }}>Connect Web Application</div>
-              <div style={{ fontSize: '11px', color: '#bfdbfe', fontWeight: 500 }}>
-                Instant Browser Console • IndexedDB
-              </div>
-            </div>
-            {/* Embedded circular icon dot (DESIGN.md: small chromatic circle icon affordance) */}
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <ArrowRight size={16} color="#ffffff" />
-            </div>
-          </button>
-        </div>
-
-        {/* Secondary options row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '13px', color: '#64748b' }}>
-          <span>Compatible with Windows 10 & 11</span>
-          <span>•</span>
-          <button
-            type="button"
-            onClick={() => triggerDownload('portable')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              fontSize: 'inherit',
-              padding: 0,
-            }}
-          >
-            Download Portable Edition (.exe)
-          </button>
-          <span>•</span>
-          <span>Zero installation needed</span>
-        </div>
-
-        {/* Live System Metric Badges (DESIGN.md: 50px pill shape container chips) */}
-        <div
-          style={{
-            marginTop: '60px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '16px',
-            maxWidth: '1100px',
-            marginRight: 'auto',
-            marginLeft: 'auto',
-          }}
-        >
-          <div
-            style={{
-              padding: '16px 22px',
-              borderRadius: '50px', // DESIGN.md: 50px pill radius
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              textAlign: 'left',
-            }}
-          >
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399', flexShrink: 0 }}>
-              <ShieldCheck size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13.5px', fontWeight: 600, color: '#ffffff' }}>100% Local Privacy</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Local IndexedDB storage</div>
-            </div>
+            />
+            FOUNDEROS ENGINE V1.0 • SOVEREIGN EXECUTIVE EDITION
           </div>
 
-          <div
+          {/* Enormous 140px Display Headline */}
+          <h1
             style={{
-              padding: '16px 22px',
-              borderRadius: '50px', // DESIGN.md: 50px pill radius
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              textAlign: 'left',
+              fontSize: 'clamp(52px, 8.5vw, 136px)',
+              fontWeight: 500,
+              lineHeight: 0.96,
+              letterSpacing: '-0.06em', // Signature tight display tracking
+              color: '#f8fafc',
+              maxWidth: '1120px',
+              margin: '0 auto 28px auto',
+              textWrap: 'balance',
             }}
           >
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', flexShrink: 0 }}>
-              <Zap size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13.5px', fontWeight: 600, color: '#ffffff' }}>&lt; 50ms Query Latency</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Zero network roundtrips</div>
-            </div>
-          </div>
+            Built for founders who run everything.
+          </h1>
 
-          <div
+          {/* Subheadline (20px Inter) */}
+          <p
             style={{
-              padding: '16px 22px',
-              borderRadius: '50px', // DESIGN.md: 50px pill radius
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              textAlign: 'left',
+              fontSize: 'clamp(18px, 2.2vw, 21px)',
+              fontWeight: 400,
+              lineHeight: 1.45,
+              color: '#94a3b8', // --text-muted
+              maxWidth: '820px',
+              margin: '0 auto 40px auto',
             }}
           >
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(168, 85, 247, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', flexShrink: 0 }}>
-              <Bot size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13.5px', fontWeight: 600, color: '#ffffff' }}>Multi-Model BYOK AI</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>OpenRouter, OpenAI, Local</div>
-            </div>
-          </div>
+            One local-first operating system replacing 12 fragmented SaaS subscriptions. Executive
+            telemetry, automated cash vaults, AI CEO scenario stress-testing, and high-conviction
+            deal flow on your own terms.
+          </p>
 
+          {/* Dual Pill CTA Buttons */}
           <div
             style={{
-              padding: '16px 22px',
-              borderRadius: '50px', // DESIGN.md: 50px pill radius
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
               display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              textAlign: 'left',
-            }}
-          >
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', flexShrink: 0 }}>
-              <HardDrive size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13.5px', fontWeight: 600, color: '#ffffff' }}>Desktop & Web Parity</div>
-              <div style={{ fontSize: '11px', color: '#94a3b8' }}>Shared local-first codebase</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          3. INTERACTIVE COCKPIT PREVIEW (DESIGN.md: 50px radius card,
-             clean internal padding 21px+, pill switcher tabs)
-         ===================================================================== */}
-      <section
-        id="cockpit"
-        style={{
-          padding: '40px 24px 100px 24px', // DESIGN.md: 80-120px section gap
-          maxWidth: '1200px', // DESIGN.md: page max-width 1200px
-          margin: '0 auto',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            backgroundColor: 'rgba(11, 15, 25, 0.9)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: '0 30px 70px -10px rgba(0, 0, 0, 0.8), 0 0 45px rgba(0, 80, 255, 0.15)',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Mock Window Titlebar */}
-          <div
-            style={{
-              padding: '18px 28px',
-              backgroundColor: '#02050d',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
               flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px',
+              marginBottom: '36px',
+            }}
+          >
+            {/* Primary Action Button (White high-contrast pill with embedded Blue dot) */}
+            <button
+              onClick={() => triggerDownload('setup')}
+              disabled={downloadState === 'downloading'}
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#030712',
+                border: 'none',
+                borderRadius: '50px',
+                padding: '16px 28px',
+                fontSize: '17px',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '14px',
+                cursor: 'pointer',
+                boxShadow: '0 8px 30px rgba(255, 255, 255, 0.15)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#f1f5f9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <span>
+                {downloadState === 'downloading'
+                  ? 'Initiating Setup Download...'
+                  : 'Download Windows Setup (.exe)'}
+              </span>
+              <div
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  backgroundColor: '#0050FF', // Royal Blue
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {downloadState === 'downloading' ? (
+                  <RefreshCw size={14} className="spin-icon" />
+                ) : (
+                  <Download size={14} strokeWidth={2.5} />
+                )}
+              </div>
+            </button>
+
+            {/* Service Action Button (Royal Blue #0050FF filled pill) */}
+            <button
+              onClick={onLaunchApp}
+              style={{
+                backgroundColor: '#0050FF', // --brand-accent
+                color: '#ffffff',
+                border: '1px solid #1a62ff',
+                borderRadius: '50px',
+                padding: '16px 28px',
+                fontSize: '17px',
+                fontWeight: 500,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '14px',
+                cursor: 'pointer',
+                boxShadow: '0 10px 30px rgba(0, 80, 255, 0.45)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1a62ff';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 12px 36px rgba(0, 80, 255, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#0050FF';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 80, 255, 0.45)';
+              }}
+            >
+              <span>Connect Web Application</span>
+              <div
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  backgroundColor: '#38bdf8', // Cyan dot
+                  color: '#030712',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </div>
+            </button>
+          </div>
+
+          {/* Trust Chips (10px radius) */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
               gap: '12px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f59e0b' }} />
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }} />
-              <span style={{ marginLeft: '12px', fontSize: '13px', color: '#64748b', fontWeight: 500 }}>
-                FounderOS Command Cockpit — Live Interface
+            {[
+              '100% Local-First IndexedDB',
+              'Zero Cloud Lock-In',
+              'Instant Sovereign Boot',
+              'Offline-First Encryption',
+            ].map((chip, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '10px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  color: '#f8fafc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <div
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: '#10b981', // Emerald
+                  }}
+                />
+                {chip}
+              </div>
+            ))}
+          </div>
+
+          {/* Download Notification Banner */}
+          {downloadState === 'completed' && (
+            <div
+              style={{
+                marginTop: '24px',
+                padding: '14px 24px',
+                borderRadius: '50px',
+                backgroundColor: '#0b0f19',
+                border: '2px solid #10b981',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px',
+                color: '#f8fafc',
+                fontSize: '15px',
+                fontWeight: 500,
+                boxShadow: '0 8px 24px rgba(16, 185, 129, 0.25)',
+                animation: 'fadeIn 0.3s ease',
+              }}
+            >
+              <CheckCircle2 size={18} color="#10b981" />
+              <span>
+                <strong>FounderOS-Setup.exe</strong> downloaded! Run the installer on Windows to start.
               </span>
             </div>
+          )}
+        </section>
 
-            {/* Interactive Preview Switcher Tabs (DESIGN.md: 50px pill shape tabs) */}
-            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={() => setActivePreviewTab('cockpit')}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '50px', // DESIGN.md: 50px radius
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  backgroundColor: activePreviewTab === 'cockpit' ? 'rgba(0, 80, 255, 0.25)' : 'transparent',
-                  color: activePreviewTab === 'cockpit' ? '#93c5fd' : '#64748b',
-                  border: activePreviewTab === 'cockpit' ? '1px solid rgba(0, 80, 255, 0.4)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Command Center
-              </button>
-              <button
-                type="button"
-                onClick={() => setActivePreviewTab('intelligence')}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '50px', // DESIGN.md: 50px radius
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  backgroundColor: activePreviewTab === 'intelligence' ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
-                  color: activePreviewTab === 'intelligence' ? '#6ee7b7' : '#64748b',
-                  border: activePreviewTab === 'intelligence' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Morning Intelligence
-              </button>
-              <button
-                type="button"
-                onClick={() => setActivePreviewTab('treasury')}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '50px', // DESIGN.md: 50px radius
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  backgroundColor: activePreviewTab === 'treasury' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                  color: activePreviewTab === 'treasury' ? '#fcd34d' : '#64748b',
-                  border: activePreviewTab === 'treasury' ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Cash & Treasury
-              </button>
-              <button
-                type="button"
-                onClick={() => setActivePreviewTab('ai')}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '50px', // DESIGN.md: 50px radius
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  backgroundColor: activePreviewTab === 'ai' ? 'rgba(168, 85, 247, 0.2)' : 'transparent',
-                  color: activePreviewTab === 'ai' ? '#d8b4fe' : '#64748b',
-                  border: activePreviewTab === 'ai' ? '1px solid rgba(168, 85, 247, 0.4)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                AI CEO Copilot
-              </button>
-            </div>
-          </div>
-
-          {/* Mock Window Content */}
-          <div style={{ padding: '36px', backgroundColor: '#090d16' }}>
-            {activePreviewTab === 'cockpit' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-                  <div>
-                    <h2 style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 4px 0', color: '#ffffff', letterSpacing: '-0.5px' }}>
-                      Executive Command Center
-                    </h2>
-                    <p style={{ fontSize: '14px', color: '#94a3b8', margin: 0 }}>
-                      Live company metrics calculated instantly from local IndexedDB ledgers.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={onLaunchApp}
-                    style={{
-                      padding: '8px 20px',
-                      borderRadius: '50px', // DESIGN.md: 50px radius
-                      backgroundColor: '#0050FF',
-                      color: '#ffffff',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 4px 14px rgba(0, 80, 255, 0.3)',
-                    }}
-                  >
-                    <span>Open Live View</span>
-                    <ArrowRight size={13} />
-                  </button>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px' }}>Annual Recurring Revenue</div>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#38bdf8', letterSpacing: '-1px' }}>$1,240,000</div>
-                    <div style={{ fontSize: '12px', color: '#34d399', marginTop: '6px' }}>+18.4% vs last quarter</div>
-                  </div>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px' }}>Net Cash Runway</div>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#34d399', letterSpacing: '-1px' }}>22.4 Months</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '6px' }}>$845,000 Cash in Vault</div>
-                  </div>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px' }}>Active Customers & Deals</div>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#a78bfa', letterSpacing: '-1px' }}>$340k Weighted</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '6px' }}>14 qualified opportunities</div>
-                  </div>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px' }}>Monthly Net Burn</div>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#f87171', letterSpacing: '-1px' }}>-$37,500</div>
-                    <div style={{ fontSize: '12px', color: '#34d399', marginTop: '6px' }}>Reduced by 12% via audit</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activePreviewTab === 'intelligence' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '50px', backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
-                    ● Synthesized Daily Briefing
-                  </span>
-                  <span style={{ fontSize: '13px', color: '#64748b' }}>Generated on-device without cloud exposure</span>
-                </div>
-                <div style={{ padding: '28px', borderRadius: '28px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', marginBottom: '10px' }}>
-                    Key Strategic Observations for Today
-                  </div>
-                  <p style={{ fontSize: '14px', color: '#cbd5e1', margin: '0 0 16px 0', lineHeight: 1.6 }}>
-                    1. <strong>Pipeline Acceleration:</strong> Three enterprise contracts in negotiation are scheduled to close within 14 days, extending runway by +3.2 months.
-                    <br />
-                    2. <strong>Treasury Optimization:</strong> Next month's payroll is fully secured in the primary operating account.
-                  </p>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '50px', backgroundColor: 'rgba(0, 80, 255, 0.15)', color: '#60a5fa' }}>Finance Ledger Checked</span>
-                    <span style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '50px', backgroundColor: 'rgba(168, 85, 247, 0.15)', color: '#c084fc' }}>CRM Pipeline Audited</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activePreviewTab === 'treasury' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0, color: '#ffffff' }}>Cash & Treasury Accounts</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8' }}>Operating Account</div>
-                    <div style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', margin: '8px 0' }}>$485,200.00</div>
-                    <div style={{ fontSize: '12px', color: '#10b981' }}>Active Liquidity • 0% Risk</div>
-                  </div>
-                  <div style={{ padding: '24px', borderRadius: '24px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                    <div style={{ fontSize: '13px', color: '#94a3b8' }}>Treasury Vault (Short-term T-Bills)</div>
-                    <div style={{ fontSize: '24px', fontWeight: 800, color: '#ffffff', margin: '8px 0' }}>$360,000.00</div>
-                    <div style={{ fontSize: '12px', color: '#38bdf8' }}>5.1% APY Yield Generated</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activePreviewTab === 'ai' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, margin: 0, color: '#ffffff' }}>AI CEO Strategic Co-Founder</h3>
-                <div style={{ padding: '28px', borderRadius: '28px', backgroundColor: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(168, 85, 247, 0.25)' }}>
-                  <div style={{ fontSize: '13.5px', color: '#c084fc', fontWeight: 600, marginBottom: '6px' }}>Founder Prompt:</div>
-                  <div style={{ fontSize: '14px', color: '#e2e8f0', marginBottom: '16px', fontStyle: 'italic' }}>
-                    "What happens to our runway if we hire 2 senior engineers next month at $150k each?"
-                  </div>
-                  <div style={{ fontSize: '13.5px', color: '#38bdf8', fontWeight: 600, marginBottom: '6px' }}>AI CEO Analysis:</div>
-                  <div style={{ fontSize: '13.5px', color: '#cbd5e1', lineHeight: 1.6 }}>
-                    "Adding $25,000/mo in payroll will increase monthly burn from $37.5k to $62.5k. Your cash runway will adjust from <strong>22.4 months</strong> to <strong>13.5 months</strong> unless pipeline deals in Stage 3 convert by Q3."
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          4. CORE CAPABILITIES (DESIGN.md: Content Cards with 50px border-radius,
-             21px+ internal padding, comfortable density, tight headings)
-         ===================================================================== */}
-      <section
-        id="features"
-        style={{
-          padding: '80px 24px 100px 24px', // DESIGN.md: 80-120px section gap
-          maxWidth: '1200px', // DESIGN.md: page max-width 1200px
-          margin: '0 auto',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#38bdf8', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
-            Built for Modern Founders
-          </span>
-          <h2
-            style={{
-              fontSize: 'clamp(32px, 4.5vw, 53px)', // DESIGN.md: 53px heading scale
-              fontWeight: 700,
-              lineHeight: 1.15, // DESIGN.md: 1.15 heading line-height
-              letterSpacing: '-2.12px', // DESIGN.md: -2.12px heading tracking
-              margin: '12px 0 16px 0',
-              color: '#ffffff',
-            }}
-          >
-            Everything you need to scale your company
-          </h2>
-          <p style={{ fontSize: '18px', color: '#94a3b8', maxWidth: '680px', margin: '0 auto' }}>
-            Replace 8 disparate subscriptions with a single private operating system.
-          </p>
-        </div>
-
-        <div
+        {/* =========================================================================
+            3. PAPER-CUT STORYBOOK ILLUSTRATION HERO PANEL (App Dark Palette)
+            - Paper-cut style character art with dark cybernetic/editorial fills
+            - Blue #0050FF, Cyan #38bdf8, Emerald #10b981, Amber #f59e0b, Rose #f43f5e
+            - Container: 63.75px radius, #0b0f19 surface, border: rgba(255,255,255,0.12)
+           ========================================================================= */}
+        <section
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '24px',
+            margin: '40px auto 100px auto',
+            maxWidth: '1100px',
+            position: 'relative',
           }}
         >
-          {/* Card 1: Executive KPI & Command Center */}
           <div
             style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              width: '100%',
+              borderRadius: '63.75px', // --radius-illustration-containers: 63.75px
+              backgroundColor: 'rgba(15, 23, 42, 0.75)', // --bg-card
               backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              border: '1.5px solid rgba(255, 255, 255, 0.12)',
+              padding: '40px 30px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              boxShadow: '0 20px 50px -10px rgba(0, 0, 0, 0.6)',
+              position: 'relative',
+              overflow: 'hidden',
             }}
           >
+            {/* Sticker Badges on the Illustration Surface */}
             <div
               style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(0, 80, 255, 0.15)',
-                color: '#38bdf8',
-                display: 'flex',
+                position: 'absolute',
+                top: '24px',
+                left: '32px',
+                padding: '6px 14px',
+                borderRadius: '10px',
+                backgroundColor: '#f59e0b', // Amber
+                color: '#030712',
+                fontSize: '13px',
+                fontWeight: 700,
+                border: '1.5px solid rgba(0,0,0,0.4)',
+                transform: 'rotate(-2deg)',
+              }}
+            >
+              ★ 100% PRIVATE • ZERO TRACKERS
+            </div>
+
+            <div
+              style={{
+                position: 'absolute',
+                top: '24px',
+                right: '32px',
+                padding: '6px 14px',
+                borderRadius: '10px',
+                backgroundColor: '#10b981', // Emerald
+                color: '#030712',
+                fontSize: '13px',
+                fontWeight: 700,
+                border: '1.5px solid rgba(0,0,0,0.4)',
+                transform: 'rotate(2deg)',
+              }}
+            >
+              ⚡ SOVEREIGN DESKTOP ENGINE
+            </div>
+
+            {/* The SVG Storybook Paper-Cut Artwork adapted to App Dark Palette */}
+            <svg
+              viewBox="0 0 1000 420"
+              style={{ width: '100%', height: 'auto', maxHeight: '420px' }}
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Radial Backdrop Glow */}
+              <circle cx="500" cy="210" r="170" fill="rgba(0, 80, 255, 0.08)" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1.5" />
+              <circle cx="500" cy="210" r="130" fill="rgba(15, 23, 42, 0.9)" />
+
+              {/* Ground Shadow Line */}
+              <rect x="180" y="360" width="640" height="12" rx="6" fill="#1e293b" />
+
+              {/* Left Pillar: Executive Vault & Cash Chest */}
+              <g transform="translate(140, 160)">
+                <rect x="0" y="50" width="160" height="140" rx="28" fill="#10b981" stroke="#0b0f19" strokeWidth="3" />
+                <rect x="20" y="30" width="120" height="36" rx="14" fill="#f59e0b" stroke="#0b0f19" strokeWidth="3" />
+                <circle cx="80" cy="48" r="8" fill="#030712" />
+                <rect x="25" y="85" width="110" height="24" rx="8" fill="#0b0f19" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
+                <text x="80" y="101" fill="#f8fafc" fontSize="13" fontWeight="bold" textAnchor="middle">
+                  TREASURY: $1.2M
+                </text>
+                <circle cx="45" cy="140" r="16" fill="#0050FF" stroke="#0b0f19" strokeWidth="2" />
+                <circle cx="115" cy="140" r="16" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+                {/* Floating Coin */}
+                <circle cx="80" cy="0" r="22" fill="#f59e0b" stroke="#0b0f19" strokeWidth="3" />
+                <text x="80" y="6" fill="#030712" fontSize="18" fontWeight="bold" textAnchor="middle">
+                  $
+                </text>
+              </g>
+
+              {/* Center Figure: The Founder Orchestrator */}
+              <g transform="translate(430, 90)">
+                {/* Desk Base */}
+                <rect x="-60" y="240" width="260" height="34" rx="17" fill="#1e293b" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+
+                {/* Founder Torso */}
+                <path
+                  d="M40 160 C10 160, -10 200, -10 240 L150 240 C150 200, 130 160, 100 160 Z"
+                  fill="#0050FF"
+                  stroke="#0b0f19"
+                  strokeWidth="3"
+                />
+                {/* Collar */}
+                <polygon points="55,160 70,185 85,160" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+
+                {/* Founder Head */}
+                <circle cx="70" cy="115" r="38" fill="#334155" stroke="#0b0f19" strokeWidth="3" />
+                {/* Hair */}
+                <path
+                  d="M32 110 C32 70, 108 70, 108 110 C100 85, 45 85, 32 110 Z"
+                  fill="#0f172a"
+                />
+                {/* Visor / Glasses (Cyan Glow) */}
+                <rect x="48" y="106" width="18" height="12" rx="4" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+                <rect x="74" y="106" width="18" height="12" rx="4" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+                <line x1="66" y1="112" x2="74" y2="112" stroke="#0b0f19" strokeWidth="2" />
+                {/* Smile */}
+                <path d="M62 132 Q70 138 78 132" stroke="#f8fafc" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+
+                {/* Laptop / Terminal */}
+                <rect x="20" y="200" width="100" height="60" rx="8" fill="#0b0f19" stroke="#38bdf8" strokeWidth="2" />
+                <rect x="30" y="210" width="80" height="40" rx="4" fill="#030712" />
+                <polyline points="40,235 55,225 70,230 85,218 95,222" stroke="#10b981" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="95" cy="222" r="3.5" fill="#f59e0b" />
+
+                {/* Hands */}
+                <circle cx="36" cy="236" r="10" fill="#334155" stroke="#0b0f19" strokeWidth="2" />
+                <circle cx="104" cy="236" r="10" fill="#334155" stroke="#0b0f19" strokeWidth="2" />
+              </g>
+
+              {/* Right Pillar: Autonomous AI Agent & Radar */}
+              <g transform="translate(700, 150)">
+                {/* AI Robot Pod */}
+                <rect x="0" y="60" width="150" height="130" rx="30" fill="#0050FF" stroke="#0b0f19" strokeWidth="3" />
+                <rect x="25" y="85" width="100" height="45" rx="14" fill="#0b0f19" stroke="rgba(255,255,255,0.2)" strokeWidth="2" />
+                {/* Glowing Eyes */}
+                <circle cx="55" cy="107" r="7" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+                <circle cx="95" cy="107" r="7" fill="#38bdf8" stroke="#0b0f19" strokeWidth="2" />
+                {/* Antenna */}
+                <line x1="75" y1="60" x2="75" y2="35" stroke="#0050FF" strokeWidth="3" strokeLinecap="round" />
+                <circle cx="75" cy="28" r="12" fill="#f43f5e" stroke="#0b0f19" strokeWidth="2.5" />
+                {/* Status Bar */}
+                <rect x="30" y="150" width="90" height="16" rx="8" fill="#10b981" stroke="#0b0f19" strokeWidth="2" />
+                <text x="75" y="162" fill="#030712" fontSize="10" fontWeight="bold" textAnchor="middle">
+                  AI CEO: SYNTHESIZING
+                </text>
+              </g>
+
+              {/* Dynamic Connection Paths (Cyan dashed trails) */}
+              <path
+                d="M300 240 Q370 190 430 220"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeDasharray="6 6"
+                fill="none"
+              />
+              <path
+                d="M570 220 Q640 190 700 230"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeDasharray="6 6"
+                fill="none"
+              />
+
+              {/* Floating Metric Stickers */}
+              <g transform="translate(320, 110)">
+                <rect x="0" y="0" width="95" height="34" rx="10" fill="#10b981" stroke="#0b0f19" strokeWidth="2" />
+                <text x="47" y="22" fill="#030712" fontSize="13" fontWeight="bold" textAnchor="middle">
+                  +142% NRR
+                </text>
+              </g>
+
+              <g transform="translate(600, 80)">
+                <rect x="0" y="0" width="105" height="34" rx="10" fill="#f59e0b" stroke="#0b0f19" strokeWidth="2" />
+                <text x="52" y="22" fill="#030712" fontSize="13" fontWeight="bold" textAnchor="middle">
+                  0 CLOUD LEAKS
+                </text>
+              </g>
+            </svg>
+
+            {/* Bottom Caption inside the Illustration Panel */}
+            <div
+              style={{
+                marginTop: '16px',
+                textAlign: 'center',
+                maxWidth: '650px',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '16px',
+                  color: '#94a3b8',
+                  margin: 0,
+                  fontWeight: 500,
+                }}
+              >
+                Storybook clarity meets high-stakes executive execution. Every byte stored
+                locally on your machine.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            4. "NO MORE CHAOS" CONTENT CARD (App Dark Palette)
+            - Surface: rgba(15, 23, 42, 0.75) with 50px border-radius
+            - Side-by-side comparison:
+              - Left: Fragmented Chaos in recessed dark slate (#1e293b) with Rose (#f43f5e) accents
+              - Right: FounderOS in dark glass with Royal Blue (#0050FF) & Emerald (#10b981) highlights
+           ========================================================================= */}
+        <section id="chaos" style={{ marginBottom: '120px' }}>
+          <div
+            style={{
+              backgroundColor: 'rgba(15, 23, 42, 0.75)', // --bg-card
+              backdropFilter: 'blur(16px)',
+              borderRadius: '50px', // --radius-cards: 50px
+              padding: 'clamp(28px, 5vw, 56px)',
+              border: '1.5px solid rgba(255, 255, 255, 0.12)',
+              boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            {/* Header Badge */}
+            <div
+              style={{
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                gap: '8px',
+                padding: '6px 14px',
+                borderRadius: '10px',
+                border: '1px solid rgba(244, 63, 94, 0.4)', // Rose outline accent
+                backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                color: '#f43f5e',
+                fontSize: '13px',
+                fontWeight: 600,
                 marginBottom: '20px',
               }}
             >
-              <LineChart size={22} />
+              <AlertTriangle size={14} />
+              THE DILEMMA & THE CURE
             </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              Executive KPIs & Cash Runway
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Live visibility into ARR, monthly net burn, cash runway, and North Star milestones. Zero manual spreadsheets or disconnected dashboards.
-            </p>
-          </div>
 
-          {/* Card 2: Morning Intelligence */}
-          <div
-            style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-          >
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                color: '#34d399',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <Zap size={22} />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              Morning Intelligence Briefing
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Synthesizes daily situational awareness from your live financial ledgers, customer churn alerts, sales stages, and priority tasks before your day begins.
-            </p>
-          </div>
-
-          {/* Card 3: AI CEO Copilot */}
-          <div
-            style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-          >
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(168, 85, 247, 0.15)',
-                color: '#c084fc',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <Bot size={22} />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              AI CEO Strategic Co-Founder
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Simulate strategic boardroom decisions, pricing adjustments, runway impacts, and investor updates with an AI that knows your actual company numbers.
-            </p>
-          </div>
-
-          {/* Card 4: Management & Corporate Vault */}
-          <div
-            style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-          >
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(245, 158, 11, 0.15)',
-                color: '#f59e0b',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <Landmark size={22} />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              Treasury, Payroll & Vault
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Manage bank accounts, assets & liabilities, employee directory, departments, and store sensitive cap table & corporate files in an encrypted local vault.
-            </p>
-          </div>
-
-          {/* Card 5: CRM & Sales Pipeline */}
-          <div
-            style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(14, 165, 233, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-          >
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(14, 165, 233, 0.15)',
-                color: '#38bdf8',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <Users size={22} />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              Customers & Deal Flow
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Track prospect lifecycles from lead to closed-won. Monitor customer retention, churn indicators, and contract renewal dates without CRM bloat.
-            </p>
-          </div>
-
-          {/* Card 6: 100% Offline & Local Privacy */}
-          <div
-            style={{
-              padding: '36px',
-              borderRadius: '50px', // DESIGN.md: 50px border-radius on cards
-              backgroundColor: 'rgba(15, 23, 42, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(16px)',
-              transition: 'transform 0.2s ease, border-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-          >
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '50%', // DESIGN.md: circular icon container
-                backgroundColor: 'rgba(99, 102, 241, 0.15)',
-                color: '#818cf8',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '20px',
-              }}
-            >
-              <Lock size={22} />
-            </div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.3px' }}>
-              Local-First IndexedDB Privacy
-            </h3>
-            <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
-              Your financial ledgers, customer records, and notes are saved strictly on your local device. Works flawlessly offline on flights and trains.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          5. DEDICATED DOWNLOAD CENTER (DESIGN.md: 50px radius cards,
-             pill action buttons with circular icon badges)
-         ===================================================================== */}
-      <section
-        id="downloads"
-        style={{
-          padding: '100px 24px', // DESIGN.md: 80-120px section gap
-          backgroundColor: '#02050e',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#34d399', letterSpacing: '1.2px', textTransform: 'uppercase' }}>
-              Deployment Options
-            </span>
+            {/* Heading (53px Inter) */}
             <h2
               style={{
-                fontSize: 'clamp(32px, 4.5vw, 53px)', // DESIGN.md: 53px heading scale
-                fontWeight: 700,
-                lineHeight: 1.15,
+                fontSize: 'clamp(32px, 4.5vw, 53px)',
+                fontWeight: 500,
+                lineHeight: 1.12,
                 letterSpacing: '-2.12px',
-                margin: '12px 0 16px 0',
-                color: '#ffffff',
+                color: '#f8fafc',
+                marginBottom: '18px',
+                maxWidth: '900px',
               }}
             >
-              Choose how you want to run FounderOS
+              No more chaos. Zero subscription sprawl.
             </h2>
-            <p style={{ fontSize: '18px', color: '#94a3b8', maxWidth: '680px', margin: '0 auto' }}>
-              Run natively on Windows with system tray daemon, or launch instantly in your web browser.
+
+            {/* Body Text (17px Inter) */}
+            <p
+              style={{
+                fontSize: '18px',
+                color: '#94a3b8',
+                lineHeight: 1.6,
+                maxWidth: '850px',
+                marginBottom: '40px',
+              }}
+            >
+              Founders lose an average of 9.4 hours every week copy-pasting numbers between 12
+              disconnected tools, paying thousands in recurring seat fees, and leaking corporate secrets
+              to external cloud servers. FounderOS replaces this entire mess with one sovereign desktop and
+              web application.
+            </p>
+
+            {/* Side-by-Side Comparison Columns */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '24px',
+              }}
+            >
+              {/* Column 1: The Fragmented Chaos (Recessed Dark Slate #1e293b) */}
+              <div
+                style={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.5)', // recessed slate
+                  borderRadius: '28px',
+                  padding: '30px',
+                  border: '1.5px solid rgba(244, 63, 94, 0.25)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      padding: '4px 12px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(244, 63, 94, 0.15)',
+                      color: '#f43f5e',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      marginBottom: '16px',
+                      border: '1px solid rgba(244, 63, 94, 0.3)',
+                    }}
+                  >
+                    THE OLD DISCONNECTED WAY
+                  </div>
+
+                  <h3
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 500,
+                      color: '#f8fafc',
+                      marginBottom: '14px',
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    12 Open Tabs & $4,200/mo Cloud Tax
+                  </h3>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {[
+                      'Stripe + QuickBooks + ChartMogul for simple revenue numbers',
+                      'HubSpot + Notion + Sheets for fragmented deal stages',
+                      'Exposing confidential runway data to third-party ad networks',
+                      'Zero offline capability; breaks when Wi-Fi drops on flights',
+                      'Constant auth timeouts, password resets, and session expired errors',
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '10px',
+                          fontSize: '15px',
+                          color: '#cbd5e1',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '18px',
+                            height: '18px',
+                            borderRadius: '50%',
+                            backgroundColor: '#f43f5e',
+                            color: '#ffffff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            marginTop: '2px',
+                          }}
+                        >
+                          <X size={12} strokeWidth={3} />
+                        </div>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: '28px',
+                    padding: '14px',
+                    borderRadius: '16px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    fontSize: '13px',
+                    color: '#94a3b8',
+                    fontWeight: 500,
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  Status: High Cognitive Fatigue & Subscription Creep
+                </div>
+              </div>
+
+              {/* Column 2: The Unified FounderOS (Elevated Glass with Royal Blue Stroke) */}
+              <div
+                style={{
+                  backgroundColor: 'rgba(11, 15, 25, 0.95)',
+                  borderRadius: '28px',
+                  padding: '30px',
+                  border: '2px solid #0050FF', // Brand Blue stroke
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 0 30px rgba(0, 80, 255, 0.2)',
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      display: 'inline-block',
+                      padding: '4px 12px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(0, 80, 255, 0.2)',
+                      color: '#38bdf8',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      marginBottom: '16px',
+                      border: '1px solid rgba(0, 80, 255, 0.4)',
+                    }}
+                  >
+                    THE FOUNDEROS WAY
+                  </div>
+
+                  <h3
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 500,
+                      color: '#f8fafc',
+                      marginBottom: '14px',
+                      lineHeight: 1.25,
+                    }}
+                  >
+                    1 Cohesive Local-First Operating System
+                  </h3>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {[
+                      'Single unified executive cockpit: MRR, ARR, Burn, and Runway',
+                      'Autonomous morning intelligence synthesized before morning coffee',
+                      '100% sovereign IndexedDB storage; zero data sold or leaked',
+                      'Operates 100% offline at 35,000 feet without internet connection',
+                      'Instant launch with zero logins, accounts, or corporate surveillance',
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '10px',
+                          fontSize: '15px',
+                          color: '#f8fafc',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '18px',
+                            height: '18px',
+                            borderRadius: '50%',
+                            backgroundColor: '#10b981',
+                            color: '#030712',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            marginTop: '2px',
+                          }}
+                        >
+                          <Check size={12} strokeWidth={3} />
+                        </div>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: '28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '12px',
+                  }}
+                >
+                  <button
+                    onClick={onLaunchApp}
+                    style={{
+                      backgroundColor: '#0050FF', // Brand Blue
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '50px',
+                      padding: '11px 20px',
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      boxShadow: '0 4px 16px rgba(0, 80, 255, 0.4)',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a62ff')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
+                  >
+                    <span>Experience FounderOS</span>
+                    <div
+                      style={{
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        backgroundColor: '#ffffff',
+                        color: '#0050FF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <ArrowRight size={10} strokeWidth={3} />
+                    </div>
+                  </button>
+
+                  <span style={{ fontSize: '13px', color: '#10b981', fontWeight: 500 }}>
+                    $0 Forever for Core
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            5. SERVICE ACTION CARDS (App Dark Palette + 50px geometry)
+            - Surface: rgba(15, 23, 42, 0.75) with 50px border-radius
+            - Heading at 30px Inter weight 500 #f8fafc
+            - Body text at 17px weight 400 #94a3b8
+            - Action trigger: Sleek pill button (50px radius) with embedded circular dot
+           ========================================================================= */}
+        <section id="capabilities" style={{ marginBottom: '120px' }}>
+          {/* Section Heading */}
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 14px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(0, 80, 255, 0.1)',
+                border: '1px solid rgba(0, 80, 255, 0.25)',
+                color: '#38bdf8',
+                fontSize: '13px',
+                fontWeight: 500,
+                marginBottom: '16px',
+              }}
+            >
+              <Layers size={14} color="#0050FF" />
+              THE SIX SOVEREIGN PILLARS
+            </div>
+
+            <h2
+              style={{
+                fontSize: 'clamp(36px, 5.5vw, 68px)',
+                fontWeight: 500,
+                letterSpacing: '-0.05em',
+                color: '#f8fafc',
+                lineHeight: 1.05,
+                margin: '0 auto 16px auto',
+                maxWidth: '900px',
+              }}
+            >
+              Everything an executive needs. Nothing you don't.
+            </h2>
+
+            <p style={{ fontSize: '18px', color: '#94a3b8', maxWidth: '650px', margin: '0 auto' }}>
+              Each module is crafted with sticker-soft tactile interactions and backed by
+              bulletproof local-first database logic.
+            </p>
+          </div>
+
+          {/* The 6 Service Action Cards Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {[
+              {
+                title: 'Executive Pulse',
+                badge: 'LIVE TELEMETRY',
+                desc: 'Real-time telemetry tracking MRR, ARR, net burn multiple, gross margins, and customer retention without third-party trackers.',
+                icon: <TrendingUp size={24} color="#38bdf8" />,
+                accentColor: '#0050FF',
+                bullets: ['Instant Net Burn & Runway countdown', 'Cohort Net Revenue Retention (NRR)', 'Real-time weighted deal pipeline'],
+                buttonText: 'Open Command Pulse',
+              },
+              {
+                title: 'Morning Intelligence',
+                badge: 'DAILY SYNTHESIS',
+                desc: 'An automated briefing synthesized every morning at 7:00 AM so you know exactly where your capital and team stand before touching email.',
+                icon: <Zap size={24} color="#f59e0b" />,
+                accentColor: '#f59e0b',
+                bullets: ['3 high-impact prioritized action items', 'Anomaly detection on runway fluctuations', 'Clean print-ready executive memo format'],
+                buttonText: 'Read Intelligence Sample',
+              },
+              {
+                title: 'Autonomous AI CEO',
+                badge: 'STRATEGIC MODELING',
+                desc: 'Stress-test hiring plans, simulate market downturns, and project cash burn across 24 months with your own private local AI copilot.',
+                icon: <Bot size={24} color="#a855f7" />,
+                accentColor: '#a855f7',
+                bullets: ['Runway sensitivity modeling under stress', 'Custom provider support (OpenRouter, Ollama)', 'Zero training on proprietary company secrets'],
+                buttonText: 'Simulate Strategy',
+              },
+              {
+                title: 'Corporate Treasury',
+                badge: 'CAPITAL SOVEREIGNTY',
+                desc: 'Monitor operating checking accounts, tax escrow splits, and high-yield reserve allocations with automated safety buffers.',
+                icon: <Landmark size={24} color="#10b981" />,
+                accentColor: '#10b981',
+                bullets: ['Multi-entity liquidity aggregation', 'Automated quarterly tax reserve calculator', 'Zero bank-link credential storage'],
+                buttonText: 'View Vault Allocation',
+              },
+              {
+                title: 'Deal Flow & Pipeline',
+                badge: 'HIGH-CONVICTION CRM',
+                desc: 'A laser-focused relationship engine built for founder-led sales. Track enterprise negotiations without heavy CRM bloat.',
+                icon: <Users size={24} color="#38bdf8" />,
+                accentColor: '#38bdf8',
+                bullets: ['Stages tailored for founder closing motions', 'Weighted probability revenue projections', 'One-click contract milestone checkoffs'],
+                buttonText: 'Track Active Deals',
+              },
+              {
+                title: '100% Local-First Engine',
+                badge: 'OFFLINE INDEXEDDB',
+                desc: 'Your financial balance sheets, cap table notes, and pipeline stay encrypted inside your local device storage. No external cloud reliance.',
+                icon: <HardDrive size={24} color="#f8fafc" />,
+                accentColor: '#0050FF',
+                bullets: ['Instant sub-10ms query execution', 'Zero latency offline flight mode support', 'One-click full JSON database export/import'],
+                buttonText: 'Inspect Architecture',
+              },
+            ].map((card, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: 'rgba(15, 23, 42, 0.75)', // --bg-card
+                  backdropFilter: 'blur(16px)',
+                  borderRadius: '50px', // --radius-cards: 50px
+                  padding: '32px',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 16px 36px rgba(0, 80, 255, 0.25)';
+                  e.currentTarget.style.borderColor = 'rgba(0, 80, 255, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.35)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                }}
+              >
+                <div>
+                  {/* Top Row: Circular Icon Container + Badge */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '20px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '52px',
+                        height: '52px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        border: '1.5px solid rgba(255, 255, 255, 0.12)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {card.icon}
+                    </div>
+
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        padding: '4px 10px',
+                        borderRadius: '10px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                        color: '#94a3b8',
+                        letterSpacing: '0.04em',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                      }}
+                    >
+                      {card.badge}
+                    </span>
+                  </div>
+
+                  {/* Heading (30px Inter weight 500) */}
+                  <h3
+                    style={{
+                      fontSize: '28px',
+                      fontWeight: 500,
+                      color: '#f8fafc',
+                      lineHeight: 1.2,
+                      marginBottom: '12px',
+                      letterSpacing: '-0.03em',
+                    }}
+                  >
+                    {card.title}
+                  </h3>
+
+                  {/* Body text (17px weight 400) */}
+                  <p
+                    style={{
+                      fontSize: '16px',
+                      color: '#94a3b8',
+                      lineHeight: 1.5,
+                      marginBottom: '24px',
+                    }}
+                  >
+                    {card.desc}
+                  </p>
+
+                  {/* Bulleted Points with Emerald Green Checkmarks */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '28px' }}>
+                    {card.bullets.map((bullet, bIdx) => (
+                      <div
+                        key={bIdx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          fontSize: '14px',
+                          color: '#e2e8f0',
+                          fontWeight: 500,
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            borderRadius: '50%',
+                            backgroundColor: '#10b981', // Emerald
+                            color: '#030712',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Check size={10} strokeWidth={3} />
+                        </div>
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Service Card Link: Sleek pill button (50px radius) */}
+                <button
+                  onClick={onLaunchApp}
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    color: '#f8fafc',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '50px', // --radius-buttons: 50px
+                    padding: '11px 20px', // 11px vertical, 20px horizontal
+                    fontSize: '15px', // 15px Inter 500
+                    fontWeight: 500,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#0050FF';
+                    e.currentTarget.style.borderColor = '#1a62ff';
+                    e.currentTarget.style.color = '#ffffff';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                    e.currentTarget.style.color = '#f8fafc';
+                  }}
+                >
+                  <span>{card.buttonText}</span>
+                  <div
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <ArrowRight size={11} strokeWidth={3} />
+                  </div>
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* =========================================================================
+            6. DOWNLOAD & WEB DISTRIBUTION HUB (App Dark Palette)
+            - 3 Glass cards (50px border-radius)
+            - Windows Setup Installer (.exe) with direct trigger
+            - Instant Web Command Center with onLaunchApp
+            - Windows Portable Binary (.exe)
+           ========================================================================= */}
+        <section id="downloads" style={{ marginBottom: '120px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 14px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(0, 80, 255, 0.1)',
+                border: '1px solid rgba(0, 80, 255, 0.3)',
+                color: '#38bdf8',
+                fontSize: '13px',
+                fontWeight: 500,
+                marginBottom: '16px',
+              }}
+            >
+              <Download size={14} color="#38bdf8" />
+              NATIVE HARDWARE & CLOUDLESS WEB
+            </div>
+
+            <h2
+              style={{
+                fontSize: 'clamp(34px, 5vw, 64px)',
+                fontWeight: 500,
+                letterSpacing: '-0.05em',
+                color: '#f8fafc',
+                lineHeight: 1.08,
+                margin: '0 auto 16px auto',
+                maxWidth: '850px',
+              }}
+            >
+              Choose your execution surface.
+            </h2>
+
+            <p style={{ fontSize: '18px', color: '#94a3b8', maxWidth: '650px', margin: '0 auto' }}>
+              Whether you prefer a native desktop installer with system tray background daemon or
+              instant zero-install web execution, FounderOS is ready in seconds.
             </p>
           </div>
 
@@ -1240,387 +1570,343 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '28px',
-              maxWidth: '1140px',
-              margin: '0 auto',
-            }}
-          >
-            {/* OPTION 1: WINDOWS SETUP INSTALLER (RECOMMENDED) */}
-            <div
-              style={{
-                padding: '40px 32px',
-                borderRadius: '50px', // DESIGN.md: 50px border-radius
-                backgroundColor: 'rgba(15, 23, 42, 0.85)',
-                border: '2px solid rgba(0, 80, 255, 0.45)',
-                boxShadow: '0 12px 35px rgba(0, 80, 255, 0.2)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative',
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-14px',
-                  right: '32px',
-                  padding: '4px 14px',
-                  borderRadius: '50px', // DESIGN.md: 50px pill badge
-                  backgroundColor: '#0050FF',
-                  color: '#ffffff',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '0.5px',
-                  boxShadow: '0 2px 10px rgba(0, 80, 255, 0.5)',
-                }}
-              >
-                RECOMMENDED
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(0, 80, 255, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Laptop size={20} color="#38bdf8" />
-                  </div>
-                  <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.4px' }}>
-                    Windows Setup Installer
-                  </h3>
-                </div>
-                <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '28px', lineHeight: 1.5 }}>
-                  Complete native desktop experience with automated background updates and tray summon.
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>One-click installation (`.exe`)</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Global hotkey summon (`Ctrl+Shift+O`)</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>System tray background daemon</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Isolated native IndexedDB storage</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="button"
-                  onClick={() => triggerDownload('setup')}
-                  style={{
-                    width: '100%',
-                    padding: '14px 20px',
-                    borderRadius: '50px', // DESIGN.md: 50px pill button
-                    backgroundColor: '#0050FF',
-                    color: '#ffffff',
-                    fontSize: '14.5px',
-                    fontWeight: 600,
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    boxShadow: '0 6px 20px rgba(0, 80, 255, 0.45)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a62ff')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
-                >
-                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Download size={13} color="#ffffff" />
-                  </div>
-                  <span>Download Setup (.exe)</span>
-                </button>
-                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#64748b', marginTop: '10px' }}>
-                  FounderOS-Setup.exe • Windows 10/11 (64-bit)
-                </div>
-              </div>
-            </div>
-
-            {/* OPTION 2: CONNECT WEB APPLICATION (INSTANT BROWSER CONSOLE) */}
-            <div
-              style={{
-                padding: '40px 32px',
-                borderRadius: '50px', // DESIGN.md: 50px border-radius
-                backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(168, 85, 247, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Globe size={20} color="#c084fc" />
-                  </div>
-                  <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.4px' }}>
-                    Connect Web Application
-                  </h3>
-                </div>
-                <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '28px', lineHeight: 1.5 }}>
-                  Zero download required. Run instantly in your favorite browser with local IndexedDB storage.
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Instant launch (Chrome, Edge, Firefox, Safari)</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>100% feature parity with Desktop</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Browser-native IndexedDB persistence</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Works offline as a Progressive App</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="button"
-                  onClick={onLaunchApp}
-                  style={{
-                    width: '100%',
-                    padding: '14px 20px',
-                    borderRadius: '50px', // DESIGN.md: 50px pill button
-                    backgroundColor: '#ffffff',
-                    color: '#030712',
-                    fontSize: '14.5px',
-                    fontWeight: 600,
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    boxShadow: '0 6px 20px rgba(255, 255, 255, 0.15)',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f1f5f9';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(0, 80, 255, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Sparkles size={13} color="#0050FF" />
-                  </div>
-                  <span>Launch Web Console</span>
-                  <ArrowRight size={14} color="#030712" />
-                </button>
-                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#64748b', marginTop: '10px' }}>
-                  No installation required • Instant start
-                </div>
-              </div>
-            </div>
-
-            {/* OPTION 3: WINDOWS PORTABLE EDITION */}
-            <div
-              style={{
-                padding: '40px 32px',
-                borderRadius: '50px', // DESIGN.md: 50px border-radius
-                backgroundColor: 'rgba(15, 23, 42, 0.7)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <HardDrive size={20} color="#fbbf24" />
-                  </div>
-                  <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff', margin: 0, letterSpacing: '-0.4px' }}>
-                    Windows Portable Edition
-                  </h3>
-                </div>
-                <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '28px', lineHeight: 1.5 }}>
-                  Single executable file. Run from USB or any folder without installation or admin rights.
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Zero installation / No admin rights required</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Ideal for secured corporate machines</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Stores data locally in your user profile</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#cbd5e1' }}>
-                    <CheckCircle2 size={16} color="#34d399" />
-                    <span>Single `.exe` file (~73 MB)</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="button"
-                  onClick={() => triggerDownload('portable')}
-                  style={{
-                    width: '100%',
-                    padding: '14px 20px',
-                    borderRadius: '50px', // DESIGN.md: 50px pill button
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    color: '#ffffff',
-                    fontSize: '14.5px',
-                    fontWeight: 600,
-                    border: '1px solid rgba(255, 255, 255, 0.16)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)')}
-                >
-                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Download size={13} color="#ffffff" />
-                  </div>
-                  <span>Download Portable (.exe)</span>
-                </button>
-                <div style={{ textAlign: 'center', fontSize: '11.5px', color: '#64748b', marginTop: '10px' }}>
-                  FounderOS-Portable.exe • Standalone binary
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          6. V2 ROADMAP SNEAK PEEK (DESIGN.md: 50px card with pill tag)
-         ===================================================================== */}
-      <section
-        id="v2"
-        style={{
-          padding: '80px 24px 90px 24px', // DESIGN.md: 80-120px section gap
-          maxWidth: '1200px', // DESIGN.md: page max-width 1200px
-          margin: '0 auto',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            padding: '50px 44px',
-            borderRadius: '50px', // DESIGN.md: 50px border-radius
-            background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.14) 0%, rgba(0, 80, 255, 0.14) 100%)',
-            border: '1px solid rgba(168, 85, 247, 0.35)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <Sparkles size={18} color="#c084fc" />
-                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '50px', backgroundColor: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', textTransform: 'uppercase' }}>
-                  FounderOS V2 • Next Generation
-                </span>
-              </div>
-              <h2 style={{ fontSize: '30px', fontWeight: 700, color: '#ffffff', margin: '0 0 8px 0', letterSpacing: '-0.6px' }}>
-                Autonomous Routines & Executive Boardroom
-              </h2>
-              <p style={{ fontSize: '15px', color: '#cbd5e1', margin: 0, maxWidth: '680px', lineHeight: 1.6 }}>
-                Coming soon: Multi-agent boardroom simulations, automatic treasury yield sweeps, and self-executing founder workflows that operate on your behalf.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={onLaunchApp}
-              style={{
-                padding: '12px 26px',
-                borderRadius: '50px', // DESIGN.md: 50px pill button
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                fontSize: '13.5px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)')}
-            >
-              <span>Preview V2 in App</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          7. FOOTER (DESIGN.md: Breathable, clean pill actions)
-         ===================================================================== */}
-      <footer
-        style={{
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          backgroundColor: '#02050d',
-          padding: '60px 24px 44px 24px',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1200px', // DESIGN.md: 1200px
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '36px',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
               gap: '24px',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Download Card 1: Windows Setup Installer */}
+            <div
+              style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                borderRadius: '50px',
+                padding: '36px',
+                border: '2px solid #0050FF',
+                boxShadow: '0 0 30px rgba(0, 80, 255, 0.25)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    display: 'inline-block',
+                    padding: '4px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: '#0050FF',
+                    color: '#ffffff',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    marginBottom: '16px',
+                  }}
+                >
+                  RECOMMENDED FOR WINDOWS
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '28px',
+                    fontWeight: 500,
+                    color: '#f8fafc',
+                    marginBottom: '10px',
+                    letterSpacing: '-0.03em',
+                  }}
+                >
+                  Windows Setup (.exe)
+                </h3>
+
+                <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.5, marginBottom: '20px' }}>
+                  Full native executable installer with automatic Start Menu shortcuts, system tray
+                  daemon, and global hotkey <code style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#38bdf8', padding: '2px 6px', borderRadius: '4px' }}>Ctrl+Shift+O</code>.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '28px' }}>
+                  {['Version: 1.0.0 (Windows 64-bit)', 'Package Size: ~73.6 MB', 'Self-updating auto-updater engine'].map((f, i) => (
+                    <div key={i} style={{ fontSize: '13px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <CheckCircle2 size={14} color="#10b981" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => triggerDownload('setup')}
+                disabled={downloadState === 'downloading'}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: 'none',
+                  borderRadius: '50px',
+                  padding: '14px 20px',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  color: '#030712',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                  boxShadow: '0 6px 20px rgba(255, 255, 255, 0.15)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f1f5f9')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
+              >
+                <span>{downloadState === 'downloading' ? 'Downloading...' : 'Download Setup File (.exe)'}</span>
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#0050FF',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Download size={12} strokeWidth={3} />
+                </div>
+              </button>
+            </div>
+
+            {/* Download Card 2: Instant Web Command Center */}
+            <div
+              style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                borderRadius: '50px',
+                padding: '36px',
+                border: '2px solid #38bdf8',
+                boxShadow: '0 0 30px rgba(56, 189, 248, 0.2)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    display: 'inline-block',
+                    padding: '4px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: '#38bdf8',
+                    color: '#030712',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    marginBottom: '16px',
+                  }}
+                >
+                  ZERO INSTALL • RUNS EVERYWHERE
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '28px',
+                    fontWeight: 500,
+                    color: '#f8fafc',
+                    marginBottom: '10px',
+                    letterSpacing: '-0.03em',
+                  }}
+                >
+                  Connect Web App
+                </h3>
+
+                <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.5, marginBottom: '20px' }}>
+                  Launch the complete FounderOS Command Center immediately inside any modern browser.
+                  Zero account required; data is persisted in your browser's local IndexedDB.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '28px' }}>
+                  {['Compatible with Chrome, Edge, Safari, Firefox', 'Zero download or file installation needed', 'Full offline Progressive Web capabilities'].map((f, i) => (
+                    <div key={i} style={{ fontSize: '13px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <CheckCircle2 size={14} color="#38bdf8" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={onLaunchApp}
+                style={{
+                  backgroundColor: '#0050FF',
+                  border: 'none',
+                  borderRadius: '50px',
+                  padding: '14px 20px',
+                  fontSize: '15px',
+                  fontWeight: 500,
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                  boxShadow: '0 4px 18px rgba(0, 80, 255, 0.4)',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a62ff')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0050FF')}
+              >
+                <span>Launch Web Application</span>
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    color: '#0050FF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <ArrowRight size={12} strokeWidth={3} />
+                </div>
+              </button>
+            </div>
+
+            {/* Download Card 3: Windows Portable Binary */}
+            <div
+              style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.75)',
+                borderRadius: '50px',
+                padding: '36px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    display: 'inline-block',
+                    padding: '4px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: '#94a3b8',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    marginBottom: '16px',
+                  }}
+                >
+                  STANDALONE PORTABLE
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '28px',
+                    fontWeight: 500,
+                    color: '#f8fafc',
+                    marginBottom: '10px',
+                    letterSpacing: '-0.03em',
+                  }}
+                >
+                  Windows Portable (.exe)
+                </h3>
+
+                <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.5, marginBottom: '20px' }}>
+                  Single standalone executable that runs without registry entries or admin permissions.
+                  Ideal for USB drives and strictly isolated corporate machines.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '28px' }}>
+                  {['No administrator installation permissions required', 'Zero background service residues on host machine', 'Encrypted local workspace stored adjacent to .exe'].map((f, i) => (
+                    <div key={i} style={{ fontSize: '13px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <CheckCircle2 size={14} color="#94a3b8" />
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={() => triggerDownload('portable')}
+                disabled={downloadState === 'downloading'}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '50px',
+                  padding: '14px 20px',
+                  fontSize: '15px',
+                  fontWeight: 500,
+                  color: '#f8fafc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
+              >
+                <span>Download Portable (.exe)</span>
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: '#10b981',
+                    color: '#030712',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Download size={12} strokeWidth={3} />
+                </div>
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* =========================================================================
+          7. FOOTER ACCENT BLOCK (App Dark Palette)
+          - #0b0f19 dark surface with top border rgba(255, 255, 255, 0.1)
+          - 50px+ padding
+          - Crisp typography and glowing brand action pills
+         ========================================================================= */}
+      <footer
+        style={{
+          backgroundColor: '#0b0f19', // --bg-surface
+          color: '#f8fafc', // --text-main
+          padding: '64px 24px 48px 24px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '40px',
+          }}
+        >
+          {/* Top Row: Brand & Quick Action Pills */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '24px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div
                 style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(0, 80, 255, 0.2)',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '16px',
+                  backgroundColor: '#030712',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   overflow: 'hidden',
+                  border: '2px solid #0050FF',
+                  boxShadow: '0 0 16px rgba(0, 80, 255, 0.4)',
                 }}
               >
                 <img
@@ -1629,83 +1915,123 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
+
               <div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#ffffff' }}>FounderOS</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>
-                  Single-User AI Founder Operating System
+                <div style={{ fontSize: '24px', fontWeight: 600, letterSpacing: '-0.04em', lineHeight: 1 }}>
+                  FounderOS
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: 500, color: '#94a3b8', marginTop: '4px' }}>
+                  The Sovereign Operating System for Modern Founders
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
               <button
-                type="button"
                 onClick={() => triggerDownload('setup')}
                 style={{
-                  padding: '9px 20px',
-                  borderRadius: '50px', // DESIGN.md: 50px pill button
                   backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  color: '#e2e8f0',
-                  border: '1px solid rgba(255, 255, 255, 0.14)',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
+                  color: '#f8fafc',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '50px',
+                  padding: '10px 20px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.14)')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)')}
               >
-                <Download size={14} color="#38bdf8" />
+                <Download size={14} />
                 <span>Download Setup</span>
               </button>
 
               <button
-                type="button"
                 onClick={onLaunchApp}
                 style={{
-                  padding: '9px 22px',
-                  borderRadius: '50px', // DESIGN.md: 50px pill button
                   backgroundColor: '#0050FF',
                   color: '#ffffff',
                   border: 'none',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
+                  borderRadius: '50px',
+                  padding: '10px 22px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  boxShadow: '0 4px 14px rgba(0, 80, 255, 0.4)',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 16px rgba(0, 80, 255, 0.4)',
                 }}
               >
-                <Sparkles size={14} />
-                <span>Connect Web App</span>
+                <span>Launch Web Command Center</span>
+                <ArrowRight size={14} />
               </button>
             </div>
           </div>
 
+          {/* Hairline Divider */}
+          <div style={{ height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.08)' }} />
+
+          {/* Bottom Copyright & Guarantee */}
           <div
             style={{
-              borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-              paddingTop: '24px',
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
               flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
               gap: '16px',
-              fontSize: '12.5px',
-              color: '#64748b',
+              fontSize: '14px',
+              fontWeight: 500,
+              color: '#94a3b8',
             }}
           >
             <div>
-              © {new Date().getFullYear()} FounderOS. Local-First Autonomous Startup Cockpit.
+              © 2026 FounderOS Corporation. 100% sovereign local-first software. No cloud tracking.
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10b981' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10b981' }} />
-              <span>Offline-first engines operational</span>
+
+            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+              <a
+                href="#chaos"
+                style={{ color: '#94a3b8', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                The Dilemma
+              </a>
+              <a
+                href="#capabilities"
+                style={{ color: '#94a3b8', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                Core Pillars
+              </a>
+              <a
+                href="#downloads"
+                style={{ color: '#94a3b8', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                Download Center
+              </a>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Animation Style */}
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .spin-icon {
+          animation: spin 1s linear infinite;
+        }
+        @media (min-width: 768px) {
+          .nav-desktop-links {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
