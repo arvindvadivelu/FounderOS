@@ -48,10 +48,11 @@
   --radius-sm: 8px;
   --radius-small: 10px;
   --radius-md: 14px;
-  --radius-lg: 28px;
-  --radius-xl: 36px;
-  --radius-card: 28px;
-  --radius-full: 50px;
+  --radius-lg: 24px;
+  --radius-cards: 24px;
+  --radius-xl: 28px;
+  --radius-buttons: 50px;
+  --radius-full: 9999px;
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
@@ -155,7 +156,7 @@ button {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-faint);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   position: relative;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
@@ -186,7 +187,7 @@ button {
   opacity: 1;
 }
 
-/* Buttons — MindMarket 50px Pill Geometry with Embedded Circular Dot Affordance */
+/* Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -197,8 +198,7 @@ button {
   padding: 8px 18px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: -0.015em;
-  border-radius: 50px;
+  border-radius: var(--radius-full);
   box-shadow: 0 4px 14px var(--primary-blue-glow);
   transition: all var(--transition-fast);
   white-space: nowrap;
@@ -225,8 +225,7 @@ button {
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: -0.015em;
-  border-radius: 50px;
+  border-radius: var(--radius-full);
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
@@ -248,8 +247,7 @@ button {
   padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: -0.015em;
-  border-radius: 50px;
+  border-radius: var(--radius-full);
   transition: all var(--transition-fast);
 }
 
@@ -258,18 +256,7 @@ button {
   border-color: rgba(244, 63, 94, 0.5);
 }
 
-/* Embedded Circular Dot / Icon Container inside Pill Buttons */
-.btn-icon-dot {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Badges & Tag Chips — MindMarket 10px Small Radius */
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -278,7 +265,7 @@ button {
   border-radius: var(--radius-small);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
   white-space: nowrap;
 }

@@ -111,60 +111,145 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
       {/* Welcome Banner & Daily Briefing Banner */}
       <SpotlightCard
         style={{
-          padding: '24px 28px',
+          padding: '28px 32px',
           background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.14) 0%, rgba(15, 23, 42, 0.85) 100%)',
-          borderColor: 'rgba(0, 80, 255, 0.25)',
+          borderColor: 'rgba(0, 80, 255, 0.3)',
+          borderRadius: '24px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
+          gap: '18px',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)',
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--brand-accent)', letterSpacing: '1px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 10px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(0, 80, 255, 0.15)',
+                border: '1px solid rgba(0, 80, 255, 0.35)',
+                color: '#38bdf8',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+              }}
+            >
               AUTONOMOUS FOUNDER OPERATING SYSTEM
             </span>
             <span
               style={{
                 fontSize: '11px',
-                padding: '1px 8px',
-                borderRadius: '999px',
+                padding: '4px 10px',
+                borderRadius: '10px',
                 backgroundColor: 'rgba(16, 185, 129, 0.15)',
                 color: '#34d399',
                 fontWeight: 600,
+                border: '1px solid rgba(16, 185, 129, 0.3)',
               }}
             >
               ● Local Database Sync Active
             </span>
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.04em', margin: 0 }}>
             Welcome back, {company?.name || 'Founder'}
           </h2>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
-            Your business is operating at <strong>{formatCurrency(mrr, currency)} MRR</strong> with approximately{' '}
-            <strong>{runwayMonths} months</strong> of cash runway.
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '6px', maxWidth: '640px', lineHeight: 1.5 }}>
+            Your business is operating at <strong style={{ color: '#f8fafc' }}>{formatCurrency(mrr, currency)} MRR</strong> with approximately{' '}
+            <strong style={{ color: '#38bdf8' }}>{runwayMonths} months</strong> of cash runway.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => onNavigate('/morning-intelligence')}
-            className="btn-secondary"
-            style={{ padding: '10px 18px', fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              padding: '10px 18px',
+              fontSize: '13px',
+              fontWeight: 600,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              borderRadius: '50px',
+              backgroundColor: 'rgba(255, 255, 255, 0.06)',
+              color: '#f8fafc',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.22)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+            }}
           >
-            <Sun size={16} color="#f59e0b" /> Morning Intelligence
+            <div
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Sun size={12} color="#f59e0b" />
+            </div>
+            <span>Morning Intelligence</span>
           </button>
 
           <button
             type="button"
             onClick={onOpenAiBriefing}
-            className="btn-primary"
-            style={{ padding: '10px 18px', fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{
+              padding: '10px 18px',
+              fontSize: '13px',
+              fontWeight: 600,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              borderRadius: '50px',
+              backgroundColor: '#0050FF',
+              color: '#ffffff',
+              border: '1px solid #1a62ff',
+              cursor: 'pointer',
+              boxShadow: '0 0 16px rgba(0, 80, 255, 0.35)',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1a62ff';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#0050FF';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
-            <Sparkles size={16} /> Open AI CEO
+            <div
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                color: '#0050FF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Sparkles size={11} strokeWidth={2.5} />
+            </div>
+            <span>Open AI CEO</span>
           </button>
         </div>
       </SpotlightCard>

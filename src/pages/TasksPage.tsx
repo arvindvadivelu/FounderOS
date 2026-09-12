@@ -164,23 +164,23 @@ export const TasksPage: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
             Execution Tasks & Daily Workflow
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
             Manage daily founder tasks, priority assignments, and time estimations.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <div
             style={{
               display: 'flex',
               backgroundColor: 'var(--bg-surface-elevated)',
-              borderRadius: 'var(--radius-full)',
-              padding: '2px',
+              borderRadius: '50px',
+              padding: '3px',
               border: '1px solid var(--border-faint)',
             }}
           >
@@ -188,15 +188,17 @@ export const TasksPage: React.FC = () => {
               type="button"
               onClick={() => setViewMode('kanban')}
               style={{
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-full)',
+                padding: '6px 14px',
+                borderRadius: '50px',
                 backgroundColor: viewMode === 'kanban' ? 'var(--brand-accent)' : 'transparent',
                 color: viewMode === 'kanban' ? '#ffffff' : 'var(--text-muted)',
                 fontSize: '12px',
                 fontWeight: 600,
+                border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                transition: 'all 0.15s ease',
               }}
             >
               <LayoutGrid size={13} /> Kanban
@@ -205,15 +207,17 @@ export const TasksPage: React.FC = () => {
               type="button"
               onClick={() => setViewMode('list')}
               style={{
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-full)',
+                padding: '6px 14px',
+                borderRadius: '50px',
                 backgroundColor: viewMode === 'list' ? 'var(--brand-accent)' : 'transparent',
                 color: viewMode === 'list' ? '#ffffff' : 'var(--text-muted)',
                 fontSize: '12px',
                 fontWeight: 600,
+                border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                transition: 'all 0.15s ease',
               }}
             >
               <ListIcon size={13} /> List
@@ -224,6 +228,7 @@ export const TasksPage: React.FC = () => {
             type="button"
             onClick={openAddModal}
             className="btn-primary"
+            style={{ borderRadius: '50px', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Plus size={15} /> New Task
           </button>

@@ -34,24 +34,26 @@ export const ProductIntelligencePage: React.FC = () => {
   return (
     <div style={{ padding: '28px 32px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div
               style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #f59e0b, #ec4899)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.35) 0%, rgba(236, 72, 153, 0.15) 100%)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)',
+                boxShadow: '0 0 16px rgba(245, 158, 11, 0.25)',
+                flexShrink: 0,
               }}
             >
-              <FolderKanban size={18} color="#fff" />
+              <FolderKanban size={20} color="#fbbf24" />
             </div>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em', margin: 0 }}>
               Product Intelligence & RICE Matrix
             </h1>
             <span
@@ -60,15 +62,15 @@ export const ProductIntelligencePage: React.FC = () => {
                 fontWeight: 700,
                 color: '#f59e0b',
                 backgroundColor: 'rgba(245, 158, 11, 0.12)',
-                padding: '3px 9px',
-                borderRadius: '999px',
+                padding: '3px 10px',
+                borderRadius: '10px',
                 border: '1px solid rgba(245, 158, 11, 0.25)',
               }}
             >
               V2 RICE MATRIX
             </span>
           </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', margin: 0 }}>
             Data-driven roadmap prioritization: (Reach × Impact × Confidence) / Effort tied to ARR leverage and customer feedback clusters.
           </p>
         </div>

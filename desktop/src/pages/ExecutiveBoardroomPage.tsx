@@ -80,24 +80,26 @@ export const ExecutiveBoardroomPage: React.FC = () => {
   return (
     <div style={{ padding: '28px 32px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Page Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div
               style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.35) 0%, rgba(236, 72, 153, 0.15) 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.35)',
+                boxShadow: '0 0 16px rgba(139, 92, 246, 0.25)',
+                flexShrink: 0,
               }}
             >
-              <Users size={18} color="#fff" />
+              <Users size={20} color="#c084fc" />
             </div>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em', margin: 0 }}>
               Executive Boardroom & Multi-Agent Deliberation
             </h1>
             <span
@@ -106,15 +108,15 @@ export const ExecutiveBoardroomPage: React.FC = () => {
                 fontWeight: 700,
                 color: '#ec4899',
                 backgroundColor: 'rgba(236, 72, 153, 0.12)',
-                padding: '3px 9px',
-                borderRadius: '999px',
+                padding: '3px 10px',
+                borderRadius: '10px',
                 border: '1px solid rgba(236, 72, 153, 0.25)',
               }}
             >
               V2 C-SUITE
             </span>
           </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', margin: 0 }}>
             Convene your virtual C-Suite. AI CEO, CFO, CRO, CPO, and COO debate trade-offs in real time to reach executive consensus.
           </p>
         </div>
@@ -267,18 +269,19 @@ export const ExecutiveBoardroomPage: React.FC = () => {
               onClick={handleConveneBoardroom}
               disabled={isDeliberating}
               style={{
-                padding: '10px 22px',
+                padding: '10px 24px',
                 background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
                 color: '#fff',
                 border: 'none',
-                borderRadius: '8px',
+                borderRadius: '50px',
                 fontSize: '13.5px',
                 fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
+                boxShadow: '0 4px 16px rgba(139, 92, 246, 0.45)',
+                transition: 'all 0.15s ease',
               }}
             >
               <Sparkles size={16} />

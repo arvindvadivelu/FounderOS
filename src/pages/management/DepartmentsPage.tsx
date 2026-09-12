@@ -114,7 +114,7 @@ export const DepartmentsPage: React.FC = () => {
       {/* Header Banner */}
       <SpotlightCard
         style={{
-          padding: '24px 28px',
+          padding: '26px 30px',
           background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.15) 0%, rgba(15, 23, 42, 0.88) 100%)',
           borderColor: 'rgba(0, 80, 255, 0.25)',
           display: 'flex',
@@ -130,7 +130,7 @@ export const DepartmentsPage: React.FC = () => {
               MANAGEMENT / ORGANIZATIONAL UNITS
             </span>
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
             Departments & Functional Units
           </h2>
           <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '600px' }}>
@@ -142,7 +142,7 @@ export const DepartmentsPage: React.FC = () => {
           type="button"
           onClick={openCreateModal}
           className="btn-primary"
-          style={{ padding: '10px 20px', fontSize: '13.5px' }}
+          style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
         >
           <Plus size={16} /> Create Department
         </button>

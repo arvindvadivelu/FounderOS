@@ -119,24 +119,26 @@ export const FinancialForecastingPage: React.FC = () => {
   return (
     <div style={{ padding: '28px 32px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div
               style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #10b981, #06b6d4)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.35) 0%, rgba(6, 182, 212, 0.15) 100%)',
+                border: '1px solid rgba(16, 185, 129, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.35)',
+                boxShadow: '0 0 16px rgba(16, 185, 129, 0.25)',
+                flexShrink: 0,
               }}
             >
-              <TrendingUp size={18} color="#fff" />
+              <TrendingUp size={20} color="#34d399" />
             </div>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em', margin: 0 }}>
               Financial Forecasting & Runway Simulator
             </h1>
             <span
@@ -145,35 +147,37 @@ export const FinancialForecastingPage: React.FC = () => {
                 fontWeight: 700,
                 color: '#34d399',
                 backgroundColor: 'rgba(52, 211, 153, 0.12)',
-                padding: '3px 9px',
-                borderRadius: '999px',
+                padding: '3px 10px',
+                borderRadius: '10px',
                 border: '1px solid rgba(52, 211, 153, 0.25)',
               }}
             >
               V2 FORECAST ENGINE
             </span>
           </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', margin: 0 }}>
             Model 12-month cash trajectories across Base, Best, and Worst cases. Test hiring impacts and track Default Alive horizons.
           </p>
         </div>
 
         {/* Preset Selector */}
-        <div style={{ display: 'flex', gap: '6px', backgroundColor: 'var(--bg-card)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+        <div style={{ display: 'flex', gap: '4px', backgroundColor: 'var(--bg-card)', padding: '3px', borderRadius: '50px', border: '1px solid var(--border-subtle)' }}>
           {(['base', 'best', 'worst'] as const).map(p => (
             <button
               key={p}
               onClick={() => handleSelectScenarioPreset(p)}
               style={{
-                padding: '6px 14px',
-                borderRadius: '6px',
+                padding: '6px 16px',
+                borderRadius: '50px',
                 fontSize: '12px',
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: 'pointer',
                 border: 'none',
                 backgroundColor: selectedScenarioType === p ? 'var(--brand-accent)' : 'transparent',
                 color: selectedScenarioType === p ? '#fff' : 'var(--text-muted)',
                 textTransform: 'capitalize',
+                boxShadow: selectedScenarioType === p ? '0 0 12px rgba(0, 80, 255, 0.35)' : 'none',
+                transition: 'all 0.15s ease',
               }}
             >
               {p} Case

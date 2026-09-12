@@ -31,27 +31,30 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         justifyContent: 'center',
         borderStyle: 'dashed',
         borderColor: 'var(--border-subtle)',
+        borderRadius: '24px',
       }}
     >
       {icon && (
         <div
           style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '12px',
-            backgroundColor: 'var(--primary-blue-surface)',
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(0, 80, 255, 0.14)',
             color: 'var(--brand-accent)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '16px',
+            border: '1px solid rgba(0, 80, 255, 0.3)',
+            boxShadow: '0 0 16px rgba(0, 80, 255, 0.25)',
           }}
         >
           {icon}
         </div>
       )}
 
-      <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px' }}>
+      <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px', letterSpacing: '-0.03em' }}>
         {title}
       </h3>
       <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '420px', marginBottom: '20px', lineHeight: 1.5 }}>

@@ -31,7 +31,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
             alignItems: 'center',
             gap: '6px',
             padding: '4px 12px',
-            borderRadius: '999px',
+            borderRadius: '10px',
             backgroundColor: 'rgba(168, 85, 247, 0.14)',
             border: '1px solid rgba(168, 85, 247, 0.35)',
             color: '#c084fc',
@@ -51,7 +51,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
             fontSize: '28px',
             fontWeight: 800,
             color: '#f8fafc',
-            letterSpacing: '-0.5px',
+            letterSpacing: '-0.035em',
             margin: '4px 0 0 0',
           }}
         >
@@ -140,7 +140,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
             type="button"
             onClick={() => onNavigate('/')}
             className="btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', fontSize: '13px' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 22px', fontSize: '13px', borderRadius: '50px' }}
           >
             <ArrowLeft size={16} /> Back to Command Center
           </button>
@@ -148,7 +148,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
             type="button"
             onClick={() => onNavigate('/tasks')}
             className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', fontSize: '13px' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', fontSize: '13px', borderRadius: '50px' }}
           >
             Go to Tasks <ArrowRight size={14} />
           </button>

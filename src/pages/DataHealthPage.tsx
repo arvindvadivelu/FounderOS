@@ -141,10 +141,10 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
       />
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '10px', letterSpacing: '-0.035em' }}>
               <Activity size={22} color="var(--brand-accent)" /> Data Health & Diagnostics
             </h2>
             {report && (
@@ -155,12 +155,13 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
                   textTransform: 'uppercase',
                   letterSpacing: '0.8px',
                   padding: '3px 10px',
-                  borderRadius: '999px',
+                  borderRadius: '10px',
                   backgroundColor: getStatusBg(report.status),
                   color: getStatusColor(report.status),
                   display: 'flex',
                   alignItems: 'center',
                   gap: '5px',
+                  border: `1px solid ${getStatusColor(report.status)}40`,
                 }}
               >
                 {report.status === 'healthy' && <ShieldCheck size={13} />}
@@ -170,19 +171,19 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
               </span>
             )}
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
             Real-time IndexedDB schema verification, entity record audits, orphan reference detection, and backup health.
           </p>
         </div>
 
         {/* Top Actions */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             onClick={runScan}
             disabled={isScanning}
             className="btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '12.5px' }}
+            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <RefreshCw size={14} className={isScanning ? 'animate-spin' : ''} />
             <span>{isScanning ? 'Auditing DB...' : 'Run Health Check'}</span>
@@ -192,7 +193,7 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
             type="button"
             onClick={handleExport}
             className="btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '12.5px' }}
+            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Download size={14} /> Export Backup
           </button>
@@ -201,7 +202,7 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '12.5px' }}
+            style={{ padding: '9px 16px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Upload size={14} /> Restore
           </button>
@@ -211,9 +212,9 @@ export const DataHealthPage: React.FC<DataHealthPageProps> = ({ onNavigate }) =>
               type="button"
               onClick={() => onNavigate('/settings')}
               className="btn-primary"
-              style={{ padding: '8px 16px', fontSize: '12.5px' }}
+              style={{ padding: '9px 18px', fontSize: '12.5px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              Settings & Backup
+              Configure DB <ArrowUpRight size={14} />
             </button>
           )}
         </div>

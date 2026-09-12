@@ -106,12 +106,12 @@ export const ProjectsPage: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
             Strategic Initiatives & Projects
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
             Orchestrate high-priority multi-week engineering & business milestones.
           </p>
         </div>
@@ -120,6 +120,7 @@ export const ProjectsPage: React.FC = () => {
           type="button"
           onClick={openAddModal}
           className="btn-primary"
+          style={{ borderRadius: '50px', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
         >
           <Plus size={15} /> New Project
         </button>

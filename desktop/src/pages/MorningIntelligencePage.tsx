@@ -161,34 +161,39 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
       {/* Page Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div
               style={{
-                padding: '8px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(234, 88, 12, 0.2) 100%)',
-                border: '1px solid rgba(245, 158, 11, 0.3)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.3) 0%, rgba(234, 88, 12, 0.1) 100%)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: '0 0 16px rgba(245, 158, 11, 0.2)',
+                flexShrink: 0,
               }}
             >
               <Sun size={22} color="#f59e0b" />
             </div>
-            <h1 style={{ fontSize: '26px', fontWeight: 800, margin: 0, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, margin: 0, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
               Morning Intelligence
             </h1>
             <span
               style={{
-                fontSize: '11.5px',
-                padding: '3px 10px',
-                borderRadius: '20px',
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                fontSize: '11px',
+                padding: '4px 10px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
                 color: '#34d399',
                 fontWeight: 600,
+                border: '1px solid rgba(16, 185, 129, 0.25)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '5px',
+                letterSpacing: '0.02em',
               }}
             >
               ● Live Local Intelligence
@@ -200,12 +205,12 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
         </div>
 
         {/* Action Controls */}
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => onNavigate('/ai?action=briefing')}
             className="btn-primary"
-            style={{ padding: '9px 16px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Bot size={15} /> Ask AI CEO
           </button>
@@ -216,8 +221,9 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
             disabled={isRegenerating}
             className="btn-secondary"
             style={{
-              padding: '9px 14px',
+              padding: '9px 16px',
               fontSize: '13px',
+              borderRadius: '50px',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
@@ -310,17 +316,18 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
             type="button"
             onClick={() => onNavigate('/ai?action=briefing')}
             style={{
-              padding: '7px 14px',
-              borderRadius: '6px',
+              padding: '8px 18px',
+              borderRadius: '50px',
               backgroundColor: 'rgba(245, 158, 11, 0.15)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
+              border: '1px solid rgba(245, 158, 11, 0.35)',
               color: '#f59e0b',
               fontSize: '12.5px',
               fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '7px',
+              transition: 'all 0.15s ease',
             }}
           >
             <Bot size={14} /> Discuss with AI CEO <ArrowRight size={13} />
@@ -531,7 +538,17 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
             </h2>
           </div>
 
-          <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
+          <div
+            style={{
+              display: 'flex',
+              gap: '4px',
+              overflowX: 'auto',
+              padding: '3px',
+              backgroundColor: 'var(--bg-surface)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '50px',
+            }}
+          >
             {[
               { id: 'all', label: 'All Dimensions' },
               { id: 'finance', label: 'Finance' },
@@ -549,14 +566,15 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
                   onClick={() => setActiveTab(tab.id)}
                   style={{
                     padding: '6px 14px',
-                    borderRadius: '6px',
-                    backgroundColor: isActive ? 'var(--brand-accent)' : 'var(--bg-card)',
+                    borderRadius: '50px',
+                    backgroundColor: isActive ? 'var(--brand-accent)' : 'transparent',
                     color: isActive ? '#ffffff' : 'var(--text-muted)',
-                    border: isActive ? 'none' : '1px solid var(--border-subtle)',
-                    fontSize: '12.5px',
+                    border: 'none',
+                    fontSize: '12px',
                     fontWeight: 600,
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
+                    boxShadow: isActive ? '0 0 12px rgba(0, 80, 255, 0.4)' : 'none',
                     transition: 'all 0.15s ease',
                   }}
                 >
@@ -713,8 +731,8 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
                     disabled={isExecuted || isExecuting}
                     onClick={() => handleExecuteRecommendation(rec)}
                     style={{
-                      padding: '7px 12px',
-                      borderRadius: '6px',
+                      padding: '8px 16px',
+                      borderRadius: '50px',
                       backgroundColor: isExecuted ? 'rgba(16, 185, 129, 0.15)' : 'var(--brand-accent)',
                       border: isExecuted ? '1px solid rgba(16, 185, 129, 0.3)' : 'none',
                       color: isExecuted ? '#10b981' : '#ffffff',
@@ -725,6 +743,8 @@ export const MorningIntelligencePage: React.FC<MorningIntelligencePageProps> = (
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '5px',
+                      boxShadow: !isExecuted && !isExecuting ? '0 0 12px rgba(0, 80, 255, 0.3)' : 'none',
+                      transition: 'all 0.15s ease',
                     }}
                   >
                     {isExecuted ? (

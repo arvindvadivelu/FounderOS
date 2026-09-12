@@ -25,14 +25,13 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       onClick={onClick}
       className={`p-5 transition-all ${onClick ? 'cursor-pointer hover:border-blue-500/40' : ''}`}
       style={{
-        padding: '22px 24px',
-        borderRadius: '28px',
+        padding: '20px 22px',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
         <span
           style={{
-            fontSize: '11.5px',
+            fontSize: '12px',
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.8px',
@@ -44,16 +43,16 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         {icon && (
           <div
             style={{
-              width: '40px',
-              height: '40px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'var(--primary-blue-surface)',
+              backgroundColor: 'rgba(0, 80, 255, 0.14)',
               color: 'var(--brand-accent)',
-              border: '1px solid var(--border-subtle)',
-              flexShrink: 0,
+              border: '1px solid rgba(0, 80, 255, 0.3)',
+              boxShadow: '0 0 12px rgba(0, 80, 255, 0.2)',
             }}
           >
             {icon}
@@ -68,7 +67,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             fontWeight: 700,
             letterSpacing: '-0.04em',
             color: 'var(--text-main)',
-            lineHeight: 1.15,
+            lineHeight: 1.2,
           }}
         >
           {value}
@@ -76,10 +75,10 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         {change && (
           <span
             style={{
-              fontSize: '11px',
+              fontSize: '11.5px',
               fontWeight: 600,
               padding: '2px 8px',
-              borderRadius: '10px', // MindMarket 10px tag chip
+              borderRadius: '10px',
               backgroundColor:
                 changeType === 'positive'
                   ? 'rgba(16, 185, 129, 0.15)'
@@ -92,6 +91,12 @@ export const MetricCard: React.FC<MetricCardProps> = ({
                   : changeType === 'negative'
                   ? '#fb7185'
                   : 'var(--text-muted)',
+              border:
+                changeType === 'positive'
+                  ? '1px solid rgba(16, 185, 129, 0.3)'
+                  : changeType === 'negative'
+                  ? '1px solid rgba(244, 63, 94, 0.3)'
+                  : '1px solid rgba(148, 163, 184, 0.2)',
             }}
           >
             {change}

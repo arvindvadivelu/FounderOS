@@ -253,10 +253,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
       <div>
-        <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-main)' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
           Settings & Provider Architecture
         </h2>
-        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+        <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
           Configure user-owned AI credentials, local IndexedDB backup/export, and company details.
         </p>
       </div>
@@ -329,6 +329,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
               type="button"
               onClick={openAddProviderModal}
               className="btn-primary"
+              style={{ borderRadius: '50px', padding: '9px 18px', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
               <Plus size={15} /> Add Provider
             </button>

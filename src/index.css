@@ -46,9 +46,12 @@
   --transition-slow: 0.5s var(--easing-smooth);
 
   --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --radius-small: 10px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-cards: 24px;
+  --radius-xl: 28px;
+  --radius-buttons: 50px;
   --radius-full: 9999px;
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -76,9 +79,10 @@ html, body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
   font-weight: 700;
   color: var(--text-main);
+  line-height: 1.18;
 }
 
 code, pre {
@@ -258,7 +262,7 @@ button {
   align-items: center;
   gap: 5px;
   padding: 3px 10px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-small);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.3px;

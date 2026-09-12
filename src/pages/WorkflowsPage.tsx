@@ -69,24 +69,26 @@ export const WorkflowsPage: React.FC = () => {
   return (
     <div style={{ padding: '28px 32px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Top Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
             <div
               style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.35) 0%, rgba(139, 92, 246, 0.15) 100%)',
+                border: '1px solid rgba(59, 130, 246, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.35)',
+                boxShadow: '0 0 16px rgba(59, 130, 246, 0.25)',
+                flexShrink: 0,
               }}
             >
-              <Zap size={18} color="#fff" />
+              <Zap size={20} color="#38bdf8" />
             </div>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em', margin: 0 }}>
               Automated Workflows & Triggers
             </h1>
             <span
@@ -95,36 +97,36 @@ export const WorkflowsPage: React.FC = () => {
                 fontWeight: 700,
                 color: '#38bdf8',
                 backgroundColor: 'rgba(56, 189, 248, 0.12)',
-                padding: '3px 9px',
-                borderRadius: '999px',
+                padding: '3px 10px',
+                borderRadius: '10px',
                 border: '1px solid rgba(56, 189, 248, 0.25)',
               }}
             >
               V2 AUTOPILOT
             </span>
           </div>
-          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', margin: 0 }}>
             Configure event-driven triggers, conditional filters, and automated founder interventions across revenue, retention, and cash.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button
             onClick={handleRunAllActive}
             disabled={executingId !== null}
             style={{
-              padding: '9px 16px',
+              padding: '9px 18px',
               backgroundColor: 'var(--bg-card)',
               color: 'var(--text-main)',
               border: '1px solid var(--border-subtle)',
-              borderRadius: '8px',
+              borderRadius: '50px',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '7px',
-              transition: 'all 0.2s',
+              transition: 'all 0.15s ease',
             }}
           >
             <RefreshCw size={15} className={executingId === 'all' ? 'spin' : ''} />
@@ -142,20 +144,24 @@ export const WorkflowsPage: React.FC = () => {
           marginBottom: '22px',
           borderBottom: '1px solid var(--border-faint)',
           paddingBottom: '12px',
+          flexWrap: 'wrap',
+          gap: '12px',
         }}
       >
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={() => setActiveTab('workflows')}
             style={{
-              padding: '7px 16px',
-              borderRadius: '6px',
+              padding: '7px 18px',
+              borderRadius: '50px',
               fontSize: '13px',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
               border: 'none',
               backgroundColor: activeTab === 'workflows' ? 'var(--brand-accent)' : 'transparent',
               color: activeTab === 'workflows' ? '#fff' : 'var(--text-muted)',
+              boxShadow: activeTab === 'workflows' ? '0 0 12px rgba(0, 80, 255, 0.35)' : 'none',
+              transition: 'all 0.15s ease',
             }}
           >
             Configured Workflows ({workflows?.length || 0})
@@ -163,14 +169,16 @@ export const WorkflowsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('logs')}
             style={{
-              padding: '7px 16px',
-              borderRadius: '6px',
+              padding: '7px 18px',
+              borderRadius: '50px',
               fontSize: '13px',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
               border: 'none',
               backgroundColor: activeTab === 'logs' ? 'var(--brand-accent)' : 'transparent',
               color: activeTab === 'logs' ? '#fff' : 'var(--text-muted)',
+              boxShadow: activeTab === 'logs' ? '0 0 12px rgba(0, 80, 255, 0.35)' : 'none',
+              transition: 'all 0.15s ease',
             }}
           >
             Execution Audit Logs ({logs?.length || 0})

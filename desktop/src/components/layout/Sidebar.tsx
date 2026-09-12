@@ -177,7 +177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               style={{
                 width: '34px',
                 height: '34px',
-                borderRadius: '8px',
+                borderRadius: '10px',
                 overflow: 'hidden',
                 display: 'flex',
                 alignItems: 'center',
@@ -272,7 +272,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '8px 12px',
-                        borderRadius: 'var(--radius-md)',
+                        borderRadius: '10px',
                         backgroundColor: isActive ? 'var(--primary-blue-surface)' : 'transparent',
                         color: isDisabled
                           ? 'var(--text-dim)'
@@ -311,10 +311,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       {item.badge !== undefined && (
                         <span
                           style={{
-                            fontSize: isDisabled ? '9px' : '10.5px',
+                            fontSize: isDisabled ? '9.5px' : '10.5px',
                             fontWeight: 700,
                             padding: isDisabled ? '2px 7px' : '1px 6px',
-                            borderRadius: '999px',
+                            borderRadius: '10px',
                             backgroundColor: isDisabled
                               ? 'rgba(168, 85, 247, 0.12)'
                               : isActive

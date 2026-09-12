@@ -168,7 +168,7 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
       {/* Header Banner */}
       <SpotlightCard
         style={{
-          padding: '24px 28px',
+          padding: '26px 30px',
           background: 'linear-gradient(135deg, rgba(0, 80, 255, 0.16) 0%, rgba(15, 23, 42, 0.9) 100%)',
           borderColor: 'rgba(0, 80, 255, 0.28)',
           display: 'flex',
@@ -186,20 +186,21 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
             <span
               style={{
                 fontSize: '11px',
-                padding: '1px 8px',
-                borderRadius: '999px',
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                padding: '3px 10px',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
                 color: '#34d399',
                 fontWeight: 600,
+                border: '1px solid rgba(16, 185, 129, 0.25)',
               }}
             >
               ● Real-time Metrics
             </span>
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.035em' }}>
             Company KPI Command Center
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '650px' }}>
+          <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '650px' }}>
             Holistic unit economics, revenue efficiency, growth momentum, and interactive runway scenario modeling.
           </p>
         </div>
@@ -209,7 +210,7 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
             type="button"
             onClick={() => onNavigate?.('/finance')}
             className="btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <DollarSign size={15} /> Financial Ledger
           </button>
@@ -217,7 +218,7 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
             type="button"
             onClick={() => onNavigate?.('/customers')}
             className="btn-secondary"
-            style={{ padding: '8px 14px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            style={{ padding: '9px 18px', fontSize: '13px', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
             <Users size={15} /> Customer Base
           </button>

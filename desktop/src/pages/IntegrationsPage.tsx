@@ -219,32 +219,48 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <div style={{ padding: '8px', borderRadius: '10px', backgroundColor: 'rgba(99, 102, 241, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+            <div
+              style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(0, 80, 255, 0.3) 0%, rgba(56, 189, 248, 0.1) 100%)',
+                border: '1px solid rgba(0, 80, 255, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 16px rgba(0, 80, 255, 0.25)',
+                flexShrink: 0,
+              }}
+            >
               <Plug size={22} color="var(--brand-accent)" />
             </div>
-            <h1 style={{ fontSize: '26px', fontWeight: 700, margin: 0 }}>External Service Integrations</h1>
+            <h1 style={{ fontSize: '26px', fontWeight: 800, margin: 0, letterSpacing: '-0.035em', color: 'var(--text-main)' }}>
+              External Service Integrations
+            </h1>
           </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0 }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13.5px', margin: 0, maxWidth: '700px' }}>
             Connect GitHub, Google Calendar, Gmail, and Payments. Data is safely stored in local IndexedDB and accessible to Founder AI & Morning Briefing.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             onClick={() => setIsLogsDrawerOpen(true)}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 14px',
-              borderRadius: '8px',
+              padding: '9px 18px',
+              borderRadius: '50px',
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
               color: 'var(--text-main)',
               fontSize: '13px',
-              fontWeight: 500,
+              fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             <Clock size={15} />
@@ -260,14 +276,15 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 14px',
-              borderRadius: '8px',
+              padding: '9px 18px',
+              borderRadius: '50px',
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
               color: 'var(--text-main)',
               fontSize: '13px',
-              fontWeight: 500,
+              fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             <Database size={15} />
@@ -280,14 +297,15 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 14px',
-              borderRadius: '8px',
+              padding: '9px 18px',
+              borderRadius: '50px',
               backgroundColor: 'rgba(59, 130, 246, 0.15)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
+              border: '1px solid rgba(59, 130, 246, 0.35)',
               color: '#38bdf8',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             <Zap size={15} />
@@ -301,8 +319,8 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 16px',
-              borderRadius: '8px',
+              padding: '9px 20px',
+              borderRadius: '50px',
               backgroundColor: 'var(--brand-accent)',
               border: 'none',
               color: '#ffffff',
@@ -310,6 +328,8 @@ export const IntegrationsPage: React.FC<IntegrationsPageProps> = ({ onNavigate }
               fontWeight: 600,
               cursor: connectedCount === 0 || isSyncingAll ? 'not-allowed' : 'pointer',
               opacity: connectedCount === 0 || isSyncingAll ? 0.6 : 1,
+              boxShadow: '0 0 16px rgba(0, 80, 255, 0.35)',
+              transition: 'all 0.15s ease',
             }}
           >
             <RefreshCw size={15} className={isSyncingAll ? 'animate-spin' : ''} />
