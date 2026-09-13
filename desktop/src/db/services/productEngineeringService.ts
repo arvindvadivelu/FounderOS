@@ -1,6 +1,7 @@
 import { db } from '../db';
 import type { Feature, Bug } from '../../types';
 import { logActivity } from './activityService';
+import { realtimeSync } from '../../services/realtimeSyncService';
 
 // Feature Services
 export async function getAllFeatures(): Promise<Feature[]> {
@@ -19,6 +20,7 @@ export async function createFeature(data: Omit<Feature, 'id' | 'createdAt' | 'up
 
   await db.features.put(feat);
   await logActivity('created_feature', 'feature', `Added feature idea "${feat.title}"`, feat.id);
+  realtimeSync.broadcast('features', 'create', feat);
   return feat;
 }
 
@@ -34,6 +36,7 @@ export async function updateFeature(id: string, updates: Partial<Feature>): Prom
 
   await db.features.put(updated);
   await logActivity('updated_feature', 'feature', `Updated feature "${updated.title}" (${updated.status})`, id);
+  realtimeSync.broadcast('features', 'update', updated);
   return updated;
 }
 
@@ -42,6 +45,7 @@ export async function deleteFeature(id: string): Promise<void> {
   if (existing) {
     await db.features.delete(id);
     await logActivity('deleted_feature', 'feature', `Deleted feature "${existing.title}"`, id);
+    realtimeSync.broadcast('features', 'delete', existing);
   }
 }
 
@@ -63,6 +67,7 @@ export async function createBug(data: Omit<Bug, 'id' | 'createdAt' | 'updatedAt'
 
   await db.bugs.put(bug);
   await logActivity('created_bug', 'bug', `Reported bug "${bug.title}" (${bug.severity})`, bug.id);
+  realtimeSync.broadcast('bugs', 'create', bug);
   return bug;
 }
 
@@ -82,6 +87,7 @@ export async function updateBug(id: string, updates: Partial<Bug>): Promise<Bug>
 
   await db.bugs.put(updated);
   await logActivity('updated_bug', 'bug', `Updated bug "${updated.title}" (${updated.status})`, id);
+  realtimeSync.broadcast('bugs', 'update', updated);
   return updated;
 }
 
@@ -90,5 +96,6 @@ export async function deleteBug(id: string): Promise<void> {
   if (existing) {
     await db.bugs.delete(id);
     await logActivity('deleted_bug', 'bug', `Deleted bug "${existing.title}"`, id);
+    realtimeSync.broadcast('bugs', 'delete', existing);
   }
 }

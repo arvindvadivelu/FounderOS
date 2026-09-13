@@ -16,7 +16,7 @@ export async function getDefaultAIProvider(): Promise<AIProvider | undefined> {
 
 export async function saveAIProvider(data: Partial<AIProvider> & { id?: string }): Promise<AIProvider> {
   const now = new Date().toISOString();
-  const id = data.id || `provider_${Date.now()}`;
+  const id = data.id || `provider_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
   
   // If setting as default, unset others
   if (data.isDefault) {

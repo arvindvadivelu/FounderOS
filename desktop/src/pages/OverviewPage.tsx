@@ -49,6 +49,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
   const projects = useLiveQuery(async () => await db.projects.toArray(), []) || [];
   const bugs = useLiveQuery(async () => await db.bugs.toArray(), []) || [];
   const features = useLiveQuery(async () => await db.features.toArray(), []) || [];
+  const bankAccounts = useLiveQuery(async () => await db.bankAccounts.toArray(), []) || [];
   const activities = useLiveQuery(
     async () => {
       const list = await db.activities.toArray();
@@ -75,13 +76,16 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
   }
 
   const netProfit = totalIncome - totalExpenses;
-  const hasData = transactions.length > 0 || mrr > 0;
-  const estimatedCash = hasData ? Math.max(0, 150000 + netProfit) : 0;
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const hasData = transactions.length > 0 || mrr > 0 || bankAccounts.length > 0;
+  const estimatedCash = bankAccounts.length > 0
+    ? totalBankBalance
+    : (hasData ? Math.max(0, 150000 + netProfit) : 0);
   const monthlyBurn = totalExpenses;
   let runwayMonths = 0;
   if (hasData && monthlyBurn > 0 && estimatedCash > 0) {
     runwayMonths = Math.round((estimatedCash / monthlyBurn) * 10) / 10;
-  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0) {
+  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0 && (totalIncome > 0 || mrr > 0)) {
     runwayMonths = 99;
   }
 

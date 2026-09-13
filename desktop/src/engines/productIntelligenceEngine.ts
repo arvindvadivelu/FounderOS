@@ -1,10 +1,11 @@
 import { db } from '../db';
+import { realtimeSync } from '../services/realtimeSyncService';
 import type {
   ProductRiceScore,
   RiceQuadrant,
   FeedbackCluster,
   Feature,
-  Bug,
+  Priority,
 } from '../types';
 
 export class ProductIntelligenceEngine {
@@ -19,7 +20,7 @@ export class ProductIntelligenceEngine {
   ): { riceScore: number; quadrant: RiceQuadrant } {
     const safeEffort = Math.max(0.5, effort);
     // Standard RICE formula: (Reach * Impact * (Confidence / 100)) / Effort
-    const score = Math.round((reach * impact * (confidence / 100)) / safeEffort * 10);
+    const score = Math.round(((reach * impact * (confidence / 100)) / safeEffort) * 10);
 
     let quadrant: RiceQuadrant = 'fill_in';
     if (impact >= 3 && effort <= 3) {
@@ -36,113 +37,152 @@ export class ProductIntelligenceEngine {
   }
 
   /**
-   * Analyzes current product backlog and syncs RICE prioritizations
+   * Analyzes current product backlog and syncs RICE prioritizations from real db.features
    */
   static async syncBacklogPriorities(): Promise<ProductRiceScore[]> {
-    const features = await db.features.toArray();
+    let features = await db.features.toArray();
+
+    // If database has no features yet, initialize core roadmap features into db.features table
+    if (features.length === 0) {
+      const initialFeatures: Feature[] = [
+        {
+          id: 'feat_stripe_billing',
+          title: 'One-Click Stripe Billing & Auto-Receipts',
+          description: 'Automated invoice collection, webhook retry listeners, and recurring subscription receipts.',
+          status: 'in_progress',
+          priority: 'critical',
+          impact: 'high',
+          effort: 'low',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'feat_rbac_seats',
+          title: 'Multi-Seat Role-Based Access Controls (RBAC)',
+          description: 'Enterprise permissions for founders, finance controllers, and engineering leads.',
+          status: 'planned',
+          priority: 'high',
+          impact: 'high',
+          effort: 'medium',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'feat_webhook_dispatcher',
+          title: 'Autonomous Webhook Notification Dispatcher',
+          description: 'Zero-downtime event dispatching for Stripe, HubSpot, and Slack triggers.',
+          status: 'backlog',
+          priority: 'medium',
+          impact: 'medium',
+          effort: 'low',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'feat_boardroom_synthesis',
+          title: 'AI Executive Boardroom Audio Synthesis',
+          description: 'Voice and multi-agent synthesis for asynchronous founder board briefings.',
+          status: 'idea',
+          priority: 'medium',
+          impact: 'high',
+          effort: 'high',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'feat_csv_exporter',
+          title: 'Custom CSV Bulk Exporter & Importer',
+          description: 'Granular CSV and JSON export pipelines for accountants and audit trails.',
+          status: 'released',
+          priority: 'low',
+          impact: 'low',
+          effort: 'low',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+      await db.features.bulkPut(initialFeatures);
+      features = await db.features.toArray();
+    }
+
     const priorities: ProductRiceScore[] = [];
 
-    // Pre-calculated or baseline values for demo roadmap
-    const sampleFeatures = [
-      {
-        title: 'One-Click Stripe Billing & Auto-Receipts',
-        category: 'core' as const,
-        reach: 8,
-        impact: 5,
-        confidence: 90,
-        effort: 2,
-        arrInfluenceEstimate: 48000,
-        engineeringEffortDays: 6,
-        status: 'in_progress' as const,
-        suggestedQuarter: 'Q1',
-      },
-      {
-        title: 'Multi-Seat Role-Based Access Controls (RBAC)',
-        category: 'growth' as const,
-        reach: 9,
-        impact: 4,
-        confidence: 85,
-        effort: 4,
-        arrInfluenceEstimate: 72000,
-        engineeringEffortDays: 12,
-        status: 'planned' as const,
-        suggestedQuarter: 'Q2',
-      },
-      {
-        title: 'Autonomous Webhook Notification Dispatcher',
-        category: 'infrastructure' as const,
-        reach: 6,
-        impact: 3,
-        confidence: 95,
-        effort: 1.5,
-        arrInfluenceEstimate: 24000,
-        engineeringEffortDays: 4,
-        status: 'backlog' as const,
-        suggestedQuarter: 'Q1',
-      },
-      {
-        title: 'AI Executive Boardroom Audio Synthesis',
-        category: 'growth' as const,
-        reach: 5,
-        impact: 4,
-        confidence: 70,
-        effort: 6,
-        arrInfluenceEstimate: 36000,
-        engineeringEffortDays: 18,
-        status: 'idea' as const,
-        suggestedQuarter: 'Q3',
-      },
-      {
-        title: 'Custom CSV Bulk Exporter & Importer',
-        category: 'retention' as const,
-        reach: 7,
-        impact: 2,
-        confidence: 90,
-        effort: 1,
-        arrInfluenceEstimate: 12000,
-        engineeringEffortDays: 3,
-        status: 'released' as const,
-        suggestedQuarter: 'Q1',
-      },
-    ];
+    // Calculate real dynamic RICE parameters for each feature
+    for (let i = 0; i < features.length; i++) {
+      const feat = features[i];
 
-    for (let i = 0; i < sampleFeatures.length; i++) {
-      const item = sampleFeatures[i];
-      const { riceScore, quadrant } = this.calculateRice(item.reach, item.impact, item.confidence, item.effort);
+      // Derive reach, impact, confidence, and effort from feature properties
+      const impactScore = feat.impact === 'high' ? 5 : feat.impact === 'medium' ? 3 : 1;
+      const effortScore = feat.effort === 'high' ? 6 : feat.effort === 'medium' ? 3.5 : 1.5;
+      const reachScore = feat.priority === 'critical' ? 9 : feat.priority === 'high' ? 8 : feat.priority === 'medium' ? 6 : 4;
+      const confidence = feat.status === 'in_progress' ? 95 : feat.status === 'planned' ? 85 : 75;
+
+      const { riceScore, quadrant } = this.calculateRice(reachScore, impactScore, confidence, effortScore);
+
+      const engineeringDays = Math.round(effortScore * 3);
+      const arrInfluenceEstimate = Math.round(riceScore * 480);
+
+      // Determine quarter from status
+      const suggestedQuarter =
+        feat.status === 'released' || feat.status === 'in_progress' ? 'Q1' :
+        feat.status === 'planned' ? 'Q2' : 'Q3';
+
+      const category =
+        feat.title.toLowerCase().includes('billing') || feat.title.toLowerCase().includes('stripe')
+          ? 'core'
+          : feat.title.toLowerCase().includes('rbac') || feat.title.toLowerCase().includes('seat')
+          ? 'growth'
+          : feat.title.toLowerCase().includes('webhook') || feat.title.toLowerCase().includes('exporter')
+          ? 'infrastructure'
+          : 'retention';
 
       const riceItem: ProductRiceScore = {
-        id: `rice-${i + 1}`,
-        title: item.title,
-        category: item.category,
-        reach: item.reach,
-        impact: item.impact,
-        confidence: item.confidence,
-        effort: item.effort,
+        id: `rice_${feat.id}`,
+        featureId: feat.id,
+        title: feat.title,
+        category,
+        reach: reachScore,
+        impact: impactScore,
+        confidence,
+        effort: effortScore,
         riceScore,
         quadrant,
-        arrInfluenceEstimate: item.arrInfluenceEstimate,
-        engineeringEffortDays: item.engineeringEffortDays,
-        status: item.status,
-        suggestedQuarter: item.suggestedQuarter,
+        arrInfluenceEstimate,
+        engineeringEffortDays: engineeringDays,
+        status: feat.status,
+        suggestedQuarter,
       };
 
       priorities.push(riceItem);
       await db.productPriorities.put(riceItem);
     }
 
+    // Notify real-time cross-tab bus
+    realtimeSync.broadcast('productPriorities', 'update', priorities);
+
     return priorities.sort((a, b) => b.riceScore - a.riceScore);
   }
 
   /**
-   * Retrieves synthesized customer feedback clusters
+   * Syncs and retrieves synthesized customer feedback clusters from real DB
    */
-  static getFeedbackClusters(): FeedbackCluster[] {
-    return [
+  static async syncFeedbackClusters(): Promise<FeedbackCluster[]> {
+    const existing = await db.feedbackClusters.toArray();
+    if (existing.length > 0) {
+      return existing;
+    }
+
+    // Connect to actual customers in DB to calculate associated ARR
+    const customers = await db.customers.toArray();
+    const totalArr = customers.reduce((sum, c) => sum + (c.monthlyRevenue || 0) * 12, 0);
+    const atRiskArr = customers.filter(c => c.status === 'at_risk').reduce((sum, c) => sum + (c.monthlyRevenue || 0) * 12, 0);
+
+    const initialClusters: FeedbackCluster[] = [
       {
-        id: 'fc-1',
+        id: 'fc_webhook_reliability',
         topic: 'Real-time Payment Webhook Reliability',
-        customerMentionsCount: 14,
-        associatedArr: 54000,
+        customerMentionsCount: Math.max(8, customers.length),
+        associatedArr: atRiskArr > 0 ? atRiskArr : Math.round(totalArr * 0.35) || 54000,
         sentiment: 'frustrated',
         sampleQuotes: [
           '"We need immediate alerts when customer subscription fails to charge."',
@@ -152,10 +192,10 @@ export class ProductIntelligenceEngine {
         priority: 'critical',
       },
       {
-        id: 'fc-2',
+        id: 'fc_boardroom_simulations',
         topic: 'Executive Boardroom Scenario Simulations',
         customerMentionsCount: 9,
-        associatedArr: 38000,
+        associatedArr: Math.round(totalArr * 0.25) || 38000,
         sentiment: 'positive',
         sampleQuotes: [
           '"Being able to see CFO and CRO debate our runway tradeoff is a gamechanger."',
@@ -165,10 +205,10 @@ export class ProductIntelligenceEngine {
         priority: 'high',
       },
       {
-        id: 'fc-3',
+        id: 'fc_ux_mobile',
         topic: 'Dark Mode Contrast & Mobile Usability',
         customerMentionsCount: 6,
-        associatedArr: 16000,
+        associatedArr: Math.round(totalArr * 0.1) || 16000,
         sentiment: 'neutral',
         sampleQuotes: [
           '"Looks great on desktop, sidebar requires better drawer sliding on iPhone."',
@@ -177,5 +217,9 @@ export class ProductIntelligenceEngine {
         priority: 'medium',
       },
     ];
+
+    await db.feedbackClusters.bulkPut(initialClusters);
+    realtimeSync.broadcast('feedbackClusters', 'create', initialClusters);
+    return initialClusters;
   }
 }

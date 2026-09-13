@@ -150,19 +150,18 @@ export function App() {
       case '/integrations':
         return <IntegrationsPage onNavigate={handleNavigate} />;
       case '/v2':
-        return <V2ComingSoonPage featureName="FounderOS V2" onNavigate={handleNavigate} />;
       case '/workflows':
-        return <V2ComingSoonPage featureName="Automated Workflows" onNavigate={handleNavigate} />;
+        return <WorkflowsPage />;
       case '/boardroom':
-        return <V2ComingSoonPage featureName="Executive Boardroom" onNavigate={handleNavigate} />;
+        return <ExecutiveBoardroomPage />;
       case '/forecasting':
-        return <V2ComingSoonPage featureName="Financial Forecasting" onNavigate={handleNavigate} />;
+        return <FinancialForecastingPage />;
       case '/customer-intelligence':
-        return <V2ComingSoonPage featureName="Customer Intelligence" onNavigate={handleNavigate} />;
+        return <CustomerIntelligencePage />;
       case '/product-intelligence':
-        return <V2ComingSoonPage featureName="Product Intelligence" onNavigate={handleNavigate} />;
+        return <ProductIntelligencePage />;
       case '/autopilot':
-        return <V2ComingSoonPage featureName="Autonomous Operations" onNavigate={handleNavigate} />;
+        return <AutonomousOperationsPage />;
       case '/settings':
         return <SettingsPage initialTab={currentRoute.includes('tab=providers') ? 'providers' : 'company'} />;
       default:

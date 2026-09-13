@@ -43,6 +43,7 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
 
   const customers = useLiveQuery(async () => await db.customers.toArray(), []) || [];
   const transactions = useLiveQuery(async () => await db.transactions.toArray(), []) || [];
+  const bankAccounts = useLiveQuery(async () => await db.bankAccounts.toArray(), []) || [];
   const deals = useLiveQuery(async () => await db.deals.toArray(), []) || [];
   const tasks = useLiveQuery(async () => await db.tasks.toArray(), []) || [];
   const bugs = useLiveQuery(async () => await db.bugs.toArray(), []) || [];
@@ -83,14 +84,17 @@ export const KpiCenterPage: React.FC<KpiCenterPageProps> = ({ onNavigate }) => {
   }
 
   const netProfit = totalIncome - totalExpenses;
-  const hasData = transactions.length > 0 || mrr > 0;
-  const estimatedCash = hasData ? Math.max(0, 150000 + netProfit) : 0;
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const hasData = transactions.length > 0 || mrr > 0 || bankAccounts.length > 0;
+  const estimatedCash = bankAccounts.length > 0
+    ? totalBankBalance
+    : (hasData ? Math.max(0, 150000 + netProfit) : 0);
   const monthlyBurn = totalExpenses;
 
   let runwayMonths = 0;
   if (hasData && monthlyBurn > 0 && estimatedCash > 0) {
     runwayMonths = Math.round((estimatedCash / monthlyBurn) * 10) / 10;
-  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0) {
+  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0 && (totalIncome > 0 || mrr > 0)) {
     runwayMonths = 99;
   }
 

@@ -60,15 +60,22 @@ export const FinancePage: React.FC = () => {
   const [txRecurring, setTxRecurring] = useState(false);
 
   // New Invoice Form State
+  const generateNewInvNumber = () => `INV-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
   const [invCustomerId, setInvCustomerId] = useState('');
-  const [invNumber, setInvNumber] = useState(`INV-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`);
+  const [invNumber, setInvNumber] = useState(generateNewInvNumber());
   const [invAmount, setInvAmount] = useState<number>(0);
   const [invDueDate, setInvDueDate] = useState('');
   const [invDescription, setInvDescription] = useState('');
 
+  const openNewInvoiceModal = () => {
+    setInvNumber(generateNewInvNumber());
+    setIsInvModalOpen(true);
+  };
+
   // Live Queries
   const company = useLiveQuery(async () => (await db.companies.toArray())[0], []);
   const customers = useLiveQuery(async () => await db.customers.toArray(), []) || [];
+  const bankAccounts = useLiveQuery(async () => await db.bankAccounts.toArray(), []) || [];
   const transactions = useLiveQuery(async () => {
     const list = await db.transactions.toArray();
     return list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -99,13 +106,16 @@ export const FinancePage: React.FC = () => {
   }
 
   const netProfit = totalIncome - totalExpenses;
-  const hasData = transactions.length > 0 || mrr > 0;
-  const estimatedCash = hasData ? Math.max(0, 150000 + netProfit) : 0;
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const hasData = transactions.length > 0 || mrr > 0 || bankAccounts.length > 0;
+  const estimatedCash = bankAccounts.length > 0
+    ? totalBankBalance
+    : (hasData ? Math.max(0, 150000 + netProfit) : 0);
   const monthlyBurn = totalExpenses;
   let runwayMonths = 0;
   if (hasData && monthlyBurn > 0 && estimatedCash > 0) {
     runwayMonths = Math.round((estimatedCash / monthlyBurn) * 10) / 10;
-  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0) {
+  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0 && (totalIncome > 0 || mrr > 0)) {
     runwayMonths = 99;
   }
 
@@ -210,6 +220,7 @@ export const FinancePage: React.FC = () => {
     setIsInvModalOpen(false);
     setInvAmount(0);
     setInvDescription('');
+    setInvNumber(generateNewInvNumber());
   };
 
   return (
@@ -339,7 +350,7 @@ export const FinancePage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => setIsInvModalOpen(true)}
+            onClick={openNewInvoiceModal}
             style={{
               backgroundColor: 'rgba(255, 255, 255, 0.06)',
               color: '#f8fafc',
@@ -843,7 +854,7 @@ export const FinancePage: React.FC = () => {
               title="No client invoices created"
               description="Create and track invoice payment states across your customer accounts."
               actionText="Create New Invoice"
-              onAction={() => setIsInvModalOpen(true)}
+              onAction={openNewInvoiceModal}
             />
           ) : (
             <div style={{ overflowX: 'auto' }}>

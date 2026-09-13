@@ -1,4 +1,6 @@
 import { db } from '../db';
+import { sendChatMessage } from '../ai/providerClient';
+import { realtimeSync } from '../services/realtimeSyncService';
 import type {
   ExecutiveAgent,
   ExecutiveAgentRole,
@@ -93,6 +95,73 @@ export class ExecutiveAgentService {
     const mrr = customers.reduce((acc, c) => acc + (c.monthlyRevenue || 0), 0);
     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
     const pipelineValue = activeDeals.reduce((acc, d) => acc + d.value, 0);
+
+    // Check if user has an AI provider with an API key configured for live LLM reasoning
+    const activeProvider =
+      (await db.aiProviders.filter(p => Boolean(p.isDefault && p.apiKey)).first()) ||
+      (await db.aiProviders.filter(p => Boolean(p.apiKey)).first());
+
+    if (activeProvider) {
+      try {
+        const sysPrompt = `You are simulating an executive boardroom debate among executive AI agents: ${participants.join(', ')}.
+Company context:
+- MRR: $${mrr.toLocaleString()}
+- Total Expenses: $${totalExpenses.toLocaleString()}
+- Active Pipeline: $${pipelineValue.toLocaleString()}
+
+Strategic Dilemma:
+- Topic: "${topic}"
+- Question: "${question}"
+
+Respond with a JSON object containing:
+- messages: array of objects with { role: string, agentName: string, avatarColor: string, content: string, stance: "support" | "caution" | "neutral", keyArguments: string[], proposedAction: string }
+- consensus: object with { summary: string, alignmentScore: number, unanimousRecommendations: string[], risksIdentified: string[], actionChecklist: array of { taskTitle: string, ownerRole: string, priority: "high" | "medium" | "low" } }
+Return pure JSON only.`;
+
+        const response = await sendChatMessage(
+          activeProvider,
+          [
+            { role: 'system', content: sysPrompt },
+            { role: 'user', content: `Debate and synthesize recommendations for: ${topic}` },
+          ],
+          undefined,
+          20000
+        );
+
+        if (response.content) {
+          const jsonText = response.content.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(jsonText);
+          if (parsed.messages && Array.isArray(parsed.messages) && parsed.consensus) {
+            const aiSession: AgentDebateSession = {
+              id: sessionId,
+              topic,
+              contextQuestion: question,
+              participants,
+              status: 'consensus_reached',
+              messages: parsed.messages.map((m: any, idx: number) => ({
+                id: `msg-${m.role || 'agent'}-${Date.now() + idx}`,
+                role: m.role || 'ceo',
+                agentName: m.agentName || EXECUTIVE_AGENTS[m.role as ExecutiveAgentRole]?.name || 'Executive',
+                avatarColor: m.avatarColor || EXECUTIVE_AGENTS[m.role as ExecutiveAgentRole]?.avatarColor || '#3b82f6',
+                content: m.content || '',
+                stance: m.stance || 'neutral',
+                keyArguments: Array.isArray(m.keyArguments) ? m.keyArguments : [],
+                proposedAction: m.proposedAction || '',
+                timestamp: new Date().toISOString(),
+              })),
+              consensus: parsed.consensus,
+              createdAt: timestamp,
+              updatedAt: timestamp,
+            };
+            await db.agentDebates.add(aiSession);
+            realtimeSync.broadcast('agentDebates', 'create', aiSession);
+            return aiSession;
+          }
+        }
+      } catch (err) {
+        console.warn('Live AI boardroom deliberation fallback to grounded baseline:', err);
+      }
+    }
 
     const messages: DebateMessage[] = [];
 
@@ -232,6 +301,7 @@ export class ExecutiveAgentService {
     };
 
     await db.agentDebates.add(session);
+    realtimeSync.broadcast('agentDebates', 'create', session);
     return session;
   }
 }

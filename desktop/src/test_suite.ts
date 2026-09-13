@@ -135,9 +135,9 @@ export async function runFullDatabaseIntegritySuite() {
   // SUITE 1: Initialization & Seed Demo Data
   // ==========================================
   console.log('--- 1. DATABASE INITIALIZATION & SCHEMA STORES ---');
-  await runTest('DB Schema v3 creates all 24 tables', async () => {
-    if (db.tables.length !== 24) {
-      throw new Error(`Expected 24 tables in Dexie, found ${db.tables.length}`);
+  await runTest('DB Schema v4 creates all 37 tables', async () => {
+    if (db.tables.length !== 37) {
+      throw new Error(`Expected 37 tables in Dexie, found ${db.tables.length}`);
     }
   });
 

@@ -1,6 +1,7 @@
 import { db } from '../db';
 import type { Transaction, Invoice } from '../../types';
 import { logActivity } from './activityService';
+import { realtimeSync } from '../../services/realtimeSyncService';
 
 export async function getAllTransactions(): Promise<Transaction[]> {
   const list = await db.transactions.toArray();
@@ -23,6 +24,7 @@ export async function createTransaction(data: Omit<Transaction, 'id' | 'createdA
     `Recorded ${tx.type === 'income' ? 'Income' : 'Expense'} of $${tx.amount.toLocaleString()} (${tx.category})`,
     tx.id
   );
+  realtimeSync.broadcast('transactions', 'create', tx);
   return tx;
 }
 
@@ -31,6 +33,7 @@ export async function deleteTransaction(id: string): Promise<void> {
   if (existing) {
     await db.transactions.delete(id);
     await logActivity('deleted_transaction', 'transaction', `Deleted transaction of $${existing.amount}`, id);
+    realtimeSync.broadcast('transactions', 'delete', existing);
   }
 }
 
@@ -50,6 +53,7 @@ export async function createInvoice(data: Omit<Invoice, 'id' | 'createdAt' | 'up
 
   await db.invoices.put(inv);
   await logActivity('created_invoice', 'invoice', `Created invoice ${inv.invoiceNumber} for $${inv.amount.toLocaleString()}`, inv.id);
+  realtimeSync.broadcast('invoices', 'create', inv);
   return inv;
 }
 
@@ -65,6 +69,7 @@ export async function updateInvoice(id: string, updates: Partial<Invoice>): Prom
 
   await db.invoices.put(updated);
   await logActivity('updated_invoice', 'invoice', `Updated invoice ${updated.invoiceNumber} (${updated.status})`, id);
+  realtimeSync.broadcast('invoices', 'update', updated);
   return updated;
 }
 
@@ -73,14 +78,16 @@ export async function deleteInvoice(id: string): Promise<void> {
   if (existing) {
     await db.invoices.delete(id);
     await logActivity('deleted_invoice', 'invoice', `Deleted invoice ${existing.invoiceNumber}`, id);
+    realtimeSync.broadcast('invoices', 'delete', existing);
   }
 }
 
 // Aggregation calculations
 export async function getFinancialSummary() {
-  const [txs, customers] = await Promise.all([
+  const [txs, customers, bankAccounts] = await Promise.all([
     db.transactions.toArray(),
     db.customers.toArray(),
+    db.bankAccounts.toArray(),
   ]);
 
   let totalIncome = 0;
@@ -104,9 +111,12 @@ export async function getFinancialSummary() {
   const arr = mrr * 12;
   const netProfit = totalIncome - totalExpenses;
 
-  // Real cash calculation: If zero transactions and zero MRR, everything is 0
-  const hasData = txs.length > 0 || mrr > 0;
-  const estimatedCash = hasData ? Math.max(0, 150000 + netProfit) : 0;
+  // Real cash calculation: Use live bank account balances if present, otherwise calculate net cash
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const hasData = txs.length > 0 || mrr > 0 || bankAccounts.length > 0;
+  const estimatedCash = bankAccounts.length > 0
+    ? totalBankBalance
+    : (hasData ? Math.max(0, 150000 + netProfit) : 0);
   const monthlyBurn = totalExpenses;
 
   // Runway calculation:
@@ -114,7 +124,7 @@ export async function getFinancialSummary() {
   let runwayMonths = 0;
   if (hasData && monthlyBurn > 0 && estimatedCash > 0) {
     runwayMonths = Math.round((estimatedCash / monthlyBurn) * 10) / 10;
-  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0) {
+  } else if (hasData && monthlyBurn === 0 && estimatedCash > 0 && (totalIncome > 0 || mrr > 0)) {
     runwayMonths = 99; // Profitable / Zero burn
   }
 

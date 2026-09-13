@@ -11,6 +11,7 @@ import {
   Home,
 } from 'lucide-react';
 import { useAIChatState } from '../../ai/aiChatService';
+import { useRealtimeSyncStatus } from '../../services/realtimeSyncService';
 import type { Company } from '../../types';
 
 interface TopbarProps {
@@ -34,6 +35,7 @@ export const Topbar: React.FC<TopbarProps> = ({
   currentRoute,
 }) => {
   const { anyActive, status: aiStatus } = useAIChatState();
+  const realtimeStatus = useRealtimeSyncStatus();
   const isDesktop = typeof window !== 'undefined' && Boolean((window as any).desktopBridge);
   const [downloadStatus, setDownloadStatus] = React.useState<'idle' | 'downloading' | 'done'>('idle');
 
@@ -148,7 +150,37 @@ export const Topbar: React.FC<TopbarProps> = ({
           title="All company data is persisted locally in browser IndexedDB"
         >
           <Database size={12} />
-          <span>Local Data: Available Offline</span>
+          <span>Local Data: Offline-Ready</span>
+        </div>
+
+        {/* Realtime Cross-Window Bus status indicator */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontSize: '11px',
+            fontWeight: 600,
+            padding: '4px 10px',
+            borderRadius: '999px',
+            backgroundColor: 'rgba(56, 189, 248, 0.12)',
+            color: '#38bdf8',
+            border: '1px solid rgba(56, 189, 248, 0.25)',
+          }}
+          className="realtime-pill"
+          title={`Realtime event bus active (BroadcastChannel). Synced events: ${realtimeStatus.eventCount}`}
+        >
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              backgroundColor: '#38bdf8',
+              boxShadow: '0 0 6px #38bdf8',
+              display: 'inline-block',
+            }}
+          />
+          <span>Realtime: Active</span>
         </div>
 
         {/* AI CEO Background Execution Indicator */}

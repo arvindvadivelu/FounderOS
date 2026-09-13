@@ -523,6 +523,28 @@ export async function seedDemoData(): Promise<void> {
       effort: 'medium',
       createdAt: isoNow,
       updatedAt: isoNow,
+    },
+    {
+      id: 'feat_4',
+      title: 'One-Click Stripe Billing & Auto-Receipts',
+      description: 'Automated invoice collection, webhook retry listeners, and recurring subscription receipts.',
+      status: 'in_progress',
+      priority: 'critical',
+      impact: 'high',
+      effort: 'low',
+      createdAt: isoNow,
+      updatedAt: isoNow,
+    },
+    {
+      id: 'feat_5',
+      title: 'Multi-Seat Role-Based Access Controls (RBAC)',
+      description: 'Enterprise permissions for founders, finance controllers, and engineering leads.',
+      status: 'planned',
+      priority: 'high',
+      impact: 'high',
+      effort: 'medium',
+      createdAt: isoNow,
+      updatedAt: isoNow,
     }
   ];
 

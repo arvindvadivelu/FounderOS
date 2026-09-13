@@ -1,6 +1,7 @@
 import { db } from '../db';
 import type { Goal, Note } from '../../types';
 import { logActivity } from './activityService';
+import { realtimeSync } from '../../services/realtimeSyncService';
 
 // Goal Services
 export async function getAllGoals(): Promise<Goal[]> {
@@ -18,6 +19,7 @@ export async function createGoal(data: Omit<Goal, 'id' | 'createdAt' | 'updatedA
 
   await db.goals.put(goal);
   await logActivity('created_goal', 'goal', `Set company goal "${goal.title}"`, goal.id);
+  realtimeSync.broadcast('goals', 'create', goal);
   return goal;
 }
 
@@ -33,6 +35,7 @@ export async function updateGoal(id: string, updates: Partial<Goal>): Promise<Go
 
   await db.goals.put(updated);
   await logActivity('updated_goal', 'goal', `Updated goal "${updated.title}" (${updated.currentValue}/${updated.target} ${updated.unit})`, id);
+  realtimeSync.broadcast('goals', 'update', updated);
   return updated;
 }
 
@@ -41,6 +44,7 @@ export async function deleteGoal(id: string): Promise<void> {
   if (existing) {
     await db.goals.delete(id);
     await logActivity('deleted_goal', 'goal', `Deleted goal "${existing.title}"`, id);
+    realtimeSync.broadcast('goals', 'delete', existing);
   }
 }
 
@@ -66,6 +70,7 @@ export async function createNote(data: Omit<Note, 'id' | 'createdAt' | 'updatedA
 
   await db.notes.put(note);
   await logActivity('created_note', 'note', `Created note "${note.title}"`, note.id);
+  realtimeSync.broadcast('notes', 'create', note);
   return note;
 }
 
@@ -81,6 +86,7 @@ export async function updateNote(id: string, updates: Partial<Note>): Promise<No
 
   await db.notes.put(updated);
   await logActivity('updated_note', 'note', `Updated note "${updated.title}"`, id);
+  realtimeSync.broadcast('notes', 'update', updated);
   return updated;
 }
 
@@ -89,5 +95,6 @@ export async function deleteNote(id: string): Promise<void> {
   if (existing) {
     await db.notes.delete(id);
     await logActivity('deleted_note', 'note', `Deleted note "${existing.title}"`, id);
+    realtimeSync.broadcast('notes', 'delete', existing);
   }
 }

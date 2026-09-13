@@ -1,4 +1,5 @@
 import { db } from '../db';
+import { realtimeSync } from '../services/realtimeSyncService';
 import type {
   WorkflowRule,
   WorkflowExecutionLog,
@@ -230,6 +231,7 @@ export class WorkflowEngine {
           updatedAt: timestamp,
         };
         await db.tasks.add(newTask);
+        realtimeSync.broadcast('tasks', 'create', newTask);
         break;
       }
 
@@ -245,12 +247,18 @@ export class WorkflowEngine {
           updatedAt: timestamp,
         };
         await db.notes.add(newNote);
+        realtimeSync.broadcast('notes', 'create', newNote);
         break;
       }
 
       case 'update_customer_status': {
         if (context?.customerId) {
           await db.customers.update(context.customerId, {
+            status: action.params.status || 'at_risk',
+            updatedAt: timestamp,
+          });
+          realtimeSync.broadcast('customers', 'update', {
+            id: context.customerId,
             status: action.params.status || 'at_risk',
             updatedAt: timestamp,
           });
@@ -271,6 +279,7 @@ export class WorkflowEngine {
           updatedAt: timestamp,
         };
         await db.tasks.add(task);
+        realtimeSync.broadcast('tasks', 'create', task);
         break;
       }
 
@@ -280,10 +289,102 @@ export class WorkflowEngine {
   }
 
   /**
+   * Evaluates database mutation events in real-time and triggers corresponding workflows
+   */
+  static async handleDatabaseEvent(
+    table: string,
+    operation: string,
+    record: any
+  ): Promise<WorkflowExecutionLog[]> {
+    if (!record || operation === 'delete') return [];
+    const logs: WorkflowExecutionLog[] = [];
+
+    // Ensure initial recipes are in db.workflows if unseeded
+    const count = await db.workflows.count();
+    if (count === 0) {
+      const now = new Date().toISOString();
+      const initialRules = FOUNDER_WORKFLOW_RECIPES.map((recipe, index) => ({
+        ...recipe,
+        id: `rule-init-${index + 1}`,
+        createdAt: now,
+        updatedAt: now,
+        runCount: 0,
+      }));
+      await db.workflows.bulkPut(initialRules as any);
+    }
+
+    const activeRules = await db.workflows.filter(r => Boolean(r.isActive)).toArray();
+
+    // 1. Deal Won Event
+    if (table === 'deals' && (record.stage === 'Won' || record.stage === 'Closed Won')) {
+      const dealWonRules = activeRules.filter(r => r.triggerType === 'deal_won');
+      for (const rule of dealWonRules) {
+        const log = await this.executeWorkflow(rule, {
+          source: 'realtime_deal_won',
+          dealId: record.id,
+          value: record.value,
+          customerId: record.customerId,
+          title: record.title || 'Enterprise Deal Won',
+        });
+        logs.push(log);
+      }
+    }
+
+    // 2. Overdue Invoice Event
+    if (table === 'invoices' && record.status === 'overdue') {
+      const overdueRules = activeRules.filter(r => r.triggerType === 'invoice_overdue');
+      for (const rule of overdueRules) {
+        const log = await this.executeWorkflow(rule, {
+          source: 'realtime_invoice_overdue',
+          invoiceId: record.id,
+          amount: record.amount,
+          customerId: record.customerId,
+          invoiceNumber: record.invoiceNumber,
+        });
+        logs.push(log);
+      }
+    }
+
+    // 3. Critical Bug Reported Event
+    if (table === 'bugs' && record.severity === 'critical') {
+      const bugRules = activeRules.filter(r => r.triggerType === 'task_blocked');
+      for (const rule of bugRules) {
+        const log = await this.executeWorkflow(rule, {
+          source: 'realtime_critical_bug',
+          bugId: record.id,
+          title: record.title,
+          severity: 'critical',
+          hoursBlocked: 48,
+        });
+        logs.push(log);
+      }
+    }
+
+    // 4. Customer Churn Risk Event
+    if (
+      table === 'customers' &&
+      (record.status === 'at_risk' || (typeof record.healthScore === 'number' && record.healthScore < 50))
+    ) {
+      const churnRules = activeRules.filter(r => r.triggerType === 'churn_risk_high');
+      for (const rule of churnRules) {
+        const log = await this.executeWorkflow(rule, {
+          source: 'realtime_churn_warning',
+          customerId: record.id,
+          companyName: record.companyName,
+          healthScore: record.healthScore || 45,
+        });
+        logs.push(log);
+      }
+    }
+
+    return logs;
+  }
+
+  /**
    * Run all active workflows against current database state
    */
   static async runAllActiveWorkflows(): Promise<WorkflowExecutionLog[]> {
-    const activeRules = await db.workflows.where('isActive').equals(1).toArray();
+    const activeRules = await db.workflows.filter(r => Boolean(r.isActive)).toArray();
     const logs: WorkflowExecutionLog[] = [];
 
     // Preload system state
@@ -324,3 +425,10 @@ export class WorkflowEngine {
     return logs;
   }
 }
+
+// Subscribe to real-time database mutation events to automatically execute founder workflows
+realtimeSync.subscribe((event) => {
+  WorkflowEngine.handleDatabaseEvent(event.table, event.operation, event.record).catch((err) => {
+    console.warn('Realtime workflow handler error:', err);
+  });
+});

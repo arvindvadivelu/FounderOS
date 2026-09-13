@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   FolderKanban,
@@ -19,9 +19,23 @@ import type { ProductRiceScore, FeedbackCluster, RiceQuadrant } from '../types';
 
 export const ProductIntelligencePage: React.FC = () => {
   const priorities = useLiveQuery(() => db.productPriorities.orderBy('riceScore').reverse().toArray(), []);
-  const feedbackClusters = ProductIntelligenceEngine.getFeedbackClusters();
+  const feedbackClusters = useLiveQuery(() => db.feedbackClusters.toArray(), []) || [];
 
   const [selectedQuadrant, setSelectedQuadrant] = useState<string>('all');
+
+  useEffect(() => {
+    async function checkInitialData() {
+      const count = await db.productPriorities.count();
+      if (count === 0) {
+        await ProductIntelligenceEngine.syncBacklogPriorities();
+      }
+      const fcCount = await db.feedbackClusters.count();
+      if (fcCount === 0) {
+        await ProductIntelligenceEngine.syncFeedbackClusters();
+      }
+    }
+    checkInitialData();
+  }, []);
 
   const filteredPriorities = priorities
     ? priorities.filter(p => selectedQuadrant === 'all' || p.quadrant === selectedQuadrant)

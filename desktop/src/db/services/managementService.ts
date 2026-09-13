@@ -9,6 +9,7 @@ import type {
   Currency,
 } from '../../types';
 import { logActivity } from './activityService';
+import { realtimeSync } from '../../services/realtimeSyncService';
 
 // ==========================================
 // 1. EMPLOYEES SERVICES
@@ -34,6 +35,7 @@ export async function createEmployee(data: Omit<Employee, 'id' | 'createdAt' | '
 
   await db.employees.put(emp);
   await logActivity('created_employee', 'employee', `Hired ${emp.name} as ${emp.role}`, emp.id);
+  realtimeSync.broadcast('employees', 'create', emp);
   return emp;
 }
 
@@ -49,6 +51,7 @@ export async function updateEmployee(id: string, updates: Partial<Employee>): Pr
 
   await db.employees.put(updated);
   await logActivity('updated_employee', 'employee', `Updated details for ${updated.name}`, id);
+  realtimeSync.broadcast('employees', 'update', updated);
   return updated;
 }
 
@@ -64,6 +67,7 @@ export async function deleteEmployee(id: string): Promise<void> {
     }
 
     await logActivity('deleted_employee', 'employee', `Removed employee record for ${existing.name}`, id);
+    realtimeSync.broadcast('employees', 'delete', existing);
   }
 }
 
@@ -118,6 +122,7 @@ export async function createDepartment(data: Omit<Department, 'id' | 'createdAt'
 
   await db.departments.put(dept);
   await logActivity('created_department', 'department', `Created department ${dept.name}`, dept.id);
+  realtimeSync.broadcast('departments', 'create', dept);
   return dept;
 }
 
@@ -133,6 +138,7 @@ export async function updateDepartment(id: string, updates: Partial<Department>)
 
   await db.departments.put(updated);
   await logActivity('updated_department', 'department', `Updated department ${updated.name}`, id);
+  realtimeSync.broadcast('departments', 'update', updated);
   return updated;
 }
 
@@ -148,6 +154,7 @@ export async function deleteDepartment(id: string): Promise<void> {
     }
 
     await logActivity('deleted_department', 'department', `Deleted department ${existing.name}`, id);
+    realtimeSync.broadcast('departments', 'delete', existing);
   }
 }
 
@@ -181,6 +188,7 @@ export async function createBankAccount(data: Omit<BankAccount, 'id' | 'createdA
 
   await db.bankAccounts.put(acc);
   await logActivity('created_bank_account', 'bank_account', `Added ${acc.institution} (${acc.accountName})`, acc.id);
+  realtimeSync.broadcast('bankAccounts', 'create', acc);
   return acc;
 }
 
@@ -205,6 +213,7 @@ export async function updateBankAccount(id: string, updates: Partial<BankAccount
 
   await db.bankAccounts.put(updated);
   await logActivity('updated_bank_account', 'bank_account', `Updated balance for ${updated.accountName} ($${updated.balance.toLocaleString()})`, id);
+  realtimeSync.broadcast('bankAccounts', 'update', updated);
   return updated;
 }
 
@@ -222,6 +231,7 @@ export async function deleteBankAccount(id: string): Promise<void> {
     }
 
     await logActivity('deleted_bank_account', 'bank_account', `Removed ${existing.accountName}`, id);
+    realtimeSync.broadcast('bankAccounts', 'delete', existing);
   }
 }
 
@@ -278,6 +288,7 @@ export async function createBalanceSheetItem(data: Omit<BalanceSheetItem, 'id' |
     `Added ${item.type === 'asset' ? 'Asset' : 'Liability'}: ${item.name} ($${item.value.toLocaleString()})`,
     item.id
   );
+  realtimeSync.broadcast('balanceSheetItems', 'create', item);
   return item;
 }
 
@@ -293,6 +304,7 @@ export async function updateBalanceSheetItem(id: string, updates: Partial<Balanc
 
   await db.balanceSheetItems.put(updated);
   await logActivity('updated_balance_sheet_item', 'balance_sheet', `Updated ${updated.name}`, id);
+  realtimeSync.broadcast('balanceSheetItems', 'update', updated);
   return updated;
 }
 
@@ -301,6 +313,7 @@ export async function deleteBalanceSheetItem(id: string): Promise<void> {
   if (existing) {
     await db.balanceSheetItems.delete(id);
     await logActivity('deleted_balance_sheet_item', 'balance_sheet', `Deleted ${existing.name}`, id);
+    realtimeSync.broadcast('balanceSheetItems', 'delete', existing);
   }
 }
 
@@ -371,6 +384,7 @@ export async function saveUploadedFileRecord(data: Omit<UploadedFile, 'id' | 'cr
   };
   await db.uploadedFiles.put(record);
   await logActivity('uploaded_file', 'file', `Uploaded ${record.name} (${record.category})`, record.id);
+  realtimeSync.broadcast('uploadedFiles', 'create', record);
   return record;
 }
 
@@ -406,6 +420,7 @@ export async function createUploadedFile(
 
         await db.uploadedFiles.put(record);
         await logActivity('uploaded_file', 'file', `Uploaded ${record.name} (${category})`, record.id);
+        realtimeSync.broadcast('uploadedFiles', 'create', record);
         resolve(record);
       } catch (err) {
         reject(err);
@@ -421,5 +436,6 @@ export async function deleteUploadedFile(id: string): Promise<void> {
   if (existing) {
     await db.uploadedFiles.delete(id);
     await logActivity('deleted_file', 'file', `Deleted file ${existing.name}`, id);
+    realtimeSync.broadcast('uploadedFiles', 'delete', existing);
   }
 }

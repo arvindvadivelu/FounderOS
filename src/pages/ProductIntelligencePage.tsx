@@ -19,18 +19,22 @@ import type { ProductRiceScore, FeedbackCluster, RiceQuadrant } from '../types';
 
 export const ProductIntelligencePage: React.FC = () => {
   const priorities = useLiveQuery(() => db.productPriorities.orderBy('riceScore').reverse().toArray(), []);
-  const feedbackClusters = ProductIntelligenceEngine.getFeedbackClusters();
+  const feedbackClusters = useLiveQuery(() => db.feedbackClusters.toArray(), []) || [];
 
   const [selectedQuadrant, setSelectedQuadrant] = useState<string>('all');
 
   useEffect(() => {
-    async function checkInitialPriorities() {
+    async function checkInitialData() {
       const count = await db.productPriorities.count();
       if (count === 0) {
         await ProductIntelligenceEngine.syncBacklogPriorities();
       }
+      const fcCount = await db.feedbackClusters.count();
+      if (fcCount === 0) {
+        await ProductIntelligenceEngine.syncFeedbackClusters();
+      }
     }
-    checkInitialPriorities();
+    checkInitialData();
   }, []);
 
   const filteredPriorities = priorities

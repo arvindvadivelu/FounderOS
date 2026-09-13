@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   Cpu,
@@ -20,12 +20,22 @@ import type { AutonomousRoutine, OperationalAnomaly, RoutineExecutionRecord } fr
 
 export const AutonomousOperationsPage: React.FC = () => {
   const routines = useLiveQuery(() => db.autonomousRoutines.toArray(), []);
-  const anomalies = useLiveQuery(() => db.anomalies.where('resolved').equals(0).toArray(), []);
+  const anomalies = useLiveQuery(() => db.anomalies.filter(a => !a.resolved).toArray(), []);
   const routineLogs = useLiveQuery(() => db.routineLogs.orderBy('executedAt').reverse().limit(15).toArray(), []);
 
   const [runningRoutineId, setRunningRoutineId] = useState<string | null>(null);
   const [healingAnomalyId, setHealingAnomalyId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkInitialScan() {
+      const count = await db.anomalies.count();
+      if (count === 0) {
+        await AutonomousRoutineService.scanForAnomalies();
+      }
+    }
+    checkInitialScan();
+  }, []);
 
   const handleExecuteRoutine = async (routine: AutonomousRoutine) => {
     setRunningRoutineId(routine.id);

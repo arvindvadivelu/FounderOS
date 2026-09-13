@@ -518,6 +518,7 @@ export async function generateInvestorReport(payload: InvestorUpdatePayload = {}
   const transactions = await db.transactions.toArray();
   const deals = await db.deals.toArray();
   const features = await db.features.toArray();
+  const bankAccounts = await db.bankAccounts.toArray();
 
   let mrr = 0;
   let activeCustomers = 0;
@@ -535,7 +536,8 @@ export async function generateInvestorReport(payload: InvestorUpdatePayload = {}
     else if (t.type === 'expense') totalExpense += t.amount;
   }
   const netProfit = totalIncome - totalExpense;
-  const cashBalance = Math.max(25000, totalIncome - totalExpense + 120000); // realistic runway balance
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const cashBalance = bankAccounts.length > 0 ? totalBankBalance : Math.max(25000, totalIncome - totalExpense + 120000); // realistic runway balance
   const monthlyBurn = Math.max(3000, totalExpense / 3);
   const runwayMonths = Math.max(1, Math.round((cashBalance / monthlyBurn) * 10) / 10);
 
@@ -1140,6 +1142,7 @@ export async function runRevenueWarRoom(payload: RevenueWarRoomPayload = {}): Pr
   const features = await db.features.toArray();
   const transactions = await db.transactions.toArray();
   const projects = await db.projects.toArray();
+  const bankAccounts = await db.bankAccounts.toArray();
 
   let closingPipelineValue = 0;
   for (const d of deals) {
@@ -1154,7 +1157,8 @@ export async function runRevenueWarRoom(payload: RevenueWarRoomPayload = {}): Pr
     if (t.type === 'income') totalIncome += t.amount;
     else if (t.type === 'expense') totalExpense += t.amount;
   }
-  const cashBalance = Math.max(30000, totalIncome - totalExpense + 120000);
+  const totalBankBalance = bankAccounts.reduce((sum, b) => sum + (b.balance || 0), 0);
+  const cashBalance = bankAccounts.length > 0 ? totalBankBalance : Math.max(30000, totalIncome - totalExpense + 120000);
   const monthlyBurn = Math.max(3500, totalExpense / 3);
   const cashRunwayMonths = Math.max(1, Math.round((cashBalance / monthlyBurn) * 10) / 10);
 

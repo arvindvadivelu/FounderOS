@@ -1,6 +1,7 @@
 import { db } from '../db';
 import type { Task, Project } from '../../types';
 import { logActivity } from './activityService';
+import { realtimeSync } from '../../services/realtimeSyncService';
 
 export async function getAllProjects(): Promise<Project[]> {
   return await db.projects.toArray();
@@ -17,6 +18,7 @@ export async function createProject(data: Omit<Project, 'id' | 'createdAt' | 'up
 
   await db.projects.put(project);
   await logActivity('created_project', 'project', `Created project "${project.name}"`, project.id);
+  realtimeSync.broadcast('projects', 'create', project);
   return project;
 }
 
@@ -32,6 +34,7 @@ export async function updateProject(id: string, updates: Partial<Project>): Prom
 
   await db.projects.put(updated);
   await logActivity('updated_project', 'project', `Updated project "${updated.name}" (${updated.progress}% done)`, id);
+  realtimeSync.broadcast('projects', 'update', updated);
   return updated;
 }
 
@@ -55,6 +58,7 @@ export async function deleteProject(id: string): Promise<void> {
     }
 
     await logActivity('deleted_project', 'project', `Deleted project "${existing.name}"`, id);
+    realtimeSync.broadcast('projects', 'delete', existing);
   }
 }
 
@@ -76,6 +80,7 @@ export async function createTask(data: Omit<Task, 'id' | 'createdAt' | 'updatedA
 
   await db.tasks.put(task);
   await logActivity('created_task', 'task', `Created task "${task.title}"`, task.id);
+  realtimeSync.broadcast('tasks', 'create', task);
   return task;
 }
 
@@ -99,6 +104,7 @@ export async function updateTask(id: string, updates: Partial<Task>): Promise<Ta
   } else {
     await logActivity('updated_task', 'task', `Updated task "${updated.title}" (${updated.status})`, id);
   }
+  realtimeSync.broadcast('tasks', 'update', updated);
   return updated;
 }
 
@@ -107,5 +113,6 @@ export async function deleteTask(id: string): Promise<void> {
   if (existing) {
     await db.tasks.delete(id);
     await logActivity('deleted_task', 'task', `Deleted task "${existing.title}"`, id);
+    realtimeSync.broadcast('tasks', 'delete', existing);
   }
 }
