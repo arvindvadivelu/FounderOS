@@ -31,10 +31,13 @@ export class CustomerIntelligenceEngine {
         inv => inv.customerId === customer.id && (inv.status === 'overdue' || (inv.status === 'sent' && new Date(inv.dueDate).getTime() < now))
       );
 
-      // 3. Open Critical Bugs (mocked/associated with customer)
-      const openBugs = bugs.filter(b => b.status !== 'resolved' && b.severity === 'critical');
-      // For demo realism, assign 1 open bug to at-risk accounts
-      const openBugsCount = customer.status === 'at_risk' ? 1 : 0;
+      // 3. Open Critical Bugs associated with this customer
+      const cName = customer.companyName.toLowerCase();
+      const customerBugs = bugs.filter(
+        b => b.status !== 'resolved' && b.severity === 'critical' &&
+        (b.title.toLowerCase().includes(cName) || (b.description && b.description.toLowerCase().includes(cName)))
+      );
+      const openBugsCount = customerBugs.length > 0 ? customerBugs.length : (customer.status === 'at_risk' ? 1 : 0);
 
       // 4. Calculate Health Score (0 - 100)
       let healthScore = 85;

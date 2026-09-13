@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   FolderKanban,
@@ -22,6 +22,16 @@ export const ProductIntelligencePage: React.FC = () => {
   const feedbackClusters = ProductIntelligenceEngine.getFeedbackClusters();
 
   const [selectedQuadrant, setSelectedQuadrant] = useState<string>('all');
+
+  useEffect(() => {
+    async function checkInitialPriorities() {
+      const count = await db.productPriorities.count();
+      if (count === 0) {
+        await ProductIntelligenceEngine.syncBacklogPriorities();
+      }
+    }
+    checkInitialPriorities();
+  }, []);
 
   const filteredPriorities = priorities
     ? priorities.filter(p => selectedQuadrant === 'all' || p.quadrant === selectedQuadrant)

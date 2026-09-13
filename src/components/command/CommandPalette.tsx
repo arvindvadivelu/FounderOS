@@ -19,6 +19,9 @@ import {
   Scale,
   UploadCloud,
   MonitorDown,
+  Zap,
+  Bot,
+  Cpu,
 } from 'lucide-react';
 import { db } from '../../db';
 
@@ -468,6 +471,72 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       icon: <Settings size={15} />,
       action: () => {
         onNavigate('/settings');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_workflows',
+      title: 'Go to Automated Workflows & Triggers',
+      subtitle: 'Event-driven triggers, conditional filters, and founder interventions',
+      category: 'Navigation',
+      icon: <Zap size={15} color="#38bdf8" />,
+      action: () => {
+        onNavigate('/workflows');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_boardroom',
+      title: 'Go to Executive Boardroom',
+      subtitle: 'Convene AI CEO, CFO, CRO, CPO, and COO for strategic trade-off debates',
+      category: 'Navigation',
+      icon: <Bot size={15} color="#ec4899" />,
+      action: () => {
+        onNavigate('/boardroom');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_forecasting',
+      title: 'Go to Financial Forecasting & Simulator',
+      subtitle: 'Compound growth models, hiring impact, and scenario trajectories',
+      category: 'Navigation',
+      icon: <TrendingUp size={15} color="#34d399" />,
+      action: () => {
+        onNavigate('/forecasting');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_customer_intelligence',
+      title: 'Go to Customer Intelligence & Churn Radar',
+      subtitle: 'Health scores, churn risk preemption, and account expansion signals',
+      category: 'Navigation',
+      icon: <Users size={15} color="#38bdf8" />,
+      action: () => {
+        onNavigate('/customer-intelligence');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_product_intelligence',
+      title: 'Go to Product Intelligence & RICE Matrix',
+      subtitle: 'Formulaic feature prioritization, reach, impact, confidence and effort',
+      category: 'Navigation',
+      icon: <Target size={15} color="#fbbf24" />,
+      action: () => {
+        onNavigate('/product-intelligence');
+        onClose();
+      },
+    },
+    {
+      id: 'nav_autopilot',
+      title: 'Go to Autonomous Operations & Auto-Healing',
+      subtitle: 'Operational heartbeat, anomaly scanner, and 1-click self-healing mitigation',
+      category: 'Navigation',
+      icon: <Cpu size={15} color="#10b981" />,
+      action: () => {
+        onNavigate('/autopilot');
         onClose();
       },
     },

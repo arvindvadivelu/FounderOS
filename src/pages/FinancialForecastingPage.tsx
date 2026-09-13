@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   TrendingUp,
@@ -26,16 +26,25 @@ export const FinancialForecastingPage: React.FC = () => {
   const transactions = useLiveQuery(() => db.transactions.toArray(), []);
 
   // Compute live current financial baselines
-  const currentCash = bankAccounts?.reduce((sum, b) => sum + (b.balance || 0), 0) || 0;
-  const currentMrr = customers?.reduce((sum, c) => sum + (c.monthlyRevenue || 0), 0) || 0;
-  const baseMonthlyBurn = 0;
+  const totalBankBalance = bankAccounts?.reduce((sum, b) => sum + (b.balance || 0), 0) || 0;
+  const netTransactionCash = transactions?.reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0) || 0;
+  const currentCash = totalBankBalance > 0 ? totalBankBalance : Math.max(0, 150000 + netTransactionCash);
+  const currentMrr = customers?.filter((c) => c.status === 'active').reduce((sum, c) => sum + (c.monthlyRevenue || 0), 0) || 0;
+  const calculatedMonthlyBurn = transactions?.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0) || 0;
 
   // Active scenario and slider state
   const [selectedScenarioType, setSelectedScenarioType] = useState<'base' | 'best' | 'worst'>('base');
-  const [growthRate, setGrowthRate] = useState<number>(0);
-  const [churnRate, setChurnRate] = useState<number>(0);
-  const [grossMargin, setGrossMargin] = useState<number>(0);
-  const [burnBuffer, setBurnBuffer] = useState<number>(baseMonthlyBurn);
+  const [growthRate, setGrowthRate] = useState<number>(8);
+  const [churnRate, setChurnRate] = useState<number>(2);
+  const [grossMargin, setGrossMargin] = useState<number>(80);
+  const [burnBuffer, setBurnBuffer] = useState<number>(15000);
+  const [hasCustomBurn, setHasCustomBurn] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!hasCustomBurn && calculatedMonthlyBurn > 0) {
+      setBurnBuffer(calculatedMonthlyBurn);
+    }
+  }, [calculatedMonthlyBurn, hasCustomBurn]);
 
   // Hiring form state
   const [showAddHire, setShowAddHire] = useState<boolean>(false);
@@ -65,29 +74,30 @@ export const FinancialForecastingPage: React.FC = () => {
 
   const projectionResult = FinancialForecastEngine.generateProjection(
     activeScenario,
-    currentCash,
-    currentMrr,
+    currentCash || 250000,
+    currentMrr || 20000,
     burnBuffer,
     hiringPlan || []
   );
 
   const handleSelectScenarioPreset = (preset: 'base' | 'best' | 'worst') => {
     setSelectedScenarioType(preset);
+    const baseBurn = calculatedMonthlyBurn > 0 ? calculatedMonthlyBurn : 15000;
     if (preset === 'base') {
       setGrowthRate(8);
       setChurnRate(2);
       setGrossMargin(80);
-      setBurnBuffer(baseMonthlyBurn);
+      setBurnBuffer(baseBurn);
     } else if (preset === 'best') {
       setGrowthRate(15);
       setChurnRate(0.8);
       setGrossMargin(85);
-      setBurnBuffer(baseMonthlyBurn);
+      setBurnBuffer(baseBurn);
     } else {
       setGrowthRate(3);
       setChurnRate(4.5);
       setGrossMargin(75);
-      setBurnBuffer(baseMonthlyBurn * 1.15);
+      setBurnBuffer(Math.round(baseBurn * 1.15));
     }
   };
 
@@ -287,7 +297,10 @@ export const FinancialForecastingPage: React.FC = () => {
                 max="50000"
                 step="1000"
                 value={burnBuffer}
-                onChange={e => setBurnBuffer(Number(e.target.value))}
+                onChange={e => {
+                  setBurnBuffer(Number(e.target.value));
+                  setHasCustomBurn(true);
+                }}
                 style={{ width: '100%', accentColor: '#f59e0b' }}
               />
             </div>

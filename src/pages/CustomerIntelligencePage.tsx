@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   Users,
@@ -24,6 +24,20 @@ export const CustomerIntelligencePage: React.FC = () => {
   const [selectedQuadrant, setSelectedQuadrant] = useState<string>('all');
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkInitialRadar() {
+      const [scoresCount, custCount] = await Promise.all([
+        db.customerHealthScores.count(),
+        db.customers.count(),
+      ]);
+      if (scoresCount === 0 && custCount > 0) {
+        await CustomerIntelligenceEngine.evaluateAllCustomers();
+        await CustomerIntelligenceEngine.discoverExpansionOpportunities();
+      }
+    }
+    checkInitialRadar();
+  }, []);
 
   const handleRunHealthScan = async () => {
     setIsScanning(true);

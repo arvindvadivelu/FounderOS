@@ -35,7 +35,7 @@ import {
 import { saveCompany, updateSettings } from '../db/services/companyService';
 import { testProviderConnection, type TestConnectionResult } from '../ai/providerClient';
 import { exportAllData, downloadJsonFile, importDataFromPayload } from '../utils/exportImport';
-import { clearAllCompanyData } from '../db/seed';
+import { seedDemoData, clearAllCompanyData } from '../db/seed';
 import { formatDate } from '../utils/formatters';
 import type { AIProvider, AIProviderType, Currency } from '../types';
 
@@ -279,6 +279,16 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
       showToast('error', 'Parse Error', 'File is not valid JSON.');
     } finally {
       e.target.value = '';
+    }
+  };
+
+  const handleLoadDemoData = async () => {
+    try {
+      await seedDemoData();
+      showToast('success', 'Demo Data Loaded', 'Sample company, deals, customers, and operations populated.');
+      window.location.reload();
+    } catch (err: any) {
+      showToast('error', 'Failed to Load Demo Data', err.message || 'Error populating data');
     }
   };
 
@@ -776,6 +786,40 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ initialTab }) => {
                 />
               </label>
             </div>
+          </SpotlightCard>
+
+          {/* Demo Sandbox Data */}
+          <SpotlightCard style={{ padding: '24px', borderRadius: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#a855f7', marginBottom: '6px' }}>
+              <Sparkles size={18} />
+              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#f8fafc' }}>
+                Load Sample Startup Dataset
+              </h3>
+            </div>
+            <p style={{ fontSize: '13px', color: '#94a3b8', margin: '0 0 16px 0', lineHeight: 1.5 }}>
+              Populate realistic B2B SaaS startup data (Solvst AI) across CRM, sales pipeline, transactions, OKRs, employees, and autonomous routines.
+            </p>
+
+            <button
+              type="button"
+              onClick={handleLoadDemoData}
+              style={{
+                borderRadius: '50px',
+                padding: '9px 20px',
+                backgroundColor: 'rgba(168, 85, 247, 0.15)',
+                border: '1px solid rgba(168, 85, 247, 0.35)',
+                color: '#c084fc',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Sparkles size={14} />
+              <span>Populate Full Demo Workspace</span>
+            </button>
           </SpotlightCard>
 
           {/* Danger Zone */}

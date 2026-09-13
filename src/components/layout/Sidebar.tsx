@@ -107,7 +107,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'FOUNDEROS V2',
       items: [
-        { id: '/v2', label: 'FounderOS V2', icon: <Sparkles size={16} color="#c084fc" />, disabled: true, badge: 'Coming Soon' },
+        { id: '/workflows', label: 'Workflows & Triggers', icon: <Zap size={16} color="#38bdf8" /> },
+        { id: '/boardroom', label: 'Executive Boardroom', icon: <Bot size={16} color="#ec4899" /> },
+        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" /> },
+        { id: '/customer-intelligence', label: 'Customer Radar', icon: <Users size={16} color="#38bdf8" /> },
+        { id: '/product-intelligence', label: 'Product RICE', icon: <Target size={16} color="#fbbf24" /> },
+        { id: '/autopilot', label: 'Autonomous Ops', icon: <Cpu size={16} color="#10b981" /> },
       ],
     },
     {
