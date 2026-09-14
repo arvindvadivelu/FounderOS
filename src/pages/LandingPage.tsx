@@ -25,26 +25,31 @@ import founderosLogo from '../assets/founderos-logo.jpg';
 
 /**
  * ============================================================================
- * Skill: animate (Department 2: Design) Implementation
+ * Skill: apple-design (Department 2: Design) Implementation Matrix
  *
- * 1. THE GATE RESULT:
- *    - Frequency Tier: Occasional to marketing interactive.
- *    - Purpose: Tactile response (:active scale), state indication (tab switching &
- *      interactive FAQ accordion collapse), and spatial consistency.
- *    - Zero Keyboard shortcut delays, zero 100+/day latency.
+ * 1. RESPONSE — KILL LATENCY (Section 1):
+ *    - Instant pointer-down feedback (:active scale(0.97) with 100ms ease-out).
+ *    - Continuous 1:1 tactile feedback during range slider scrubbing.
  *
- * 2. THE INGREDIENTS:
- *    - Tool: Pure CSS transitions and hardware-accelerated animations.
- *    - Properties: transform, opacity, and grid-template-rows (for accordion only).
- *    - Curve: Custom strong ease-out cubic-bezier(0.23, 1, 0.32, 1) and ease-in-out.
- *    - Durations: Button press 160ms, Tab change 220ms, Accordion 220ms.
+ * 2. MATERIALS & DEPTH (Section 12):
+ *    - Translucent floating materials (backdrop-filter: blur(24px) saturate(180%)).
+ *    - Specular highlights: bright top edge hairlines (border-top catching light).
+ *    - Material weight hierarchy: heavier chassis for structure, lighter for controls.
  *
- * 3. STRICT ANTI-PATTERNS SATISFIED:
- *    - Zero "transition: all" (named properties on every rule).
- *    - Zero "scale(0)" (entrances start at scale(0.97–0.98) + opacity: 0).
- *    - Zero built-in sluggish ease-in on UI elements.
- *    - Hover transforms gated behind @media (hover: hover) and (pointer: fine).
- *    - Full @media (prefers-reduced-motion: reduce) compliance.
+ * 3. TYPOGRAPHY — OPTICAL SIZING & TRACKING (Section 15):
+ *    - Size-specific letter spacing: negative tracking on display headlines (-0.035em),
+ *      neutral tracking on body text (-0.01em), positive tracking on micro-labels (+0.08em).
+ *    - Inverse leading: tight leading on large headlines (1.02–1.08), loose on body (1.5).
+ *    - Apple system font stack first with Plus Jakarta Sans and JetBrains Mono.
+ *
+ * 4. ACCESSIBILITY TRIAD (Section 14):
+ *    - prefers-reduced-motion: cross-fades, static transitions without displacement.
+ *    - prefers-reduced-transparency: frostier solid backgrounds, backdrop-filter removed.
+ *    - prefers-contrast: more: high-contrast solid borders.
+ *
+ * 5. THE EIGHT DESIGN PRINCIPLES (Section 16):
+ *    - Purpose, Agency, Responsibility (100% private, sovereign data), Familiarity,
+ *      Flexibility, Simplicity (not minimalism — strip the unnecessary), Craft, Delight.
  * ============================================================================
  */
 
@@ -62,19 +67,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [downloadState, setDownloadState] = useState<'idle' | 'downloading' | 'completed'>('idle');
   const [downloadType, setDownloadType] = useState<'setup' | 'portable'>('setup');
 
-  // Interactive Cockpit Simulator State
+  // Interactive Executive Console State
   const [activeTab, setActiveTab] = useState<'telemetry' | 'briefing' | 'treasury' | 'boardroom'>('telemetry');
   const [monthlyBurnRate, setMonthlyBurnRate] = useState<number>(38200);
   const totalCashReserves = 1248000;
 
-  // Interactive Accordion FAQ State (Recipe from animate/RECIPES.md)
+  // Interactive Accordion FAQ State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex((prev) => (prev === index ? null : index));
   };
 
-  // Live dynamic runway calculation for the simulator
+  // Direct manipulation dynamic runway calculation
   const calculatedRunway = useMemo(() => {
     if (monthlyBurnRate <= 0) return '∞';
     return (totalCashReserves / monthlyBurnRate).toFixed(1);
@@ -108,69 +113,71 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   const faqData = [
     {
-      q: 'Where is my financial and deal data stored?',
-      a: '100% on your own local device inside browser IndexedDB and encrypted local storage. No company balance sheets, revenue data, invoice records, or CRM opportunities ever leave your machine or touch external cloud servers.',
+      q: 'Where is my financial and cap table data stored?',
+      a: '100% on your local device within encrypted browser IndexedDB storage. No corporate balance sheets, revenue numbers, payroll details, or investor cap table notes ever leave your hardware or touch external cloud servers.',
     },
     {
       q: 'Can I use FounderOS when I have no internet connection?',
-      a: 'Yes. FounderOS is built offline-first from the ground up. You can manage tasks, model financial scenarios, update deal stages, and review daily briefing notes at 35,000 feet on an airplane with Wi-Fi turned off.',
+      a: 'Yes. FounderOS is engineered offline-first from the ground up. You can manage tasks, model cash runway scenarios, review daily briefings, and track enterprise deal pipelines at 35,000 feet on an airplane with Wi-Fi disabled.',
     },
     {
-      q: 'How does the AI Copilot work if data is local?',
-      a: 'You supply your own private API keys (OpenRouter, Google Gemini, Anthropic, or Ollama for 100% local offline neural models). FounderOS acts strictly as a sovereign orchestration layer. Your keys and prompts are stored encrypted locally on your drive.',
+      q: 'How does the AI Copilot function while maintaining complete privacy?',
+      a: 'You supply your own private API keys (Google Gemini, Anthropic, OpenRouter, or local Ollama instances for 100% offline neural models). FounderOS acts strictly as an orchestration interface. Your keys and prompts remain encrypted locally on your drive.',
     },
     {
-      q: 'Can I export or migrate my database at any time?',
+      q: 'Can I export or migrate my complete workspace at any time?',
       a: 'Yes. Under Settings → Backup, you can generate a cryptographically structured full JSON database export with one click, or restore previous backups with zero vendor lock-in.',
     },
   ];
 
   return (
-    <div className="founderos-landing-root">
-      {/* Dynamic Background Noise & Ambient Atmospheric Glow */}
-      <div className="ambient-glow glow-top" />
-      <div className="ambient-glow glow-bottom" />
+    <div className="apple-page-root">
+      {/* Ambient Depth Background Fields */}
+      <div className="apple-glow glow-primary" />
+      <div className="apple-glow glow-secondary" />
 
       {/* =====================================================================
-          1. FLOATING PILL NAVIGATION BAR (Apple Glass & Button-in-Button)
+          1. TRANSLUCENT FLOATING NAVIGATION BAR (Apple Glass & Specular Bevel)
          ===================================================================== */}
-      <header className="nav-header">
-        <div className="nav-shell">
+      <header className="apple-nav-header">
+        <div className="apple-nav-capsule">
           {/* Brand Mark & Identity */}
           <div
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="nav-brand"
+            className="apple-nav-brand"
+            role="button"
+            tabIndex={0}
           >
-            <div className="brand-logo-frame">
-              <img src={founderosLogo} alt="FounderOS" className="brand-logo-img" />
+            <div className="apple-brand-frame">
+              <img src={founderosLogo} alt="FounderOS" className="apple-brand-img" />
             </div>
-            <div className="brand-text-col">
-              <span className="brand-title">FounderOS</span>
-              <span className="brand-subtitle">Executive Command</span>
+            <div className="apple-brand-meta">
+              <span className="apple-brand-name">FounderOS</span>
+              <span className="apple-brand-edition">Executive Console</span>
             </div>
           </div>
 
-          {/* Nav Quick Links (Smooth Scroll) */}
-          <nav className="nav-links">
-            <a href="#simulator" className="nav-link-item">Simulator</a>
-            <a href="#dilemma" className="nav-link-item">The Dilemma</a>
-            <a href="#pillars" className="nav-link-item">Pillars</a>
-            <a href="#downloads" className="nav-link-item">Distribution</a>
-            <a href="#faq" className="nav-link-item">Architecture</a>
+          {/* Nav Quick Links (Size-specific tracking) */}
+          <nav className="apple-nav-links">
+            <a href="#console" className="apple-nav-anchor">Console</a>
+            <a href="#dilemma" className="apple-nav-anchor">The Dilemma</a>
+            <a href="#capabilities" className="apple-nav-anchor">Capabilities</a>
+            <a href="#distribution" className="apple-nav-anchor">Distribution</a>
+            <a href="#architecture" className="apple-nav-anchor">Architecture</a>
           </nav>
 
-          {/* Navigation Action Buttons (Button Press Feedback: scale(0.97)) */}
-          <div className="nav-actions">
+          {/* Navigation Action Buttons (Button-in-Button with 100ms press feedback) */}
+          <div className="apple-nav-actions">
             <button
               onClick={() => triggerDownload('setup')}
               disabled={downloadState === 'downloading'}
-              className="btn-nested-secondary"
+              className="apple-btn-secondary"
               title="Download Windows Setup (.exe)"
             >
               <span>{downloadState === 'downloading' ? 'Downloading...' : 'Download Setup'}</span>
-              <div className="btn-icon-pod pod-sky">
+              <div className="apple-icon-circle circle-cyan">
                 {downloadState === 'downloading' ? (
-                  <RefreshCw size={11} className="spin-icon" />
+                  <RefreshCw size={11} className="apple-spin-icon" />
                 ) : (
                   <Download size={11} strokeWidth={2.5} />
                 )}
@@ -179,11 +186,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={onLaunchApp}
-              className="btn-nested-primary"
+              className="apple-btn-primary"
               title="Launch Web Application"
             >
               <span>Launch App</span>
-              <div className="btn-icon-pod pod-white">
+              <div className="apple-icon-circle circle-white">
                 <ArrowRight size={11} strokeWidth={2.5} />
               </div>
             </button>
@@ -191,45 +198,45 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="landing-main-container">
+      {/* Main Content Surface */}
+      <main className="apple-main-container">
         {/* =====================================================================
-            2. HERO DISPLAY SECTION (High Macro-Whitespace & Microscopic Eyebrows)
+            2. HERO DISPLAY SECTION (Optical Sizing, Tight Leading & Negative Tracking)
            ===================================================================== */}
-        <section className="hero-section">
-          {/* Microscopic Eyebrow Badge */}
-          <div className="eyebrow-badge">
-            <span className="eyebrow-dot" />
-            <span className="eyebrow-text">FounderOS Engine v1.0 • Sovereign Executive Edition</span>
+        <section className="apple-hero-section">
+          {/* Eyebrow Pill Tag (+0.08em optical tracking) */}
+          <div className="apple-eyebrow-pill">
+            <span className="apple-eyebrow-pip" />
+            <span className="apple-eyebrow-text">FOUNDEROS V1.0 • SOVEREIGN EXECUTIVE RUNTIME</span>
           </div>
 
-          {/* Enormous Headline with Tight Letter-Spacing */}
-          <h1 className="hero-headline">
+          {/* Enormous Display Headline (-0.035em tight display tracking) */}
+          <h1 className="apple-hero-display">
             Built for founders who run everything.
           </h1>
 
-          {/* Subheadline: Clear, direct, zero AI buzzwords */}
-          <p className="hero-subheadline">
+          {/* Subheadline: Clear, direct, zero buzzwords (-0.01em tracking, 1.5 leading) */}
+          <p className="apple-hero-lead">
             The unified local-first operating system replacing 12 fragmented SaaS subscriptions.
-            Executive telemetry, automated treasury vaults, AI scenario stress-testing, and
-            high-conviction deal flow directly on your machine.
+            Executive cash telemetry, automated treasury vaults, AI scenario stress-testing, and
+            high-conviction deal pipelines executed directly on your machine.
           </p>
 
-          {/* Dual Pill CTA Buttons (Nested Button-in-Button with 160ms Press Feedback) */}
-          <div className="hero-cta-row">
+          {/* Dual Action Triggers (100ms Press Response) */}
+          <div className="apple-hero-cta-cluster">
             <button
               onClick={() => triggerDownload('setup')}
               disabled={downloadState === 'downloading'}
-              className="hero-btn-primary"
+              className="apple-hero-cta-primary"
             >
               <span>
                 {downloadState === 'downloading'
                   ? 'Initiating Setup Download...'
                   : 'Download Windows Setup (.exe)'}
               </span>
-              <div className="btn-icon-pod pod-royal">
+              <div className="apple-icon-circle circle-royal">
                 {downloadState === 'downloading' ? (
-                  <RefreshCw size={13} className="spin-icon" />
+                  <RefreshCw size={13} className="apple-spin-icon" />
                 ) : (
                   <Download size={13} strokeWidth={2.5} />
                 )}
@@ -238,147 +245,155 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={onLaunchApp}
-              className="hero-btn-secondary"
+              className="apple-hero-cta-secondary"
             >
               <span>Launch Web Command Center</span>
-              <div className="btn-icon-pod pod-cyan">
+              <div className="apple-icon-circle circle-cyan">
                 <ArrowRight size={13} strokeWidth={2.5} />
               </div>
             </button>
           </div>
 
-          {/* Staggered Hardware & Trust Proof Chips */}
-          <div className="hero-trust-chips">
+          {/* Hardware Proof Badges */}
+          <div className="apple-proof-strip">
             {[
-              { label: '100% Local-First IndexedDB', color: '#10b981' },
-              { label: 'Zero Cloud Surveillance', color: '#38bdf8' },
-              { label: 'Sub-10ms Offline Flight Mode', color: '#a855f7' },
-              { label: '$0 Forever for Core', color: '#f59e0b' },
+              { label: '100% Local-First IndexedDB', color: '#34c759' },
+              { label: 'Zero Corporate Surveillance', color: '#0071e3' },
+              { label: 'Sub-10ms Offline Flight Mode', color: '#af52de' },
+              { label: '$0 Forever for Core', color: '#ff9f0a' },
             ].map((chip, idx) => (
-              <div key={idx} className="trust-chip-item stagger-chip">
-                <span className="trust-chip-dot" style={{ backgroundColor: chip.color }} />
+              <div key={idx} className="apple-proof-tag">
+                <span className="apple-proof-dot" style={{ backgroundColor: chip.color }} />
                 <span>{chip.label}</span>
               </div>
             ))}
           </div>
 
-          {/* Download Completion Toast */}
+          {/* Download Completion Banner */}
           {downloadState === 'completed' && (
-            <div className="download-complete-toast animate-fade-in">
-              <CheckCircle2 size={18} color="#10b981" />
+            <div className="apple-download-alert">
+              <CheckCircle2 size={16} color="#34c759" />
               <span>
-                <strong>FounderOS-Setup.exe</strong> downloaded! Run installer on Windows to begin.
+                <strong>FounderOS-Setup.exe</strong> downloaded! Run the installer on Windows to start.
               </span>
             </div>
           )}
         </section>
 
         {/* =====================================================================
-            3. HERO ANCHOR: INTERACTIVE EXECUTIVE COCKPIT SIMULATOR
-            Smooth tab transition with hardware acceleration and live slider
+            3. HERO ANCHOR: THE EXECUTIVE CONSOLE WORKBENCH
+            Apple double-bezel chassis, segmented tab controls, and direct slider
            ===================================================================== */}
-        <section id="simulator" className="simulator-section">
-          {/* Outer Hardware Chassis (Double-Bezel) */}
-          <div className="chassis-outer">
-            <div className="chassis-inner">
-              {/* Window Header Bar */}
-              <div className="window-header">
-                <div className="window-controls">
-                  <span className="window-dot dot-close" />
-                  <span className="window-dot dot-minimize" />
-                  <span className="window-dot dot-expand" />
-                  <span className="window-title-tag">founderos.internal // sovereign-session</span>
+        <section id="console" className="apple-console-section">
+          {/* Double-Bezel Outer Enclosure with Specular Top Edge */}
+          <div className="apple-chassis-outer">
+            <div className="apple-chassis-inner">
+              {/* Window Chrome Header Bar */}
+              <div className="apple-window-bar">
+                <div className="apple-traffic-lights">
+                  <span className="apple-light light-red" />
+                  <span className="apple-light light-yellow" />
+                  <span className="apple-light light-green" />
+                  <span className="apple-window-id">founderos.local // sovereign-runtime</span>
                 </div>
 
-                {/* Interactive Simulator Tab Switcher */}
-                <div className="simulator-tabs">
+                {/* Apple Segmented Control for Console Tabs */}
+                <div className="apple-segmented-control" role="tablist">
                   <button
                     onClick={() => setActiveTab('telemetry')}
-                    className={`tab-btn ${activeTab === 'telemetry' ? 'tab-btn-active' : ''}`}
+                    className={`apple-segment ${activeTab === 'telemetry' ? 'segment-active' : ''}`}
+                    role="tab"
+                    aria-selected={activeTab === 'telemetry'}
                   >
                     <TrendingUp size={13} />
                     <span>Executive Pulse</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('briefing')}
-                    className={`tab-btn ${activeTab === 'briefing' ? 'tab-btn-active' : ''}`}
+                    className={`apple-segment ${activeTab === 'briefing' ? 'segment-active' : ''}`}
+                    role="tab"
+                    aria-selected={activeTab === 'briefing'}
                   >
                     <Zap size={13} />
                     <span>Morning Intel</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('treasury')}
-                    className={`tab-btn ${activeTab === 'treasury' ? 'tab-btn-active' : ''}`}
+                    className={`apple-segment ${activeTab === 'treasury' ? 'segment-active' : ''}`}
+                    role="tab"
+                    aria-selected={activeTab === 'treasury'}
                   >
                     <Landmark size={13} />
                     <span>Treasury Vaults</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('boardroom')}
-                    className={`tab-btn ${activeTab === 'boardroom' ? 'tab-btn-active' : ''}`}
+                    className={`apple-segment ${activeTab === 'boardroom' ? 'segment-active' : ''}`}
+                    role="tab"
+                    aria-selected={activeTab === 'boardroom'}
                   >
                     <Bot size={13} />
                     <span>AI Boardroom</span>
                   </button>
                 </div>
 
-                <div className="window-status">
-                  <span className="status-live-indicator" />
-                  <span className="status-live-label">LIVE LOCAL ENGINE</span>
+                <div className="apple-runtime-status">
+                  <span className="apple-status-beacon" />
+                  <span className="apple-status-text">LOCAL ENGINE VERIFIED</span>
                 </div>
               </div>
 
-              {/* Simulator Main Stage */}
-              <div className="simulator-stage">
+              {/* Console Main Stage */}
+              <div className="apple-console-stage">
                 {/* TAB 1: EXECUTIVE TELEMETRY */}
                 {activeTab === 'telemetry' && (
-                  <div className="sim-panel animate-tab-enter">
-                    <div className="sim-metrics-grid">
-                      <div className="sim-stat-card stagger-stat">
-                        <div className="sim-stat-header">
-                          <span className="sim-stat-label">TOTAL LIQUIDITY</span>
-                          <span className="sim-stat-pill pill-emerald">+12.4% MoM</span>
+                  <div className="apple-console-panel apple-enter-active">
+                    <div className="apple-metrics-grid">
+                      <div className="apple-metric-card">
+                        <div className="apple-metric-header">
+                          <span className="apple-metric-label">TOTAL LIQUIDITY</span>
+                          <span className="apple-badge badge-green">+12.4% MoM</span>
                         </div>
-                        <div className="sim-stat-val">${totalCashReserves.toLocaleString()}</div>
-                        <div className="sim-stat-sub">Aggregated across 3 connected bank vaults</div>
+                        <div className="apple-metric-number">${totalCashReserves.toLocaleString()}</div>
+                        <div className="apple-metric-subtext">Reconciled across 3 connected bank vaults</div>
                       </div>
 
-                      <div className="sim-stat-card stagger-stat">
-                        <div className="sim-stat-header">
-                          <span className="sim-stat-label">CURRENT MONTHLY BURN</span>
-                          <span className="sim-stat-pill pill-amber">Controllable</span>
+                      <div className="apple-metric-card">
+                        <div className="apple-metric-header">
+                          <span className="apple-metric-label">CURRENT MONTHLY BURN</span>
+                          <span className="apple-badge badge-amber">Controllable</span>
                         </div>
-                        <div className="sim-stat-val">${monthlyBurnRate.toLocaleString()}/mo</div>
-                        <div className="sim-stat-sub">Net burn multiple: 0.94x (Top quartile)</div>
+                        <div className="apple-metric-number">${monthlyBurnRate.toLocaleString()}/mo</div>
+                        <div className="apple-metric-subtext">Net burn multiple: 0.94x (Top decile)</div>
                       </div>
 
-                      <div className="sim-stat-card highlight-card stagger-stat">
-                        <div className="sim-stat-header">
-                          <span className="sim-stat-label">CALCULATED RUNWAY</span>
-                          <span className="sim-stat-pill pill-blue">Realtime Live</span>
+                      <div className="apple-metric-card metric-spotlight">
+                        <div className="apple-metric-header">
+                          <span className="apple-metric-label">CALCULATED RUNWAY</span>
+                          <span className="apple-badge badge-blue">Live Telemetry</span>
                         </div>
-                        <div className="sim-stat-val text-cyan">{calculatedRunway} Months</div>
-                        <div className="sim-stat-sub">Zero debt obligations • Default alive</div>
+                        <div className="apple-metric-number text-accent-blue">{calculatedRunway} Months</div>
+                        <div className="apple-metric-subtext">Zero debt obligations • Default alive</div>
                       </div>
 
-                      <div className="sim-stat-card stagger-stat">
-                        <div className="sim-stat-header">
-                          <span className="sim-stat-label">ANNUAL RUN-RATE (ARR)</span>
-                          <span className="sim-stat-pill pill-emerald">148% NRR</span>
+                      <div className="apple-metric-card">
+                        <div className="apple-metric-header">
+                          <span className="apple-metric-label">ANNUAL RUN-RATE (ARR)</span>
+                          <span className="apple-badge badge-green">148% NRR</span>
                         </div>
-                        <div className="sim-stat-val">$1,710,000</div>
-                        <div className="sim-stat-sub">Gross margin: 88.4% • CAC payback 4.2 mo</div>
+                        <div className="apple-metric-number">$1,710,000</div>
+                        <div className="apple-metric-subtext">Gross margin: 88.4% • Payback: 4.2 mo</div>
                       </div>
                     </div>
 
-                    {/* Interactive Stress-Test Slider */}
-                    <div className="interactive-burn-bar">
-                      <div className="burn-slider-info">
-                        <div className="burn-slider-title">
-                          <Sliders size={14} color="#38bdf8" />
-                          <span>Interactive Runway Stress-Test: Adjust Monthly Burn Rate</span>
+                    {/* Direct Manipulation Range Slider */}
+                    <div className="apple-slider-console">
+                      <div className="apple-slider-header">
+                        <div className="slider-header-caption">
+                          <Sliders size={14} color="#0071e3" />
+                          <span>Interactive Runway Stress-Test: Drag to Adjust Monthly Burn Rate</span>
                         </div>
-                        <span className="burn-current-tag">${monthlyBurnRate.toLocaleString()} / mo</span>
+                        <span className="apple-slider-pill">${monthlyBurnRate.toLocaleString()} / mo</span>
                       </div>
                       <input
                         type="range"
@@ -387,12 +402,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                         step="1000"
                         value={monthlyBurnRate}
                         onChange={(e) => setMonthlyBurnRate(Number(e.target.value))}
-                        className="burn-range-slider"
+                        className="apple-range-input"
+                        aria-label="Adjust Monthly Burn Rate"
                       />
-                      <div className="burn-slider-labels">
-                        <span>$15k/mo (Lean Bootstrapped: {(totalCashReserves / 15000).toFixed(1)} mo)</span>
-                        <span>$50k/mo (Growth: {(totalCashReserves / 50000).toFixed(1)} mo)</span>
-                        <span>$90k/mo (Aggressive Expansion: {(totalCashReserves / 90000).toFixed(1)} mo)</span>
+                      <div className="apple-slider-markers">
+                        <span>$15,000 (Lean: {(totalCashReserves / 15000).toFixed(1)} mo)</span>
+                        <span>$50,000 (Growth: {(totalCashReserves / 50000).toFixed(1)} mo)</span>
+                        <span>$90,000 (Expansion: {(totalCashReserves / 90000).toFixed(1)} mo)</span>
                       </div>
                     </div>
                   </div>
@@ -400,59 +416,59 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 {/* TAB 2: MORNING INTELLIGENCE */}
                 {activeTab === 'briefing' && (
-                  <div className="sim-panel animate-tab-enter">
-                    <div className="briefing-memo-card">
-                      <div className="briefing-memo-header">
-                        <div className="briefing-memo-badge">
-                          <Sparkles size={12} />
+                  <div className="apple-console-panel apple-enter-active">
+                    <div className="apple-memo-card">
+                      <div className="apple-memo-top">
+                        <div className="apple-memo-stamp">
+                          <Sparkles size={13} />
                           <span>DAILY EXECUTIVE BRIEFING • 07:00 AM UTC</span>
                         </div>
-                        <div className="briefing-date">Generated locally on your device in 12ms</div>
+                        <span className="apple-memo-timestamp">Synthesized locally on your device in 12ms</span>
                       </div>
 
-                      <h3 className="briefing-title">
+                      <h3 className="apple-memo-heading">
                         Founder Daily Priority Memo: 3 Critical Actions for Today
                       </h3>
 
-                      <div className="briefing-items-stack">
-                        <div className="briefing-item stagger-item">
-                          <div className="item-num">01</div>
-                          <div className="item-content">
-                            <div className="item-header">
-                              <span className="item-tag tag-amber">CASH ACCELERATION</span>
-                              <span className="item-time">Impact: +$45,000</span>
+                      <div className="apple-memo-items">
+                        <div className="apple-memo-entry">
+                          <span className="memo-entry-index">01</span>
+                          <div className="memo-entry-details">
+                            <div className="memo-entry-meta">
+                              <span className="apple-pill-tag tag-amber">CASH ACCELERATION</span>
+                              <span className="memo-metric-impact">Impact: +$45,000</span>
                             </div>
-                            <p className="item-desc">
+                            <p className="memo-entry-text">
                               <strong>Stripe Enterprise Renewal Due:</strong> Vertex Technologies contract
-                              renewing in 48 hours. Early payment discount agreement ready for 1-click execution.
+                              renewing in 48 hours. Early prepayment discount terms ready for 1-click execution.
                             </p>
                           </div>
                         </div>
 
-                        <div className="briefing-item stagger-item">
-                          <div className="item-num">02</div>
-                          <div className="item-content">
-                            <div className="item-header">
-                              <span className="item-tag tag-blue">DEAL VELOCITY</span>
-                              <span className="item-time">Pipeline: Stage 4</span>
+                        <div className="apple-memo-entry">
+                          <span className="memo-entry-index">02</span>
+                          <div className="memo-entry-details">
+                            <div className="memo-entry-meta">
+                              <span className="apple-pill-tag tag-blue">DEAL VELOCITY</span>
+                              <span className="memo-metric-impact">Pipeline: Stage 4</span>
                             </div>
-                            <p className="item-desc">
-                              <strong>Apex Logistics Deal In Flight:</strong> CTO approved technical review.
-                              Schedule 15-minute Founder closing call before contract draft expires.
+                            <p className="memo-entry-text">
+                              <strong>Apex Logistics Deal in Motion:</strong> Technical evaluation signed off.
+                              Founder closing dialogue scheduled before quotation window closes.
                             </p>
                           </div>
                         </div>
 
-                        <div className="briefing-item stagger-item">
-                          <div className="item-num">03</div>
-                          <div className="item-content">
-                            <div className="item-header">
-                              <span className="item-tag tag-emerald">ANOMALY DETECTED</span>
-                              <span className="item-time">Savings: $1,420/mo</span>
+                        <div className="apple-memo-entry">
+                          <span className="memo-entry-index">03</span>
+                          <div className="memo-entry-details">
+                            <div className="memo-entry-meta">
+                              <span className="apple-pill-tag tag-green">INFRASTRUCTURE AUDIT</span>
+                              <span className="memo-metric-impact">Savings: $1,420/mo</span>
                             </div>
-                            <p className="item-desc">
-                              <strong>Unused Cloud Compute Flagged:</strong> 4 idle staging GPU clusters identified
-                              in infrastructure audit. Automated shutdown task staged for approval.
+                            <p className="memo-entry-text">
+                              <strong>Unused Cloud GPU Instances Flagged:</strong> 4 idle staging clusters discovered
+                              in infrastructure scan. Automated shutdown sequence staged for 1-click approval.
                             </p>
                           </div>
                         </div>
@@ -463,94 +479,94 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                 {/* TAB 3: TREASURY VAULTS */}
                 {activeTab === 'treasury' && (
-                  <div className="sim-panel animate-tab-enter">
-                    <div className="treasury-grid">
-                      <div className="vault-card stagger-stat">
-                        <div className="vault-header">
-                          <div className="vault-icon-circle icon-emerald">
+                  <div className="apple-console-panel apple-enter-active">
+                    <div className="apple-vaults-grid">
+                      <div className="apple-vault-tile">
+                        <div className="vault-tile-header">
+                          <div className="vault-icon-frame icon-green">
                             <Landmark size={18} />
                           </div>
-                          <span className="vault-badge">PRIMARY OPERATING</span>
+                          <span className="vault-status-badge">PRIMARY OPERATING</span>
                         </div>
-                        <div className="vault-title">Silicon Valley Bank Checking</div>
-                        <div className="vault-balance">$428,500.00</div>
-                        <div className="vault-meta">6.2 months operating buffer reserved</div>
+                        <div className="vault-tile-title">Silicon Valley Bank Checking</div>
+                        <div className="vault-tile-balance">$428,500.00</div>
+                        <div className="vault-tile-note">6.2 months operating buffer reserved</div>
                       </div>
 
-                      <div className="vault-card stagger-stat">
-                        <div className="vault-header">
-                          <div className="vault-icon-circle icon-blue">
+                      <div className="apple-vault-tile">
+                        <div className="vault-tile-header">
+                          <div className="vault-icon-frame icon-blue">
                             <ShieldCheck size={18} />
                           </div>
-                          <span className="vault-badge">5.2% APY TREASURY</span>
+                          <span className="vault-status-badge">5.2% APY TREASURY</span>
                         </div>
-                        <div className="vault-title">Brex High-Yield Reserve Vault</div>
-                        <div className="vault-balance">$682,000.00</div>
-                        <div className="vault-meta">Yielding ~$2,955/mo in passive cash</div>
+                        <div className="vault-tile-title">Brex High-Yield Liquidity Vault</div>
+                        <div className="vault-tile-balance">$682,000.00</div>
+                        <div className="vault-tile-note">Yielding ~$2,955/mo in passive cash</div>
                       </div>
 
-                      <div className="vault-card stagger-stat">
-                        <div className="vault-header">
-                          <div className="vault-icon-circle icon-purple">
+                      <div className="apple-vault-tile">
+                        <div className="vault-tile-header">
+                          <div className="vault-icon-frame icon-purple">
                             <Layers size={18} />
                           </div>
-                          <span className="vault-badge">TAX ESCROW</span>
+                          <span className="vault-status-badge">TAX ESCROW</span>
                         </div>
-                        <div className="vault-title">Quarterly Tax & Payroll Reserve</div>
-                        <div className="vault-balance">$137,500.00</div>
-                        <div className="vault-meta">Automated 25% net revenue set-aside</div>
+                        <div className="vault-tile-title">Quarterly Tax & Payroll Reserve</div>
+                        <div className="vault-tile-balance">$137,500.00</div>
+                        <div className="vault-tile-note">Automated 25% net revenue set-aside</div>
                       </div>
                     </div>
 
-                    <div className="treasury-footer-pill">
-                      <CheckCircle2 size={14} color="#10b981" />
-                      <span>Zero bank credentials stored in the cloud. Balances managed through local encrypted ledger.</span>
+                    <div className="apple-vault-footnote">
+                      <CheckCircle2 size={14} color="#34c759" />
+                      <span>Zero bank credentials stored in the cloud. Balances managed strictly via local encrypted ledger.</span>
                     </div>
                   </div>
                 )}
 
                 {/* TAB 4: AI BOARDROOM */}
                 {activeTab === 'boardroom' && (
-                  <div className="sim-panel animate-tab-enter">
-                    <div className="boardroom-transcript-card">
-                      <div className="boardroom-meta-header">
-                        <div className="boardroom-topic">
-                          <Terminal size={14} color="#38bdf8" />
-                          <span>TOPIC: Q3 Engineering Hiring vs. 24-Month Runway Extension</span>
+                  <div className="apple-console-panel apple-enter-active">
+                    <div className="apple-boardroom-card">
+                      <div className="boardroom-header-row">
+                        <div className="boardroom-docket-tag">
+                          <Terminal size={14} color="#0071e3" />
+                          <span>DELIBERATION: Q3 Engineering Capacity vs. 24-Month Runway Extension</span>
                         </div>
-                        <span className="boardroom-status-badge">CONSENSUS REACHED</span>
+                        <span className="boardroom-verdict-pill">CONSENSUS REACHED</span>
                       </div>
 
-                      <div className="boardroom-chat-log">
-                        <div className="chat-entry stagger-item">
-                          <div className="chat-avatar avatar-cfo">CFO</div>
-                          <div className="chat-body">
-                            <div className="chat-speaker">AI Chief Financial Officer</div>
-                            <p className="chat-text">
-                              "Adding 2 senior engineers increases burn by $32k/mo, pulling runway from 32.6 to 21.4 months.
-                              I recommend hiring 1 contractor first and waiting until ARR hits $2.0M before committing full-time payroll."
+                      <div className="boardroom-dialogue-stack">
+                        <div className="boardroom-bubble">
+                          <div className="boardroom-agent-badge avatar-cfo">CFO</div>
+                          <div className="boardroom-bubble-body">
+                            <div className="boardroom-agent-role">AI Chief Financial Officer</div>
+                            <p className="boardroom-bubble-text">
+                              "Adding two full-time engineers increases burn by $32k/mo, compressing runway from 32.6
+                              to 21.4 months. I recommend engaging one specialized contractor until ARR clears $2.0M."
                             </p>
                           </div>
                         </div>
 
-                        <div className="chat-entry stagger-item">
-                          <div className="chat-avatar avatar-growth">VPG</div>
-                          <div className="chat-body">
-                            <div className="chat-speaker">AI VP of Growth</div>
-                            <p className="chat-text">
-                              "Enterprise deals in pipeline #4 require SOC2 Type II automation. If we delay engineering by 3 months,
-                              we risk slipping $380,000 in late Q3 closes."
+                        <div className="boardroom-bubble">
+                          <div className="boardroom-agent-badge avatar-growth">VPG</div>
+                          <div className="boardroom-bubble-body">
+                            <div className="boardroom-agent-role">AI VP of Growth</div>
+                            <p className="boardroom-bubble-text">
+                              "Stage 4 enterprise deals require SOC2 Type II automation. If engineering slips by 3 months,
+                              we risk postponing $380,000 in scheduled enterprise commitments."
                             </p>
                           </div>
                         </div>
 
-                        <div className="chat-entry consensus-entry stagger-item">
-                          <div className="chat-avatar avatar-system">SYN</div>
-                          <div className="chat-body">
-                            <div className="chat-speaker">FounderOS Strategy Synthesis</div>
-                            <p className="chat-text">
-                              <strong>Recommended Decision:</strong> Proceed with 1 dedicated security engineering lead immediately.
-                              Fund role exclusively from Brex treasury yield ($2,955/mo offset), preserving runway at 28.5 months.
+                        <div className="boardroom-bubble bubble-consensus">
+                          <div className="boardroom-agent-badge avatar-synthesis">SYN</div>
+                          <div className="boardroom-bubble-body">
+                            <div className="boardroom-agent-role">FounderOS Synthesis Council</div>
+                            <p className="boardroom-bubble-text">
+                              <strong>Recommended Action:</strong> Engage one dedicated security lead immediately.
+                              Fund role exclusively from Brex treasury yield ($2,955/mo offset), preserving cash runway at 28.5 months.
                             </p>
                           </div>
                         </div>
@@ -560,16 +576,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 )}
               </div>
 
-              {/* Simulator Action Footer */}
-              <div className="simulator-footer-bar">
-                <div className="footer-left-info">
-                  <Cpu size={14} color="#38bdf8" />
-                  <span>Interactive Demonstration • Experience live data manipulation in the actual software</span>
+              {/* Console Action Footer Bar */}
+              <div className="apple-console-footer">
+                <div className="console-footer-info">
+                  <Cpu size={14} color="#0071e3" />
+                  <span>Interactive Demonstration • Test live state changes in the actual desktop environment</span>
                 </div>
 
-                <button onClick={onLaunchApp} className="simulator-launch-btn">
+                <button onClick={onLaunchApp} className="apple-console-enter-btn">
                   <span>Enter Full Workspace</span>
-                  <ArrowRight size={13} strokeWidth={2.5} />
+                  <ArrowRight size={12} strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -577,50 +593,46 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* =====================================================================
-            4. THE DILEMMA & THE CURE: ASYMMETRICAL BENTO COMPARISON
+            4. THE DILEMMA & THE CURE (Asymmetrical Comparison Bento)
            ===================================================================== */}
-        <section id="dilemma" className="dilemma-section">
-          <div className="dilemma-shell">
-            <div className="dilemma-inner">
-              {/* Header Badge */}
-              <div className="dilemma-header-pill">
+        <section id="dilemma" className="apple-section">
+          <div className="apple-section-shell">
+            <div className="apple-section-inner">
+              <div className="apple-eyebrow-pill pill-danger">
                 <AlertTriangle size={13} />
-                <span>THE ARCHITECTURAL DILEMMA & THE CURE</span>
+                <span>ARCHITECTURAL DILEMMA & THE CURE</span>
               </div>
 
-              {/* Section Headline */}
-              <h2 className="dilemma-title">
+              <h2 className="apple-section-heading">
                 No more chaos. Zero subscription sprawl.
               </h2>
 
-              <p className="dilemma-desc">
-                Founders lose an average of 9.4 hours every week copy-pasting numbers between 12
-                disconnected SaaS silos, paying thousands in recurring seat taxes, and leaking
-                unencrypted financial telemetry to third-party ad networks. FounderOS replaces
-                this fragmented stack with one sovereign local-first runtime.
+              <p className="apple-section-lead">
+                Founders lose an average of 9.4 hours every week copy-pasting numbers across 12 disconnected
+                cloud tools, paying thousands in recurring seat fees, and leaking unencrypted financial telemetry
+                to third-party ad networks. FounderOS cures this fragmentation with a single sovereign local runtime.
               </p>
 
-              {/* Asymmetric Side-by-Side Comparison */}
-              <div className="comparison-bento-grid">
-                {/* Side 1: The SaaS Tax */}
-                <div className="comparison-card card-dilemma-legacy">
-                  <div className="card-top-marker">
-                    <span className="marker-badge badge-legacy">THE 12-TAB CLOUD MESS</span>
-                    <span className="marker-cost">-$4,200/mo Cloud Tax</span>
+              <div className="apple-comparison-grid">
+                {/* Legacy SaaS Tax */}
+                <div className="comparison-pane pane-legacy">
+                  <div className="comparison-pane-head">
+                    <span className="comparison-badge badge-legacy">THE 12-TAB CLOUD TAX</span>
+                    <span className="comparison-cost">-$4,200/mo Recurring Tax</span>
                   </div>
 
-                  <h3 className="card-comp-heading">Fragmented, Slow & Leaky</h3>
+                  <h3 className="comparison-pane-title">Fragmented, Slow & Leaky</h3>
 
-                  <div className="comp-checklist">
+                  <div className="comparison-items-list">
                     {[
                       'Stripe + QuickBooks + ChartMogul for simple revenue calculations',
-                      'HubSpot + Notion + Spreadsheets with broken, stale deal sync',
-                      'Confidential runway & cap table data stored on third-party servers',
-                      'Zero offline functionality; completely unusable on flights or flaky Wi-Fi',
-                      'Endless password resets, SSO auth errors, and session timeouts',
+                      'HubSpot + Notion + Spreadsheets with broken, stale deal synchronization',
+                      'Confidential runway & cap table data stored on third-party cloud servers',
+                      'Zero offline functionality; completely unusable on flights or spotty Wi-Fi',
+                      'Endless password resets, SSO auth timeouts, and session expired errors',
                     ].map((item, i) => (
-                      <div key={i} className="checklist-row row-danger">
-                        <div className="check-icon-circle circle-danger">
+                      <div key={i} className="comparison-row row-danger">
+                        <div className="apple-status-circle circle-danger">
                           <X size={11} strokeWidth={3} />
                         </div>
                         <span>{item}</span>
@@ -628,21 +640,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     ))}
                   </div>
 
-                  <div className="legacy-footer-pill">
+                  <div className="comparison-footer-caption">
                     Outcome: Cognitive fatigue, fragmented team context, and compounding subscription creep.
                   </div>
                 </div>
 
-                {/* Side 2: The Sovereign FounderOS */}
-                <div className="comparison-card card-dilemma-founderos">
-                  <div className="card-top-marker">
-                    <span className="marker-badge badge-founderos">THE FOUNDEROS RUNTIME</span>
-                    <span className="marker-cost text-emerald">$0/mo Core • Zero Leaks</span>
+                {/* FounderOS Sovereign Runtime */}
+                <div className="comparison-pane pane-founderos">
+                  <div className="comparison-pane-head">
+                    <span className="comparison-badge badge-founderos">THE FOUNDEROS RUNTIME</span>
+                    <span className="comparison-cost text-green">$0/mo Core • Sovereign</span>
                   </div>
 
-                  <h3 className="card-comp-heading">Unified, Instantaneous & Sovereign</h3>
+                  <h3 className="comparison-pane-title">Unified, Instantaneous & Sovereign</h3>
 
-                  <div className="comp-checklist">
+                  <div className="comparison-items-list">
                     {[
                       'Single unified executive cockpit: MRR, ARR, Burn Multiple, and Runway',
                       'Autonomous morning intelligence memo synthesized before your day starts',
@@ -650,8 +662,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       'Operates 100% offline at 35,000 feet with instant sub-10ms queries',
                       'Zero login barriers, zero corporate trackers, immediate keyboard shortcuts',
                     ].map((item, i) => (
-                      <div key={i} className="checklist-row row-success">
-                        <div className="check-icon-circle circle-success">
+                      <div key={i} className="comparison-row row-success">
+                        <div className="apple-status-circle circle-success">
                           <Check size={11} strokeWidth={3} />
                         </div>
                         <span>{item}</span>
@@ -659,14 +671,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     ))}
                   </div>
 
-                  <div className="founderos-action-bar">
-                    <button onClick={onLaunchApp} className="founderos-cta-btn">
+                  <div className="comparison-action-bar">
+                    <button onClick={onLaunchApp} className="apple-btn-primary">
                       <span>Experience FounderOS</span>
-                      <div className="btn-icon-pod pod-white">
+                      <div className="apple-icon-circle circle-white">
                         <ArrowRight size={11} strokeWidth={2.5} />
                       </div>
                     </button>
-                    <span className="action-subtext">Free forever for personal & core use</span>
+                    <span className="comparison-guarantee-text">Free forever for personal & core use</span>
                   </div>
                 </div>
               </div>
@@ -675,60 +687,59 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* =====================================================================
-            5. THE SIX SOVEREIGN PILLARS (Asymmetrical Bento Grid)
+            5. THE SIX SOVEREIGN PILLARS (Bento Grid with Concentric Hardware Curves)
            ===================================================================== */}
-        <section id="pillars" className="pillars-section">
-          <div className="pillars-heading-block">
-            <div className="eyebrow-badge">
-              <Layers size={13} color="#0050FF" />
-              <span>THE SOVEREIGN CAPABILITIES MATRIX</span>
+        <section id="capabilities" className="apple-section">
+          <div className="apple-section-header-block">
+            <div className="apple-eyebrow-pill">
+              <Layers size={13} color="#0071e3" />
+              <span>CAPABILITIES MATRIX</span>
             </div>
 
-            <h2 className="pillars-title">
+            <h2 className="apple-section-heading">
               Everything an executive needs. Nothing you don't.
             </h2>
 
-            <p className="pillars-subtitle">
-              Engineered with double-bezel tactile hardware surfaces and powered by
+            <p className="apple-section-lead">
+              Engineered with translucent hardware materials and powered by
               bulletproof local-first database logic.
             </p>
           </div>
 
-          {/* Asymmetrical Bento Grid */}
-          <div className="pillars-bento-grid">
-            {/* Card 1 (Wide Bento): Executive Telemetry */}
-            <div className="bento-card bento-wide">
+          <div className="apple-bento-grid">
+            {/* Pillar 1 (Wide): Executive Telemetry */}
+            <div className="apple-bento-card bento-wide">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-cyan">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-cyan">
                       <TrendingUp size={22} />
                     </div>
-                    <span className="bento-pill-tag">CORE TELEMETRY</span>
+                    <span className="bento-mono-tag">CORE TELEMETRY</span>
                   </div>
 
-                  <h3 className="bento-card-title">Executive Pulse & Cash Engine</h3>
-                  <p className="bento-card-desc">
-                    Live financial telemetry tracking MRR, ARR, Net Burn Multiple, Gross Margins, and Customer Retention
+                  <h3 className="bento-heading">Executive Pulse & Cash Engine</h3>
+                  <p className="bento-description">
+                    Real-time financial telemetry tracking MRR, ARR, Net Burn Multiple, Gross Margins, and Customer Retention
                     reconciled directly from real local transactions and bank vaults.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Instant Net Burn & Runway countdown with dynamic sensitivity stress-testing</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Cohort Net Revenue Retention (NRR) and multi-tier customer health scoring</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Live reconciliation with real bank accounts stored in local IndexedDB</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Explore Executive Telemetry</span>
                     <ArrowRight size={13} />
                   </button>
@@ -736,35 +747,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Card 2: Morning Intelligence */}
-            <div className="bento-card">
+            {/* Pillar 2: Morning Intelligence */}
+            <div className="apple-bento-card">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-amber">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-amber">
                       <Zap size={22} />
                     </div>
-                    <span className="bento-pill-tag">DAILY SYNTHESIS</span>
+                    <span className="bento-mono-tag">DAILY SYNTHESIS</span>
                   </div>
 
-                  <h3 className="bento-card-title">Morning Intelligence</h3>
-                  <p className="bento-card-desc">
+                  <h3 className="bento-heading">Morning Intelligence</h3>
+                  <p className="bento-description">
                     An automated briefing synthesized every morning at 7:00 AM so you know exactly where your capital,
-                    pipeline, and operations stand before touching email.
+                    pipeline, and operations stand before opening email.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#f59e0b" />
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#ff9f0a" />
                       <span>3 high-impact prioritized founder action items</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#f59e0b" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#ff9f0a" />
                       <span>Proactive runway fluctuation anomaly alerts</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Read Sample Memo</span>
                     <ArrowRight size={13} />
                   </button>
@@ -772,35 +783,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Card 3: Autonomous AI CEO */}
-            <div className="bento-card">
+            {/* Pillar 3: Autonomous AI Copilot */}
+            <div className="apple-bento-card">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-purple">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-purple">
                       <Bot size={22} />
                     </div>
-                    <span className="bento-pill-tag">STRATEGY MODELING</span>
+                    <span className="bento-mono-tag">STRATEGY MODELING</span>
                   </div>
 
-                  <h3 className="bento-card-title">Autonomous AI Copilot</h3>
-                  <p className="bento-card-desc">
+                  <h3 className="bento-heading">Autonomous AI Copilot</h3>
+                  <p className="bento-description">
                     Stress-test hiring roadmaps, simulate market downturns, and project cash burn across 24 months
                     with your private local AI advisor using OpenRouter, Ollama, or Gemini.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#a855f7" />
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#af52de" />
                       <span>Multi-agent boardroom deliberation and voting</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#a855f7" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#af52de" />
                       <span>Zero training on your proprietary corporate data</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Simulate Strategy</span>
                     <ArrowRight size={13} />
                   </button>
@@ -808,35 +819,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Card 4: Corporate Treasury */}
-            <div className="bento-card">
+            {/* Pillar 4: Corporate Treasury */}
+            <div className="apple-bento-card">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-emerald">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-green">
                       <Landmark size={22} />
                     </div>
-                    <span className="bento-pill-tag">CAPITAL VAULTS</span>
+                    <span className="bento-mono-tag">CAPITAL VAULTS</span>
                   </div>
 
-                  <h3 className="bento-card-title">Corporate Treasury</h3>
-                  <p className="bento-card-desc">
+                  <h3 className="bento-heading">Corporate Treasury</h3>
+                  <p className="bento-description">
                     Monitor operating checking, tax escrow splits, and high-yield reserve allocations with
                     automated safety buffers and multi-bank aggregation.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Multi-entity liquidity aggregation</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Quarterly automated tax reserve calculator</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Inspect Vaults</span>
                     <ArrowRight size={13} />
                   </button>
@@ -844,35 +855,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Card 5: High-Conviction Deal Flow */}
-            <div className="bento-card">
+            {/* Pillar 5: High-Conviction Deal CRM */}
+            <div className="apple-bento-card">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-blue">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-blue">
                       <Users size={22} />
                     </div>
-                    <span className="bento-pill-tag">FOUNDER-LED SALES</span>
+                    <span className="bento-mono-tag">FOUNDER-LED SALES</span>
                   </div>
 
-                  <h3 className="bento-card-title">Deal Pipeline & CRM</h3>
-                  <p className="bento-card-desc">
-                    A laser-focused relationship engine designed for founder-led sales. Track enterprise negotiations,
-                    milestones, and probability-weighted pipeline without CRM bloat.
+                  <h3 className="bento-heading">Deal Pipeline & CRM</h3>
+                  <p className="bento-description">
+                    A laser-focused relationship engine tailored for founder-led sales. Track enterprise negotiations,
+                    closing milestones, and probability-weighted pipeline without CRM bloat.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#38bdf8" />
-                      <span>Kanban stages customized for founder closing</span>
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#0071e3" />
+                      <span>Kanban stages tailored for founder closing</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#38bdf8" />
-                      <span>Automated weighted revenue projection</span>
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#0071e3" />
+                      <span>Automated weighted revenue projections</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Open Deal Pipeline</span>
                     <ArrowRight size={13} />
                   </button>
@@ -880,39 +891,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Card 6 (Wide Bento): Local-First Engine */}
-            <div className="bento-card bento-wide">
+            {/* Pillar 6 (Wide): Local-First Sovereign DB */}
+            <div className="apple-bento-card bento-wide">
               <div className="bento-shell">
-                <div className="bento-inner">
-                  <div className="bento-card-header">
-                    <div className="bento-icon-frame icon-white">
+                <div className="bento-card-inner">
+                  <div className="bento-card-top">
+                    <div className="bento-icon-box icon-white">
                       <HardDrive size={22} />
                     </div>
-                    <span className="bento-pill-tag">OFFLINE ARCHITECTURE</span>
+                    <span className="bento-mono-tag">OFFLINE ARCHITECTURE</span>
                   </div>
 
-                  <h3 className="bento-card-title">100% Local-First Sovereign Database</h3>
-                  <p className="bento-card-desc">
+                  <h3 className="bento-heading">100% Local-First Sovereign Database</h3>
+                  <p className="bento-description">
                     Your balance sheets, cap table notes, client health scores, and pipeline stay encrypted inside your local
                     device IndexedDB. Operates seamlessly with zero external server dependencies.
                   </p>
 
-                  <div className="bento-bullets-col">
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
-                      <span>Sub-10ms local query execution for instant, zero-lag page navigation</span>
+                  <div className="bento-bullets-stack">
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
+                      <span>Sub-10ms local query execution for instant, zero-lag page transitions</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>Full offline flight mode support; works at 35,000 feet without internet</span>
                     </div>
-                    <div className="bento-bullet-item">
-                      <CheckCircle2 size={14} color="#10b981" />
+                    <div className="bento-bullet-line">
+                      <CheckCircle2 size={14} color="#34c759" />
                       <span>One-click full JSON database export and cryptographic restoration</span>
                     </div>
                   </div>
 
-                  <button onClick={onLaunchApp} className="bento-action-link">
+                  <button onClick={onLaunchApp} className="bento-link-trigger">
                     <span>Inspect Engine Specs</span>
                     <ArrowRight size={13} />
                   </button>
@@ -925,49 +936,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* =====================================================================
             6. DOWNLOAD & WEB DISTRIBUTION HUB (Three Execution Surfaces)
            ===================================================================== */}
-        <section id="downloads" className="downloads-section">
-          <div className="downloads-heading-block">
-            <div className="eyebrow-badge">
-              <Download size={13} color="#38bdf8" />
+        <section id="distribution" className="apple-section">
+          <div className="apple-section-header-block">
+            <div className="apple-eyebrow-pill">
+              <Download size={13} color="#0071e3" />
               <span>NATIVE HARDWARE & CLOUDLESS WEB</span>
             </div>
 
-            <h2 className="downloads-title">
+            <h2 className="apple-section-heading">
               Choose your execution surface.
             </h2>
 
-            <p className="downloads-subtitle">
+            <p className="apple-section-lead">
               Whether you prefer an automated native Windows installer with system tray background daemon,
               a portable zero-install USB binary, or instant zero-setup web execution.
             </p>
           </div>
 
-          <div className="distribution-grid">
+          <div className="apple-distribution-grid">
             {/* Target 1: Windows Setup Installer */}
-            <div className="dist-card card-featured">
-              <div className="dist-shell">
-                <div className="dist-inner">
-                  <div className="dist-tag-row">
-                    <span className="dist-badge badge-primary">RECOMMENDED FOR WINDOWS</span>
+            <div className="apple-dist-card card-featured">
+              <div className="dist-card-shell">
+                <div className="dist-card-inner">
+                  <div className="dist-tag-strip">
+                    <span className="dist-status-badge badge-primary">RECOMMENDED FOR WINDOWS</span>
                   </div>
 
-                  <h3 className="dist-heading">Windows Setup (.exe)</h3>
-                  <p className="dist-desc">
+                  <h3 className="dist-card-title">Windows Setup (.exe)</h3>
+                  <p className="dist-card-lead">
                     Full native executable installer with automatic Start Menu shortcuts, system tray
-                    daemon, and global hotkey <kbd className="mono-kbd">Ctrl+Shift+O</kbd>.
+                    daemon, and global hotkey <kbd className="apple-mono-kbd">Ctrl+Shift+O</kbd>.
                   </p>
 
-                  <div className="dist-specs-stack">
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#10b981" />
+                  <div className="dist-features-col">
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#34c759" />
                       <span>Version: 1.0.0 (Windows 64-bit)</span>
                     </div>
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#10b981" />
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#34c759" />
                       <span>Package Size: ~73.6 MB (Self-contained)</span>
                     </div>
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#10b981" />
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#34c759" />
                       <span>Built-in local auto-updater engine</span>
                     </div>
                   </div>
@@ -975,10 +986,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <button
                     onClick={() => triggerDownload('setup')}
                     disabled={downloadState === 'downloading'}
-                    className="dist-btn btn-white"
+                    className="apple-dist-action action-white"
                   >
                     <span>{downloadState === 'downloading' ? 'Downloading...' : 'Download Windows Setup'}</span>
-                    <div className="btn-icon-pod pod-royal">
+                    <div className="apple-icon-circle circle-royal">
                       <Download size={12} strokeWidth={3} />
                     </div>
                   </button>
@@ -987,40 +998,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Target 2: Instant Web Command Center */}
-            <div className="dist-card">
-              <div className="dist-shell">
-                <div className="dist-inner">
-                  <div className="dist-tag-row">
-                    <span className="dist-badge badge-cyan">ZERO INSTALL • RUNS EVERYWHERE</span>
+            <div className="apple-dist-card">
+              <div className="dist-card-shell">
+                <div className="dist-card-inner">
+                  <div className="dist-tag-strip">
+                    <span className="dist-status-badge badge-cyan">ZERO INSTALL • RUNS EVERYWHERE</span>
                   </div>
 
-                  <h3 className="dist-heading">Connect Web App</h3>
-                  <p className="dist-desc">
+                  <h3 className="dist-card-title">Connect Web App</h3>
+                  <p className="dist-card-lead">
                     Launch the complete FounderOS Command Center immediately in any modern browser.
                     Zero accounts required; data is persisted securely in your local IndexedDB.
                   </p>
 
-                  <div className="dist-specs-stack">
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#38bdf8" />
+                  <div className="dist-features-col">
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#0071e3" />
                       <span>Chrome, Edge, Safari, Firefox compatible</span>
                     </div>
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#38bdf8" />
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#0071e3" />
                       <span>Zero download or installation needed</span>
                     </div>
-                    <div className="spec-row">
-                      <CheckCircle2 size={13} color="#38bdf8" />
+                    <div className="dist-feature-line">
+                      <CheckCircle2 size={13} color="#0071e3" />
                       <span>Full offline Progressive Web App (PWA)</span>
                     </div>
                   </div>
 
                   <button
                     onClick={onLaunchApp}
-                    className="dist-btn btn-royal"
+                    className="apple-dist-action action-royal"
                   >
                     <span>Launch Web Application</span>
-                    <div className="btn-icon-pod pod-white">
+                    <div className="apple-icon-circle circle-white">
                       <ArrowRight size={12} strokeWidth={3} />
                     </div>
                   </button>
@@ -1029,29 +1040,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Target 3: Standalone Portable Binary */}
-            <div className="dist-card">
-              <div className="dist-shell">
-                <div className="dist-inner">
-                  <div className="dist-tag-row">
-                    <span className="dist-badge badge-neutral">STANDALONE PORTABLE</span>
+            <div className="apple-dist-card">
+              <div className="dist-card-shell">
+                <div className="dist-card-inner">
+                  <div className="dist-tag-strip">
+                    <span className="dist-status-badge badge-neutral">STANDALONE PORTABLE</span>
                   </div>
 
-                  <h3 className="dist-heading">Windows Portable (.exe)</h3>
-                  <p className="dist-desc">
+                  <h3 className="dist-card-title">Windows Portable (.exe)</h3>
+                  <p className="dist-card-lead">
                     Single standalone executable that runs without registry keys or admin rights.
                     Ideal for encrypted USB drives and strictly isolated corporate workstations.
                   </p>
 
-                  <div className="dist-specs-stack">
-                    <div className="spec-row">
+                  <div className="dist-features-col">
+                    <div className="dist-feature-line">
                       <CheckCircle2 size={13} color="#94a3b8" />
                       <span>No administrator permissions required</span>
                     </div>
-                    <div className="spec-row">
+                    <div className="dist-feature-line">
                       <CheckCircle2 size={13} color="#94a3b8" />
                       <span>Zero background service residues left on host</span>
                     </div>
-                    <div className="spec-row">
+                    <div className="dist-feature-line">
                       <CheckCircle2 size={13} color="#94a3b8" />
                       <span>Encrypted workspace stored next to .exe</span>
                     </div>
@@ -1060,10 +1071,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <button
                     onClick={() => triggerDownload('portable')}
                     disabled={downloadState === 'downloading'}
-                    className="dist-btn btn-glass"
+                    className="apple-dist-action action-glass"
                   >
                     <span>Download Portable (.exe)</span>
-                    <div className="btn-icon-pod pod-emerald">
+                    <div className="apple-icon-circle circle-green">
                       <Download size={12} strokeWidth={3} />
                     </div>
                   </button>
@@ -1074,38 +1085,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </section>
 
         {/* =====================================================================
-            7. ARCHITECTURAL FAQ ACCORDION (Recipe from animate/RECIPES.md)
+            7. ARCHITECTURAL FAQ ACCORDION
            ===================================================================== */}
-        <section id="faq" className="faq-section">
-          <div className="faq-shell">
-            <div className="faq-inner">
-              <div className="eyebrow-badge">
-                <ShieldCheck size={13} color="#10b981" />
+        <section id="architecture" className="apple-section">
+          <div className="apple-section-shell">
+            <div className="apple-section-inner">
+              <div className="apple-eyebrow-pill">
+                <ShieldCheck size={13} color="#34c759" />
                 <span>ARCHITECTURAL GUARANTEES</span>
               </div>
 
-              <h2 className="faq-title">Questions founders ask before trusting us with their company.</h2>
+              <h2 className="apple-section-heading">Questions founders ask before trusting us with their company.</h2>
 
-              <div className="faq-accordion-container">
+              <div className="apple-faq-stack">
                 {faqData.map((item, idx) => {
                   const isOpen = openFaqIndex === idx;
                   return (
-                    <div key={idx} className="faq-accordion-item" data-open={isOpen}>
+                    <div key={idx} className="apple-faq-row" data-open={isOpen}>
                       <button
                         onClick={() => toggleFaq(idx)}
-                        className="faq-question-btn"
+                        className="apple-faq-trigger"
                         aria-expanded={isOpen}
                       >
-                        <span className="faq-question-text">{item.q}</span>
-                        <div className={`faq-chevron-wrapper ${isOpen ? 'chevron-rotated' : ''}`}>
+                        <span className="apple-faq-question">{item.q}</span>
+                        <div className={`apple-faq-chevron ${isOpen ? 'chevron-rotated' : ''}`}>
                           <ChevronDown size={18} />
                         </div>
                       </button>
 
-                      {/* Smooth Grid-Template-Rows Collapse Recipe */}
-                      <div className="faq-answer-collapse" data-open={isOpen}>
-                        <div className="faq-answer-inner">
-                          <p className="faq-answer-text">{item.a}</p>
+                      <div className="apple-faq-collapse" data-open={isOpen}>
+                        <div className="apple-faq-inner">
+                          <p className="apple-faq-answer">{item.a}</p>
                         </div>
                       </div>
                     </div>
@@ -1118,57 +1128,57 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </main>
 
       {/* =====================================================================
-          8. FOOTER (Minimalist Monospace & Status Indicators)
+          8. FOOTER (Systemic Clarity & Operational Telemetry)
          ===================================================================== */}
-      <footer className="landing-footer">
-        <div className="footer-content">
-          <div className="footer-top-row">
-            <div className="footer-brand-cluster">
-              <div className="brand-logo-frame logo-small">
-                <img src={founderosLogo} alt="FounderOS" className="brand-logo-img" />
+      <footer className="apple-footer">
+        <div className="apple-footer-content">
+          <div className="apple-footer-top">
+            <div className="apple-footer-brand">
+              <div className="apple-brand-frame frame-small">
+                <img src={founderosLogo} alt="FounderOS" className="apple-brand-img" />
               </div>
-              <div className="footer-brand-meta">
-                <span className="footer-brand-title">FounderOS</span>
-                <span className="footer-brand-tagline">The Sovereign Operating System for Modern Founders</span>
+              <div className="apple-footer-meta">
+                <span className="footer-title">FounderOS</span>
+                <span className="footer-tagline">The Sovereign Operating System for Modern Founders</span>
               </div>
             </div>
 
-            <div className="footer-actions">
-              <button onClick={() => triggerDownload('setup')} className="footer-pill-btn">
+            <div className="apple-footer-ctas">
+              <button onClick={() => triggerDownload('setup')} className="apple-footer-btn">
                 <Download size={13} />
                 <span>Windows Setup</span>
               </button>
 
-              <button onClick={onLaunchApp} className="footer-pill-btn btn-royal-subtle">
+              <button onClick={onLaunchApp} className="apple-footer-btn btn-highlight">
                 <span>Launch Web Command Center</span>
                 <ArrowRight size={13} />
               </button>
             </div>
           </div>
 
-          <div className="footer-hairline" />
+          <div className="apple-footer-divider" />
 
-          <div className="footer-bottom-row">
-            <div className="footer-status-pills">
-              <span className="system-status-indicator">
-                <span className="status-dot-emerald" />
+          <div className="apple-footer-bottom">
+            <div className="apple-footer-telemetry">
+              <span className="telemetry-pill">
+                <span className="beacon-green" />
                 <span>Engine: Sub-10ms IndexedDB</span>
               </span>
-              <span className="system-status-indicator">
-                <span className="status-dot-blue" />
+              <span className="telemetry-pill">
+                <span className="beacon-blue" />
                 <span>Zero Cloud Dependencies</span>
               </span>
             </div>
 
-            <div className="footer-nav-links">
-              <a href="#simulator">Simulator</a>
+            <div className="apple-footer-links">
+              <a href="#console">Console</a>
               <a href="#dilemma">The Dilemma</a>
-              <a href="#pillars">Capabilities</a>
-              <a href="#downloads">Distribution</a>
-              <a href="#faq">Architecture</a>
+              <a href="#capabilities">Capabilities</a>
+              <a href="#distribution">Distribution</a>
+              <a href="#architecture">Architecture</a>
             </div>
 
-            <div className="footer-copy">
+            <div className="apple-footer-copy">
               © {new Date().getFullYear()} FounderOS. Sovereign local-first execution.
             </div>
           </div>
@@ -1176,149 +1186,169 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </footer>
 
       {/* =====================================================================
-          STRICT ANIMATE DIRECTIVES: Hardware-Accelerated Microinteractions
+          APPLE DESIGN SYSTEM CSS: Materials, Depth, Typography & Spring Curves
          ===================================================================== */}
       <style>{`
-        /* Core animation tokens conforming strictly to animate/SKILL.md */
+        /* =====================================================================
+           APPLE DESIGN SYSTEM CORE TOKENS
+           - Optical tracking: size-specific (-0.035em display, +0.08em eyebrows)
+           - Inverse leading: 1.04 display, 1.5 body
+           - Apple spring curve: cubic-bezier(0.16, 1, 0.3, 1) (damping 1.0, response 0.35)
+           - Specular edge: 1px bright top hairline catching light
+           ===================================================================== */
         :root {
-          --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-          --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-          --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+          --apple-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Plus Jakarta Sans', system-ui, sans-serif;
+          --apple-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+          --apple-blue: #0071e3;
+          --apple-blue-hover: #0077ed;
+          --apple-royal: #0050FF;
+          --apple-royal-hover: #1a62ff;
+          --apple-green: #34c759;
+          --apple-amber: #ff9f0a;
+          --apple-purple: #af52de;
+          --apple-red: #ff3b30;
+          --apple-spring: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .founderos-landing-root {
+        .apple-page-root {
           min-height: 100vh;
           background-color: #030712;
           color: #f8fafc;
-          font-family: var(--font-heading), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+          font-family: var(--apple-font);
           position: relative;
           overflow-x: hidden;
           line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
-        .ambient-glow {
+        /* Ambient Diffuse Glow Layers (Section 12) */
+        .apple-glow {
           position: fixed;
           border-radius: 50%;
           pointer-events: none;
           z-index: 0;
         }
-        .glow-top {
+        .glow-primary {
           top: -12%;
           left: 15%;
-          width: 700px;
-          height: 700px;
+          width: 720px;
+          height: 720px;
           background: radial-gradient(circle, rgba(0, 80, 255, 0.12) 0%, rgba(3, 7, 18, 0) 70%);
           filter: blur(100px);
         }
-        .glow-bottom {
+        .glow-secondary {
           top: 45%;
           right: -10%;
-          width: 650px;
-          height: 650px;
-          background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(3, 7, 18, 0) 70%);
+          width: 660px;
+          height: 660px;
+          background: radial-gradient(circle, rgba(0, 113, 227, 0.08) 0%, rgba(3, 7, 18, 0) 70%);
           filter: blur(110px);
         }
 
-        /* 1. Floating Pill Navigation */
-        .nav-header {
+        /* 1. Translucent Floating Navigation Bar */
+        .apple-nav-header {
           position: sticky;
-          top: 18px;
+          top: 16px;
           z-index: 100;
           padding: 0 24px;
           max-width: 1200px;
           margin: 0 auto 24px auto;
         }
-        .nav-shell {
-          background-color: rgba(11, 15, 25, 0.82);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 50px;
+        .apple-nav-capsule {
+          background: rgba(15, 23, 42, 0.72);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          border-radius: 980px;
           padding: 8px 18px;
           border: 1px solid rgba(255, 255, 255, 0.10);
-          box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.6);
+          border-top: 1px solid rgba(255, 255, 255, 0.25); /* Specular highlight */
+          box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 16px;
         }
-        .nav-brand {
+        .apple-nav-brand {
           display: flex;
           align-items: center;
           gap: 12px;
           cursor: pointer;
           user-select: none;
         }
-        .brand-logo-frame {
-          width: 38px;
-          height: 38px;
-          border-radius: 12px;
+        .apple-brand-frame {
+          width: 36px;
+          height: 36px;
+          border-radius: 11px;
           background-color: #030712;
           overflow: hidden;
           display: flex;
           align-items: center;
           justify-content: center;
-          border: 2px solid #0050FF;
-          box-shadow: 0 0 16px rgba(0, 80, 255, 0.45);
+          border: 1.5px solid #0050FF;
+          box-shadow: 0 0 14px rgba(0, 80, 255, 0.4);
         }
-        .logo-small {
-          width: 32px;
-          height: 32px;
-          border-radius: 10px;
+        .frame-small {
+          width: 30px;
+          height: 30px;
+          border-radius: 9px;
         }
-        .brand-logo-img {
+        .apple-brand-img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        .brand-text-col {
+        .apple-brand-meta {
           display: flex;
           flex-direction: column;
         }
-        .brand-title {
-          font-size: 16px;
+        .apple-brand-name {
+          font-size: 15px;
           font-weight: 700;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.02em;
           color: #f8fafc;
           line-height: 1.1;
         }
-        .brand-subtitle {
+        .apple-brand-edition {
           font-size: 11px;
           font-weight: 500;
           color: #94a3b8;
           letter-spacing: 0.02em;
         }
-        .nav-links {
+        .apple-nav-links {
           display: flex;
           align-items: center;
           gap: 24px;
         }
         @media (max-width: 860px) {
-          .nav-links {
+          .apple-nav-links {
             display: none;
           }
         }
-        .nav-link-item {
-          font-size: 14px;
+        .apple-nav-anchor {
+          font-size: 13px;
           font-weight: 500;
           color: #94a3b8;
-          transition: color 150ms var(--ease-out);
+          letter-spacing: -0.01em;
+          transition: color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .nav-link-item:hover {
+          .apple-nav-anchor:hover {
             color: #f8fafc;
           }
         }
-        .nav-actions {
+        .apple-nav-actions {
           display: flex;
           align-items: center;
           gap: 10px;
         }
 
-        /* Button Press Feedback Recipe (160ms var(--ease-out), scale(0.97)) */
-        .btn-nested-secondary {
-          background-color: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.14);
-          border-radius: 50px;
+        /* Apple Tactile Button-in-Button Architecture (Section 1 & 12) */
+        .apple-btn-secondary {
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-top: 1px solid rgba(255, 255, 255, 0.22);
+          border-radius: 980px;
           padding: 8px 16px;
           font-size: 13px;
           font-weight: 600;
@@ -1327,22 +1357,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 10px;
           cursor: pointer;
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+          transition: transform 100ms ease-out, background-color 140ms ease-out, border-color 140ms ease-out;
         }
-        .btn-nested-secondary:active {
+        .apple-btn-secondary:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-nested-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
+          .apple-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.22);
           }
         }
 
-        .btn-nested-primary {
-          background-color: #0050FF;
+        .apple-btn-primary {
+          background: #0050FF;
           border: 1px solid #1a62ff;
-          border-radius: 50px;
+          border-top: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 980px;
           padding: 8px 18px;
           font-size: 13px;
           font-weight: 600;
@@ -1351,20 +1383,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 10px;
           cursor: pointer;
-          box-shadow: 0 0 20px rgba(0, 80, 255, 0.4);
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+          box-shadow: 0 2px 14px rgba(0, 80, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+          transition: transform 100ms ease-out, background-color 140ms ease-out, box-shadow 140ms ease-out;
         }
-        .btn-nested-primary:active {
+        .apple-btn-primary:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-nested-primary:hover {
-            background-color: #1a62ff;
-            box-shadow: 0 0 28px rgba(0, 80, 255, 0.6);
+          .apple-btn-primary:hover {
+            background: #1a62ff;
+            box-shadow: 0 4px 20px rgba(0, 80, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
           }
         }
 
-        .btn-icon-pod {
+        .apple-icon-circle {
           width: 22px;
           height: 22px;
           border-radius: 50%;
@@ -1372,82 +1404,81 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          transition: transform 180ms var(--ease-out);
+          transition: transform 160ms var(--apple-spring);
         }
-        .pod-sky { background-color: #38bdf8; color: #030712; }
-        .pod-white { background-color: #ffffff; color: #0050FF; }
-        .pod-royal { background-color: #0050FF; color: #ffffff; }
-        .pod-cyan { background-color: #38bdf8; color: #030712; }
-        .pod-emerald { background-color: #10b981; color: #030712; }
+        .circle-cyan { background-color: #38bdf8; color: #030712; }
+        .circle-white { background-color: #ffffff; color: #0050FF; }
+        .circle-royal { background-color: #0050FF; color: #ffffff; }
+        .circle-green { background-color: #34c759; color: #030712; }
 
         @media (hover: hover) and (pointer: fine) {
-          .btn-nested-primary:hover .btn-icon-pod,
-          .btn-nested-secondary:hover .btn-icon-pod,
-          .hero-btn-primary:hover .btn-icon-pod,
-          .hero-btn-secondary:hover .btn-icon-pod,
-          .founderos-cta-btn:hover .btn-icon-pod,
-          .dist-btn:hover .btn-icon-pod {
+          .apple-btn-primary:hover .apple-icon-circle,
+          .apple-btn-secondary:hover .apple-icon-circle,
+          .apple-hero-cta-primary:hover .apple-icon-circle,
+          .apple-hero-cta-secondary:hover .apple-icon-circle,
+          .apple-dist-action:hover .apple-icon-circle {
             transform: translate(2px, -1px);
           }
         }
 
         /* 2. Hero Section */
-        .landing-main-container {
+        .apple-main-container {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 24px;
           position: relative;
           z-index: 1;
         }
-        .hero-section {
-          padding-top: 64px;
-          padding-bottom: 50px;
+        .apple-hero-section {
+          padding-top: 60px;
+          padding-bottom: 48px;
           text-align: center;
           display: flex;
           flex-direction: column;
           align-items: center;
         }
-        .eyebrow-badge {
+        .apple-eyebrow-pill {
           display: inline-flex;
           align-items: center;
           gap: 8px;
           padding: 6px 16px;
-          border-radius: 50px;
-          background-color: rgba(0, 80, 255, 0.12);
+          border-radius: 980px;
+          background: rgba(0, 80, 255, 0.12);
           border: 1px solid rgba(0, 80, 255, 0.35);
           color: #38bdf8;
           font-size: 11px;
           font-weight: 700;
-          letter-spacing: 0.18em;
+          letter-spacing: 0.08em; /* Positive optical tracking for small labels */
           text-transform: uppercase;
           margin-bottom: 24px;
         }
-        .eyebrow-dot {
+        .apple-eyebrow-pip {
           width: 6px;
           height: 6px;
           border-radius: 50%;
           background-color: #0050FF;
           box-shadow: 0 0 8px #0050FF;
         }
-        .hero-headline {
-          font-size: clamp(40px, 7vw, 108px);
+        .apple-hero-display {
+          font-size: clamp(38px, 6.5vw, 98px);
           font-weight: 700;
-          line-height: 0.98;
-          letter-spacing: -0.05em;
+          line-height: 1.02; /* Tight inverse leading */
+          letter-spacing: -0.035em; /* Negative tracking for large display */
           color: #f8fafc;
-          max-width: 1080px;
+          max-width: 1060px;
           margin: 0 auto 24px auto;
           text-wrap: balance;
         }
-        .hero-subheadline {
-          font-size: clamp(16px, 2vw, 20px);
+        .apple-hero-lead {
+          font-size: clamp(16px, 1.8vw, 19px);
           font-weight: 400;
           line-height: 1.5;
+          letter-spacing: -0.01em;
           color: #94a3b8;
-          max-width: 820px;
+          max-width: 800px;
           margin: 0 auto 36px auto;
         }
-        .hero-cta-row {
+        .apple-hero-cta-cluster {
           display: flex;
           flex-wrap: wrap;
           align-items: center;
@@ -1455,68 +1486,69 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           gap: 16px;
           margin-bottom: 32px;
         }
-        .hero-btn-primary {
-          background-color: #ffffff;
+        .apple-hero-cta-primary {
+          background: #ffffff;
           color: #030712;
           border: none;
-          border-radius: 50px;
+          border-radius: 980px;
           padding: 14px 26px;
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 700;
           display: inline-flex;
           align-items: center;
           gap: 14px;
           cursor: pointer;
-          box-shadow: 0 8px 30px rgba(255, 255, 255, 0.18);
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+          box-shadow: 0 4px 24px rgba(255, 255, 255, 0.18);
+          transition: transform 100ms ease-out, background-color 140ms ease-out, box-shadow 140ms ease-out;
         }
-        .hero-btn-primary:active {
+        .apple-hero-cta-primary:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .hero-btn-primary:hover {
+          .apple-hero-cta-primary:hover {
             background-color: #f1f5f9;
-            box-shadow: 0 10px 36px rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.28);
           }
         }
 
-        .hero-btn-secondary {
-          background-color: #0050FF;
+        .apple-hero-cta-secondary {
+          background: #0050FF;
           color: #ffffff;
           border: 1px solid #1a62ff;
-          border-radius: 50px;
+          border-top: 1px solid rgba(255, 255, 255, 0.35);
+          border-radius: 980px;
           padding: 14px 26px;
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 600;
           display: inline-flex;
           align-items: center;
           gap: 14px;
           cursor: pointer;
-          box-shadow: 0 10px 30px rgba(0, 80, 255, 0.45);
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+          box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+          transition: transform 100ms ease-out, background-color 140ms ease-out, box-shadow 140ms ease-out;
         }
-        .hero-btn-secondary:active {
+        .apple-hero-cta-secondary:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .hero-btn-secondary:hover {
+          .apple-hero-cta-secondary:hover {
             background-color: #1a62ff;
-            box-shadow: 0 12px 36px rgba(0, 80, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 80, 255, 0.6);
           }
         }
 
-        /* Staggered Chips Entrance (animate/RECIPES.md) */
-        .hero-trust-chips {
+        .apple-proof-strip {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
           gap: 10px;
         }
-        .trust-chip-item {
+        .apple-proof-tag {
           padding: 6px 14px;
-          border-radius: 50px;
-          background-color: rgba(15, 23, 42, 0.8);
+          border-radius: 980px;
+          background: rgba(15, 23, 42, 0.75);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           font-size: 12px;
           font-weight: 600;
           color: #e2e8f0;
@@ -1524,58 +1556,51 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 8px;
         }
-        .stagger-chip {
-          opacity: 0;
-          transform: translateY(8px);
-          animation: itemFadeIn 280ms var(--ease-out) forwards;
-        }
-        .stagger-chip:nth-child(1) { animation-delay: 40ms; }
-        .stagger-chip:nth-child(2) { animation-delay: 80ms; }
-        .stagger-chip:nth-child(3) { animation-delay: 120ms; }
-        .stagger-chip:nth-child(4) { animation-delay: 160ms; }
-
-        .trust-chip-dot {
+        .apple-proof-dot {
           width: 6px;
           height: 6px;
           border-radius: 50%;
         }
-        .download-complete-toast {
+        .apple-download-alert {
           margin-top: 24px;
           padding: 12px 24px;
-          border-radius: 50px;
-          background-color: #0b0f19;
-          border: 1.5px solid #10b981;
+          border-radius: 980px;
+          background: #0b0f19;
+          border: 1.5px solid #34c759;
           display: inline-flex;
           align-items: center;
           gap: 12px;
           color: #f8fafc;
           font-size: 14px;
           font-weight: 500;
-          box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+          box-shadow: 0 8px 24px rgba(52, 199, 89, 0.25);
         }
 
-        /* 3. Interactive Cockpit Simulator (Double-Bezel Hardware Architecture) */
-        .simulator-section {
-          margin: 30px auto 100px auto;
+        /* 3. The Executive Console Workbench (Apple Double-Bezel Architecture) */
+        .apple-console-section {
+          margin: 24px auto 96px auto;
           max-width: 1140px;
         }
-        .chassis-outer {
+        .apple-chassis-outer {
           padding: 8px;
-          border-radius: 28px;
-          background-color: rgba(255, 255, 255, 0.03);
+          border-radius: 26px;
+          background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.75);
+          border-top: 1px solid rgba(255, 255, 255, 0.22); /* Machined aluminum highlight */
+          box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.75);
         }
-        .chassis-inner {
-          border-radius: 20px;
+        .apple-chassis-inner {
+          border-radius: 18px;
           background-color: #0b0f19;
           border: 1px solid rgba(255, 255, 255, 0.05);
           box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
           overflow: hidden;
         }
-        .window-header {
+        .apple-window-bar {
           padding: 14px 20px;
-          background-color: rgba(15, 23, 42, 0.7);
+          background: rgba(15, 23, 42, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
           align-items: center;
@@ -1583,39 +1608,41 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           flex-wrap: wrap;
           gap: 14px;
         }
-        .window-controls {
+        .apple-traffic-lights {
           display: flex;
           align-items: center;
           gap: 8px;
         }
-        .window-dot {
+        .apple-light {
           width: 11px;
           height: 11px;
           border-radius: 50%;
         }
-        .dot-close { background-color: #f43f5e; }
-        .dot-minimize { background-color: #f59e0b; }
-        .dot-expand { background-color: #10b981; }
-        .window-title-tag {
-          font-family: var(--font-mono), monospace;
+        .light-red { background-color: #ff3b30; }
+        .light-yellow { background-color: #ff9f0a; }
+        .light-green { background-color: #34c759; }
+        .apple-window-id {
+          font-family: var(--apple-mono);
           font-size: 11px;
           color: #64748b;
           margin-left: 8px;
         }
-        .simulator-tabs {
+
+        /* Apple Segmented Control Recipe (Section 4 & 16) */
+        .apple-segmented-control {
           display: flex;
           align-items: center;
-          background-color: rgba(3, 7, 18, 0.6);
+          background: rgba(0, 0, 0, 0.4);
           padding: 3px;
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          gap: 4px;
+          border-radius: 980px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          gap: 2px;
         }
-        .tab-btn {
+        .apple-segment {
           background: transparent;
           border: none;
           padding: 6px 14px;
-          border-radius: 8px;
+          border-radius: 980px;
           font-size: 12px;
           font-weight: 600;
           color: #94a3b8;
@@ -1623,126 +1650,132 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 6px;
           cursor: pointer;
-          transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out);
+          transition: background-color 140ms ease-out, color 140ms ease-out, transform 100ms ease-out;
         }
-        .tab-btn:active {
+        .apple-segment:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .tab-btn:hover {
+          .apple-segment:hover {
             color: #f8fafc;
           }
         }
-        .tab-btn-active {
-          background-color: rgba(255, 255, 255, 0.1);
+        .segment-active {
+          background: rgba(255, 255, 255, 0.12);
           color: #f8fafc;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+          border-top: 1px solid rgba(255, 255, 255, 0.25);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
         }
-        .window-status {
+
+        .apple-runtime-status {
           display: flex;
           align-items: center;
           gap: 6px;
         }
-        .status-live-indicator {
+        .apple-status-beacon {
           width: 7px;
           height: 7px;
           border-radius: 50%;
-          background-color: #10b981;
-          box-shadow: 0 0 8px #10b981;
+          background-color: #34c759;
+          box-shadow: 0 0 8px #34c759;
         }
-        .status-live-label {
-          font-family: var(--font-mono), monospace;
+        .apple-status-text {
+          font-family: var(--apple-mono);
           font-size: 11px;
           font-weight: 600;
-          color: #10b981;
+          color: #34c759;
           letter-spacing: 0.05em;
         }
 
-        .simulator-stage {
+        .apple-console-stage {
           padding: 28px;
           min-height: 380px;
           background: radial-gradient(circle at 50% 0%, rgba(0, 80, 255, 0.05) 0%, rgba(11, 15, 25, 0) 60%);
         }
 
-        /* Simulator Tab 1: Telemetry Grid */
-        .sim-metrics-grid {
+        /* Telemetry Cards */
+        .apple-metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
           gap: 16px;
           margin-bottom: 24px;
         }
-        .sim-stat-card {
-          background-color: rgba(15, 23, 42, 0.65);
+        .apple-metric-card {
+          background: rgba(15, 23, 42, 0.65);
           border: 1px solid rgba(255, 255, 255, 0.07);
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
           border-radius: 16px;
           padding: 20px;
           display: flex;
           flex-direction: column;
           gap: 6px;
-          transition: transform 180ms var(--ease-out), border-color 180ms var(--ease-out);
+          transition: transform 140ms ease-out, border-color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .sim-stat-card:hover {
+          .apple-metric-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.18);
           }
         }
-        .highlight-card {
-          background-color: rgba(0, 80, 255, 0.08);
+        .metric-spotlight {
+          background: rgba(0, 80, 255, 0.08);
           border-color: rgba(0, 80, 255, 0.3);
+          border-top-color: rgba(56, 189, 248, 0.4);
           box-shadow: 0 0 24px rgba(0, 80, 255, 0.15);
         }
-        .sim-stat-header {
+        .apple-metric-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
-        .sim-stat-label {
+        .apple-metric-label {
           font-size: 11px;
           font-weight: 700;
           letter-spacing: 0.06em;
           color: #94a3b8;
         }
-        .sim-stat-pill {
+        .apple-badge {
           font-size: 10px;
           font-weight: 700;
           padding: 2px 8px;
-          border-radius: 50px;
+          border-radius: 980px;
         }
-        .pill-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .pill-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-        .pill-blue { background-color: rgba(0, 80, 255, 0.2); color: #38bdf8; }
+        .badge-green { background-color: rgba(52, 199, 89, 0.15); color: #34c759; }
+        .badge-amber { background-color: rgba(255, 159, 10, 0.15); color: #ff9f0a; }
+        .badge-blue { background-color: rgba(0, 113, 227, 0.2); color: #38bdf8; }
 
-        .sim-stat-val {
-          font-family: var(--font-heading), sans-serif;
+        .apple-metric-number {
+          font-family: var(--apple-font);
           font-size: 28px;
           font-weight: 700;
           color: #f8fafc;
           letter-spacing: -0.02em;
         }
-        .text-cyan { color: #38bdf8; }
-        .text-emerald { color: #10b981; }
+        .text-accent-blue { color: #38bdf8; }
+        .text-green { color: #34c759; }
 
-        .sim-stat-sub {
+        .apple-metric-subtext {
           font-size: 12px;
           color: #64748b;
         }
 
-        .interactive-burn-bar {
-          background-color: rgba(3, 7, 18, 0.7);
+        /* Direct Manipulation Scrubbing Slider (Section 2) */
+        .apple-slider-console {
+          background: rgba(3, 7, 18, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.14);
           border-radius: 16px;
           padding: 18px 22px;
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
-        .burn-slider-info {
+        .apple-slider-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
-        .burn-slider-title {
+        .slider-header-caption {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -1750,35 +1783,36 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           font-weight: 600;
           color: #f8fafc;
         }
-        .burn-current-tag {
-          font-family: var(--font-mono), monospace;
+        .apple-slider-pill {
+          font-family: var(--apple-mono);
           font-size: 13px;
           font-weight: 700;
           color: #38bdf8;
           padding: 3px 10px;
           border-radius: 6px;
-          background-color: rgba(56, 189, 248, 0.1);
+          background: rgba(56, 189, 248, 0.1);
         }
-        .burn-range-slider {
+        .apple-range-input {
           width: 100%;
           cursor: pointer;
           accent-color: #0050FF;
         }
-        .burn-slider-labels {
+        .apple-slider-markers {
           display: flex;
           justify-content: space-between;
           font-size: 11px;
           color: #64748b;
         }
 
-        /* Simulator Tab 2: Morning Briefing */
-        .briefing-memo-card {
-          background-color: rgba(15, 23, 42, 0.7);
+        /* Morning Briefing */
+        .apple-memo-card {
+          background: rgba(15, 23, 42, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           border-radius: 18px;
           padding: 24px;
         }
-        .briefing-memo-header {
+        .apple-memo-top {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -1786,114 +1820,115 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           flex-wrap: wrap;
           gap: 10px;
         }
-        .briefing-memo-badge {
+        .apple-memo-stamp {
           display: flex;
           align-items: center;
           gap: 6px;
           font-size: 11px;
           font-weight: 700;
-          color: #f59e0b;
+          color: #ff9f0a;
           letter-spacing: 0.08em;
         }
-        .briefing-date {
-          font-family: var(--font-mono), monospace;
+        .apple-memo-timestamp {
+          font-family: var(--apple-mono);
           font-size: 11px;
           color: #64748b;
         }
-        .briefing-title {
+        .apple-memo-heading {
           font-size: 20px;
           font-weight: 600;
           color: #f8fafc;
           margin-bottom: 18px;
           letter-spacing: -0.02em;
         }
-        .briefing-items-stack {
+        .apple-memo-items {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
-        .briefing-item {
+        .apple-memo-entry {
           display: flex;
           align-items: flex-start;
           gap: 14px;
           padding: 12px 16px;
           border-radius: 12px;
-          background-color: rgba(3, 7, 18, 0.5);
+          background: rgba(3, 7, 18, 0.5);
           border: 1px solid rgba(255, 255, 255, 0.05);
-          transition: transform 160ms var(--ease-out), border-color 160ms var(--ease-out);
+          transition: transform 140ms ease-out, border-color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .briefing-item:hover {
+          .apple-memo-entry:hover {
             transform: translateX(4px);
             border-color: rgba(255, 255, 255, 0.15);
           }
         }
-        .item-num {
-          font-family: var(--font-mono), monospace;
+        .memo-entry-index {
+          font-family: var(--apple-mono);
           font-size: 14px;
           font-weight: 700;
           color: #0050FF;
           padding-top: 2px;
         }
-        .item-content {
+        .memo-entry-details {
           flex: 1;
         }
-        .item-header {
+        .memo-entry-meta {
           display: flex;
           align-items: center;
           gap: 10px;
           margin-bottom: 4px;
         }
-        .item-tag {
+        .apple-pill-tag {
           font-size: 10px;
           font-weight: 700;
           padding: 2px 6px;
           border-radius: 4px;
         }
-        .tag-amber { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-        .tag-blue { background-color: rgba(0, 80, 255, 0.2); color: #38bdf8; }
-        .tag-emerald { background-color: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .item-time {
-          font-family: var(--font-mono), monospace;
+        .tag-amber { background-color: rgba(255, 159, 10, 0.2); color: #ff9f0a; }
+        .tag-blue { background-color: rgba(0, 113, 227, 0.2); color: #38bdf8; }
+        .tag-green { background-color: rgba(52, 199, 89, 0.2); color: #34c759; }
+        .memo-metric-impact {
+          font-family: var(--apple-mono);
           font-size: 11px;
           color: #94a3b8;
         }
-        .item-desc {
+        .memo-entry-text {
           font-size: 13px;
           color: #cbd5e1;
           margin: 0;
-          line-height: 1.4;
+          line-height: 1.45;
         }
 
-        /* Simulator Tab 3: Treasury Grid */
-        .treasury-grid {
+        /* Treasury Grid */
+        .apple-vaults-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 16px;
           margin-bottom: 18px;
         }
-        .vault-card {
-          background-color: rgba(15, 23, 42, 0.7);
+        .apple-vault-tile {
+          background: rgba(15, 23, 42, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           border-radius: 16px;
           padding: 22px;
           display: flex;
           flex-direction: column;
           gap: 8px;
-          transition: transform 180ms var(--ease-out), border-color 180ms var(--ease-out);
+          transition: transform 140ms ease-out, border-color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .vault-card:hover {
+          .apple-vault-tile:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.18);
           }
         }
-        .vault-header {
+        .vault-tile-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
-        .vault-icon-circle {
+        .vault-icon-frame {
           width: 36px;
           height: 36px;
           border-radius: 10px;
@@ -1901,14 +1936,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           justify-content: center;
         }
-        .icon-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .icon-blue { background-color: rgba(0, 80, 255, 0.2); color: #38bdf8; }
-        .icon-purple { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
-        .icon-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .icon-green { background-color: rgba(52, 199, 89, 0.15); color: #34c759; }
+        .icon-blue { background-color: rgba(0, 113, 227, 0.2); color: #38bdf8; }
+        .icon-purple { background-color: rgba(175, 82, 222, 0.15); color: #af52de; }
+        .icon-amber { background-color: rgba(255, 159, 10, 0.15); color: #ff9f0a; }
         .icon-cyan { background-color: rgba(56, 189, 248, 0.15); color: #38bdf8; }
         .icon-white { background-color: rgba(255, 255, 255, 0.1); color: #f8fafc; }
 
-        .vault-badge {
+        .vault-status-badge {
           font-size: 10px;
           font-weight: 700;
           color: #94a3b8;
@@ -1916,42 +1951,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           border-radius: 4px;
           background-color: rgba(255, 255, 255, 0.05);
         }
-        .vault-title {
+        .vault-tile-title {
           font-size: 14px;
           font-weight: 600;
           color: #f8fafc;
         }
-        .vault-balance {
-          font-family: var(--font-mono), monospace;
+        .vault-tile-balance {
+          font-family: var(--apple-mono);
           font-size: 24px;
           font-weight: 700;
           color: #f8fafc;
           letter-spacing: -0.02em;
         }
-        .vault-meta {
+        .vault-tile-note {
           font-size: 12px;
           color: #64748b;
         }
-        .treasury-footer-pill {
+        .apple-vault-footnote {
           display: flex;
           align-items: center;
           gap: 8px;
           padding: 10px 16px;
           border-radius: 12px;
-          background-color: rgba(3, 7, 18, 0.6);
+          background: rgba(3, 7, 18, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.06);
           font-size: 12px;
           color: #94a3b8;
         }
 
-        /* Simulator Tab 4: AI Boardroom */
-        .boardroom-transcript-card {
-          background-color: rgba(15, 23, 42, 0.7);
+        /* Boardroom Dialogue */
+        .apple-boardroom-card {
+          background: rgba(15, 23, 42, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           border-radius: 18px;
           padding: 22px;
         }
-        .boardroom-meta-header {
+        .boardroom-header-row {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -1959,7 +1995,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           flex-wrap: wrap;
           gap: 10px;
         }
-        .boardroom-topic {
+        .boardroom-docket-tag {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -1967,42 +2003,43 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           font-weight: 600;
           color: #f8fafc;
         }
-        .boardroom-status-badge {
+        .boardroom-verdict-pill {
           font-size: 10px;
           font-weight: 700;
           padding: 3px 8px;
           border-radius: 4px;
-          background-color: rgba(16, 185, 129, 0.15);
-          color: #10b981;
+          background-color: rgba(52, 199, 89, 0.15);
+          color: #34c759;
         }
-        .boardroom-chat-log {
+        .boardroom-dialogue-stack {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
-        .chat-entry {
+        .boardroom-bubble {
           display: flex;
           align-items: flex-start;
           gap: 12px;
           padding: 12px 14px;
           border-radius: 12px;
-          background-color: rgba(3, 7, 18, 0.5);
-          transition: transform 160ms var(--ease-out);
+          background: rgba(3, 7, 18, 0.5);
+          transition: transform 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .chat-entry:hover {
+          .boardroom-bubble:hover {
             transform: translateX(4px);
           }
         }
-        .consensus-entry {
-          background-color: rgba(0, 80, 255, 0.1);
+        .bubble-consensus {
+          background: rgba(0, 80, 255, 0.1);
           border: 1px solid rgba(0, 80, 255, 0.25);
+          border-top: 1px solid rgba(56, 189, 248, 0.35);
         }
-        .chat-avatar {
+        .boardroom-agent-badge {
           width: 32px;
           height: 32px;
           border-radius: 8px;
-          font-family: var(--font-mono), monospace;
+          font-family: var(--apple-mono);
           font-size: 11px;
           font-weight: 700;
           display: flex;
@@ -2010,26 +2047,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           justify-content: center;
           flex-shrink: 0;
         }
-        .avatar-cfo { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .avatar-cfo { background-color: rgba(255, 159, 10, 0.2); color: #ff9f0a; }
         .avatar-growth { background-color: rgba(56, 189, 248, 0.2); color: #38bdf8; }
-        .avatar-system { background-color: #0050FF; color: #ffffff; }
-        .chat-body { flex: 1; }
-        .chat-speaker {
+        .avatar-synthesis { background-color: #0050FF; color: #ffffff; }
+        .boardroom-bubble-body { flex: 1; }
+        .boardroom-agent-role {
           font-size: 11px;
           font-weight: 700;
           color: #94a3b8;
           margin-bottom: 2px;
         }
-        .chat-text {
+        .boardroom-bubble-text {
           font-size: 13px;
           color: #cbd5e1;
           margin: 0;
           line-height: 1.45;
         }
 
-        .simulator-footer-bar {
+        .apple-console-footer {
           padding: 14px 20px;
-          background-color: rgba(15, 23, 42, 0.8);
+          background: rgba(15, 23, 42, 0.8);
           border-top: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
           align-items: center;
@@ -2037,18 +2074,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           flex-wrap: wrap;
           gap: 12px;
         }
-        .footer-left-info {
+        .console-footer-info {
           display: flex;
           align-items: center;
           gap: 8px;
           font-size: 12px;
           color: #94a3b8;
         }
-        .simulator-launch-btn {
+        .apple-console-enter-btn {
           background-color: #0050FF;
           color: #ffffff;
           border: none;
-          border-radius: 50px;
+          border-radius: 980px;
           padding: 8px 18px;
           font-size: 13px;
           font-weight: 600;
@@ -2056,126 +2093,118 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 8px;
           cursor: pointer;
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+          transition: transform 100ms ease-out, background-color 140ms ease-out;
         }
-        .simulator-launch-btn:active {
+        .apple-console-enter-btn:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .simulator-launch-btn:hover {
+          .apple-console-enter-btn:hover {
             background-color: #1a62ff;
           }
         }
 
         /* 4. Dilemma & Cure Section */
-        .dilemma-section {
-          margin-bottom: 120px;
+        .apple-section {
+          margin-bottom: 96px;
         }
-        .dilemma-shell {
+        .apple-section-shell {
           padding: 8px;
-          border-radius: 36px;
-          background-color: rgba(255, 255, 255, 0.02);
+          border-radius: 26px;
+          background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
         }
-        .dilemma-inner {
-          border-radius: 28px;
-          background-color: rgba(11, 15, 25, 0.85);
+        .apple-section-inner {
+          border-radius: 20px;
+          background: rgba(11, 15, 25, 0.88);
           backdrop-filter: blur(16px);
-          padding: clamp(28px, 5vw, 48px);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          padding: clamp(28px, 4vw, 44px);
         }
-        .dilemma-header-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 6px 14px;
-          border-radius: 50px;
-          background-color: rgba(244, 63, 94, 0.12);
-          border: 1px solid rgba(244, 63, 94, 0.35);
-          color: #f43f5e;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          margin-bottom: 20px;
+        .pill-danger {
+          background-color: rgba(255, 59, 48, 0.12);
+          border-color: rgba(255, 59, 48, 0.35);
+          color: #ff3b30;
         }
-        .dilemma-title {
-          font-size: clamp(28px, 4vw, 48px);
+        .apple-section-heading {
+          font-size: clamp(28px, 3.8vw, 46px);
           font-weight: 700;
-          line-height: 1.1;
-          letter-spacing: -0.04em;
+          line-height: 1.08;
+          letter-spacing: -0.025em;
           color: #f8fafc;
+          margin-top: 14px;
           margin-bottom: 16px;
-          max-width: 900px;
+          max-width: 850px;
         }
-        .dilemma-desc {
-          font-size: 17px;
+        .apple-section-lead {
+          font-size: 16px;
           color: #94a3b8;
           line-height: 1.6;
-          max-width: 850px;
-          margin-bottom: 36px;
+          max-width: 800px;
+          margin-bottom: 32px;
         }
-        .comparison-bento-grid {
+        .apple-comparison-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 24px;
+          gap: 20px;
         }
-        .comparison-card {
-          border-radius: 22px;
-          padding: 28px;
+        .comparison-pane {
+          border-radius: 18px;
+          padding: 26px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+          transition: transform 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .comparison-card:hover {
+          .comparison-pane:hover {
             transform: translateY(-2px);
           }
         }
-        .card-dilemma-legacy {
-          background-color: rgba(15, 23, 42, 0.45);
-          border: 1.5px solid rgba(244, 63, 94, 0.25);
+        .pane-legacy {
+          background: rgba(15, 23, 42, 0.45);
+          border: 1.5px solid rgba(255, 59, 48, 0.25);
         }
-        .card-dilemma-founderos {
-          background-color: rgba(11, 15, 25, 0.95);
+        .pane-founderos {
+          background: rgba(11, 15, 25, 0.95);
           border: 2px solid #0050FF;
+          border-top: 2px solid #38bdf8;
           box-shadow: 0 0 32px rgba(0, 80, 255, 0.2);
         }
-        .card-top-marker {
+        .comparison-pane-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
           margin-bottom: 16px;
         }
-        .marker-badge {
+        .comparison-badge {
           font-size: 11px;
           font-weight: 700;
           padding: 4px 10px;
           border-radius: 6px;
         }
-        .badge-legacy { background-color: rgba(244, 63, 94, 0.15); color: #f43f5e; }
+        .badge-legacy { background-color: rgba(255, 59, 48, 0.15); color: #ff3b30; }
         .badge-founderos { background-color: rgba(0, 80, 255, 0.2); color: #38bdf8; }
-        .marker-cost {
-          font-family: var(--font-mono), monospace;
+        .comparison-cost {
+          font-family: var(--apple-mono);
           font-size: 12px;
           font-weight: 700;
-          color: #f43f5e;
+          color: #ff3b30;
         }
-        .card-comp-heading {
-          font-size: 22px;
+        .comparison-pane-title {
+          font-size: 21px;
           font-weight: 600;
           color: #f8fafc;
-          margin-bottom: 18px;
+          margin-bottom: 16px;
           letter-spacing: -0.02em;
         }
-        .comp-checklist {
+        .comparison-items-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
           margin-bottom: 24px;
         }
-        .checklist-row {
+        .comparison-row {
           display: flex;
           align-items: flex-start;
           gap: 10px;
@@ -2184,7 +2213,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         }
         .row-danger { color: #cbd5e1; }
         .row-success { color: #f8fafc; }
-        .check-icon-circle {
+        .apple-status-circle {
           width: 18px;
           height: 18px;
           border-radius: 50%;
@@ -2194,74 +2223,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           flex-shrink: 0;
           margin-top: 1px;
         }
-        .circle-danger { background-color: #f43f5e; color: #ffffff; }
-        .circle-success { background-color: #10b981; color: #030712; }
-        .legacy-footer-pill {
+        .circle-danger { background-color: #ff3b30; color: #ffffff; }
+        .circle-success { background-color: #34c759; color: #030712; }
+        .comparison-footer-caption {
           padding: 12px;
           border-radius: 12px;
-          background-color: rgba(0, 0, 0, 0.3);
+          background: rgba(0, 0, 0, 0.3);
           font-size: 12px;
           color: #94a3b8;
         }
-        .founderos-action-bar {
+        .comparison-action-bar {
           display: flex;
           align-items: center;
           justify-content: space-between;
           flex-wrap: wrap;
           gap: 12px;
         }
-        .founderos-cta-btn {
-          background-color: #0050FF;
-          color: #ffffff;
-          border: none;
-          border-radius: 50px;
-          padding: 10px 20px;
-          font-size: 14px;
-          font-weight: 600;
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          box-shadow: 0 4px 18px rgba(0, 80, 255, 0.4);
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
-        }
-        .founderos-cta-btn:active { transform: scale(0.97); }
-        @media (hover: hover) and (pointer: fine) {
-          .founderos-cta-btn:hover { background-color: #1a62ff; }
-        }
-        .action-subtext {
+        .comparison-guarantee-text {
           font-size: 12px;
-          color: #10b981;
+          color: #34c759;
           font-weight: 600;
         }
 
         /* 5. Six Pillars Bento Grid */
-        .pillars-section {
-          margin-bottom: 120px;
-        }
-        .pillars-heading-block {
+        .apple-section-header-block {
           text-align: center;
-          margin-bottom: 48px;
+          margin-bottom: 44px;
         }
-        .pillars-title {
-          font-size: clamp(30px, 4.5vw, 56px);
-          font-weight: 700;
-          letter-spacing: -0.04em;
-          color: #f8fafc;
-          line-height: 1.08;
-          margin: 0 auto 16px auto;
-          max-width: 850px;
-        }
-        .pillars-subtitle {
-          font-size: 17px;
-          color: #94a3b8;
-          max-width: 680px;
-          margin: 0 auto;
-        }
-        .pillars-bento-grid {
+        .apple-bento-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-          gap: 24px;
+          gap: 20px;
         }
         .bento-wide {
           grid-column: span 2;
@@ -2271,80 +2263,79 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             grid-column: span 1;
           }
         }
-        .bento-card {
+        .apple-bento-card {
           display: flex;
           flex-direction: column;
         }
         .bento-shell {
           padding: 6px;
-          border-radius: 28px;
-          background-color: rgba(255, 255, 255, 0.02);
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           height: 100%;
-          transition: transform 200ms var(--ease-out), border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+          transition: transform 140ms ease-out, border-color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
           .bento-shell:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             border-color: rgba(0, 80, 255, 0.35);
-            box-shadow: 0 16px 36px -10px rgba(0, 80, 255, 0.2);
           }
         }
-        .bento-inner {
-          border-radius: 22px;
-          background-color: rgba(11, 15, 25, 0.88);
-          padding: 28px;
+        .bento-card-inner {
+          border-radius: 16px;
+          background: rgba(11, 15, 25, 0.88);
+          padding: 26px;
           height: 100%;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          border: 1px solid rgba(255, 255, 255, 0.04);
         }
-        .bento-card-header {
+        .bento-card-top {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 20px;
+          margin-bottom: 18px;
         }
-        .bento-icon-frame {
-          width: 48px;
-          height: 48px;
-          border-radius: 14px;
+        .bento-icon-box {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .bento-pill-tag {
-          font-family: var(--font-mono), monospace;
+        .bento-mono-tag {
+          font-family: var(--apple-mono);
           font-size: 11px;
           font-weight: 700;
           padding: 4px 10px;
-          border-radius: 50px;
-          background-color: rgba(255, 255, 255, 0.05);
+          border-radius: 980px;
+          background: rgba(255, 255, 255, 0.05);
           color: #94a3b8;
           letter-spacing: 0.05em;
         }
-        .bento-card-title {
-          font-size: 24px;
+        .bento-heading {
+          font-size: 22px;
           font-weight: 600;
           color: #f8fafc;
-          margin-bottom: 10px;
+          margin-bottom: 8px;
           letter-spacing: -0.02em;
         }
-        .bento-card-desc {
-          font-size: 15px;
+        .bento-description {
+          font-size: 14px;
           color: #94a3b8;
           line-height: 1.5;
-          margin-bottom: 22px;
+          margin-bottom: 20px;
         }
-        .bento-bullets-col {
+        .bento-bullets-stack {
           display: flex;
           flex-direction: column;
           gap: 10px;
-          margin-bottom: 24px;
+          margin-bottom: 22px;
         }
-        .bento-bullet-item {
+        .bento-bullet-line {
           display: flex;
           align-items: center;
           gap: 10px;
@@ -2352,88 +2343,67 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           color: #cbd5e1;
           font-weight: 500;
         }
-        .bento-action-link {
+        .bento-link-trigger {
           background: transparent;
           border: none;
-          color: #38bdf8;
-          font-size: 14px;
+          color: #0071e3;
+          font-size: 13px;
           font-weight: 600;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 6px;
           cursor: pointer;
           padding: 0;
-          transition: color 150ms var(--ease-out), transform 150ms var(--ease-out);
+          transition: color 140ms ease-out, transform 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .bento-action-link:hover {
-            color: #f8fafc;
+          .bento-link-trigger:hover {
+            color: #38bdf8;
             transform: translateX(3px);
           }
         }
 
         /* 6. Distribution Hub */
-        .downloads-section {
-          margin-bottom: 120px;
-        }
-        .downloads-heading-block {
-          text-align: center;
-          margin-bottom: 48px;
-        }
-        .downloads-title {
-          font-size: clamp(30px, 4.5vw, 54px);
-          font-weight: 700;
-          letter-spacing: -0.04em;
-          color: #f8fafc;
-          line-height: 1.08;
-          margin: 0 auto 16px auto;
-          max-width: 850px;
-        }
-        .downloads-subtitle {
-          font-size: 17px;
-          color: #94a3b8;
-          max-width: 680px;
-          margin: 0 auto;
-        }
-        .distribution-grid {
+        .apple-distribution-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 24px;
+          gap: 20px;
         }
-        .dist-card {
+        .apple-dist-card {
           display: flex;
           flex-direction: column;
         }
-        .dist-shell {
+        .dist-card-shell {
           padding: 6px;
-          border-radius: 28px;
-          background-color: rgba(255, 255, 255, 0.02);
+          border-radius: 22px;
+          background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid rgba(255, 255, 255, 0.16);
           height: 100%;
-          transition: transform 200ms var(--ease-out), border-color 200ms var(--ease-out);
+          transition: transform 140ms ease-out, border-color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .dist-shell:hover {
+          .dist-card-shell:hover {
             transform: translateY(-2px);
           }
         }
-        .card-featured .dist-shell {
+        .card-featured .dist-card-shell {
           border-color: rgba(0, 80, 255, 0.4);
           box-shadow: 0 0 30px rgba(0, 80, 255, 0.2);
         }
-        .dist-inner {
-          border-radius: 22px;
-          background-color: rgba(11, 15, 25, 0.9);
-          padding: 32px;
+        .dist-card-inner {
+          border-radius: 16px;
+          background: rgba(11, 15, 25, 0.9);
+          padding: 28px;
           height: 100%;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
         }
-        .dist-tag-row {
-          margin-bottom: 16px;
+        .dist-tag-strip {
+          margin-bottom: 14px;
         }
-        .dist-badge {
+        .dist-status-badge {
           font-size: 11px;
           font-weight: 700;
           padding: 4px 10px;
@@ -2441,46 +2411,46 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           letter-spacing: 0.04em;
         }
         .badge-primary { background-color: #0050FF; color: #ffffff; }
-        .badge-cyan { background-color: #38bdf8; color: #030712; }
+        .badge-cyan { background-color: #0071e3; color: #ffffff; }
         .badge-neutral { background-color: rgba(255, 255, 255, 0.08); color: #94a3b8; }
 
-        .dist-heading {
-          font-size: 26px;
+        .dist-card-title {
+          font-size: 24px;
           font-weight: 600;
           color: #f8fafc;
-          margin-bottom: 10px;
+          margin-bottom: 8px;
           letter-spacing: -0.02em;
         }
-        .dist-desc {
+        .dist-card-lead {
           font-size: 14px;
           color: #94a3b8;
           line-height: 1.5;
-          margin-bottom: 22px;
+          margin-bottom: 20px;
         }
-        .mono-kbd {
-          font-family: var(--font-mono), monospace;
-          background-color: rgba(255, 255, 255, 0.1);
+        .apple-mono-kbd {
+          font-family: var(--apple-mono);
+          background: rgba(255, 255, 255, 0.1);
           color: #38bdf8;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 12px;
         }
-        .dist-specs-stack {
+        .dist-features-col {
           display: flex;
           flex-direction: column;
           gap: 8px;
-          margin-bottom: 28px;
+          margin-bottom: 26px;
         }
-        .spec-row {
+        .dist-feature-line {
           display: flex;
           align-items: center;
           gap: 8px;
           font-size: 13px;
           color: #cbd5e1;
         }
-        .dist-btn {
+        .apple-dist-action {
           border: none;
-          border-radius: 50px;
+          border-radius: 980px;
           padding: 12px 20px;
           font-size: 14px;
           font-weight: 600;
@@ -2488,127 +2458,103 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           justify-content: space-between;
           cursor: pointer;
-          transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+          transition: transform 100ms ease-out, background-color 140ms ease-out;
         }
-        .dist-btn:active {
+        .apple-dist-action:active {
           transform: scale(0.97);
         }
-        .btn-white {
+        .action-white {
           background-color: #ffffff;
           color: #030712;
-          box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+          box-shadow: 0 4px 18px rgba(255, 255, 255, 0.15);
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-white:hover { background-color: #f1f5f9; }
+          .action-white:hover { background-color: #f1f5f9; }
         }
 
-        .btn-royal {
+        .action-royal {
           background-color: #0050FF;
           color: #ffffff;
-          box-shadow: 0 4px 20px rgba(0, 80, 255, 0.4);
+          box-shadow: 0 4px 18px rgba(0, 80, 255, 0.4);
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-royal:hover { background-color: #1a62ff; }
+          .action-royal:hover { background-color: #1a62ff; }
         }
 
-        .btn-glass {
-          background-color: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+        .action-glass {
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.14);
           color: #f8fafc;
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-glass:hover { background-color: rgba(255, 255, 255, 0.12); }
+          .action-glass:hover { background: rgba(255, 255, 255, 0.12); }
         }
 
-        /* 7. Architecture FAQ Interactive Accordion (animate/RECIPES.md) */
-        .faq-section {
-          margin-bottom: 120px;
-        }
-        .faq-shell {
-          padding: 8px;
-          border-radius: 32px;
-          background-color: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        .faq-inner {
-          border-radius: 24px;
-          background-color: rgba(11, 15, 25, 0.85);
-          padding: clamp(28px, 5vw, 44px);
-        }
-        .faq-title {
-          font-size: clamp(24px, 3.5vw, 40px);
-          font-weight: 700;
-          color: #f8fafc;
-          letter-spacing: -0.03em;
-          margin-top: 14px;
-          margin-bottom: 32px;
-          max-width: 800px;
-        }
-        .faq-accordion-container {
+        /* 7. Architectural FAQ Accordion */
+        .apple-faq-stack {
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 12px;
         }
-        .faq-accordion-item {
-          border-radius: 16px;
-          background-color: rgba(15, 23, 42, 0.6);
+        .apple-faq-row {
+          border-radius: 14px;
+          background: rgba(15, 23, 42, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid rgba(255, 255, 255, 0.12);
           overflow: hidden;
-          transition: border-color 200ms var(--ease-out), background-color 200ms var(--ease-out);
+          transition: border-color 160ms ease-out, background-color 160ms ease-out;
         }
-        .faq-accordion-item[data-open="true"] {
+        .apple-faq-row[data-open="true"] {
           border-color: rgba(0, 80, 255, 0.35);
-          background-color: rgba(15, 23, 42, 0.85);
+          background: rgba(15, 23, 42, 0.85);
         }
-        .faq-question-btn {
+        .apple-faq-trigger {
           width: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 20px 24px;
+          padding: 18px 22px;
           background: transparent;
           border: none;
           color: #f8fafc;
-          font-size: 16px;
+          font-size: 15px;
           font-weight: 600;
           text-align: left;
           cursor: pointer;
           gap: 16px;
-          transition: transform 160ms var(--ease-out);
+          transition: transform 100ms ease-out;
         }
-        .faq-question-btn:active {
+        .apple-faq-trigger:active {
           transform: scale(0.99);
         }
-        .faq-question-text {
+        .apple-faq-question {
           flex: 1;
         }
-        .faq-chevron-wrapper {
-          color: #38bdf8;
+        .apple-faq-chevron {
+          color: #0071e3;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 220ms var(--ease-out);
+          transition: transform 180ms var(--apple-spring);
         }
         .chevron-rotated {
           transform: rotate(180deg);
         }
-
-        /* Sanctioned Accordion Recipe: grid-template-rows 0fr -> 1fr */
-        .faq-answer-collapse {
+        .apple-faq-collapse {
           display: grid;
           grid-template-rows: 0fr;
-          transition: grid-template-rows 220ms var(--ease-out), opacity 220ms var(--ease-out);
+          transition: grid-template-rows 180ms var(--apple-spring), opacity 180ms ease-out;
           opacity: 0;
         }
-        .faq-answer-collapse[data-open="true"] {
+        .apple-faq-collapse[data-open="true"] {
           grid-template-rows: 1fr;
           opacity: 1;
         }
-        .faq-answer-inner {
+        .apple-faq-inner {
           overflow: hidden;
         }
-        .faq-answer-text {
-          padding: 0 24px 20px 24px;
+        .apple-faq-answer {
+          padding: 0 22px 18px 22px;
           font-size: 14px;
           color: #94a3b8;
           line-height: 1.6;
@@ -2616,55 +2562,55 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         }
 
         /* 8. Footer */
-        .landing-footer {
+        .apple-footer {
           background-color: #070a13;
           border-top: 1px solid rgba(255, 255, 255, 0.08);
-          padding: 60px 24px 44px 24px;
+          padding: 56px 24px 40px 24px;
           position: relative;
           z-index: 1;
         }
-        .footer-content {
+        .apple-footer-content {
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
           flex-direction: column;
-          gap: 36px;
+          gap: 32px;
         }
-        .footer-top-row {
+        .apple-footer-top {
           display: flex;
           align-items: center;
           justify-content: space-between;
           flex-wrap: wrap;
           gap: 20px;
         }
-        .footer-brand-cluster {
+        .apple-footer-brand {
           display: flex;
           align-items: center;
           gap: 14px;
         }
-        .footer-brand-meta {
+        .apple-footer-meta {
           display: flex;
           flex-direction: column;
         }
-        .footer-brand-title {
-          font-size: 20px;
+        .footer-title {
+          font-size: 18px;
           font-weight: 700;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.02em;
         }
-        .footer-brand-tagline {
+        .footer-tagline {
           font-size: 12px;
           color: #94a3b8;
         }
-        .footer-actions {
+        .apple-footer-ctas {
           display: flex;
           align-items: center;
           gap: 10px;
           flex-wrap: wrap;
         }
-        .footer-pill-btn {
-          background-color: rgba(255, 255, 255, 0.06);
+        .apple-footer-btn {
+          background: rgba(255, 255, 255, 0.06);
           border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 50px;
+          border-radius: 980px;
           padding: 8px 16px;
           font-size: 13px;
           font-weight: 600;
@@ -2673,31 +2619,31 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           align-items: center;
           gap: 8px;
           cursor: pointer;
-          transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out);
+          transition: background-color 140ms ease-out, transform 100ms ease-out;
         }
-        .footer-pill-btn:active {
+        .apple-footer-btn:active {
           transform: scale(0.97);
         }
         @media (hover: hover) and (pointer: fine) {
-          .footer-pill-btn:hover {
-            background-color: rgba(255, 255, 255, 0.12);
+          .apple-footer-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
           }
         }
-        .btn-royal-subtle {
+        .btn-highlight {
           background-color: #0050FF;
           border-color: #1a62ff;
           color: #ffffff;
         }
         @media (hover: hover) and (pointer: fine) {
-          .btn-royal-subtle:hover {
+          .btn-highlight:hover {
             background-color: #1a62ff;
           }
         }
-        .footer-hairline {
+        .apple-footer-divider {
           height: 1px;
           background-color: rgba(255, 255, 255, 0.06);
         }
-        .footer-bottom-row {
+        .apple-footer-bottom {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -2706,107 +2652,77 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           font-size: 13px;
           color: #94a3b8;
         }
-        .footer-status-pills {
+        .apple-footer-telemetry {
           display: flex;
           align-items: center;
           gap: 16px;
         }
-        .system-status-indicator {
+        .telemetry-pill {
           display: flex;
           align-items: center;
           gap: 6px;
-          font-family: var(--font-mono), monospace;
-          font-size: 12px;
+          font-family: var(--apple-mono);
+          font-size: 11px;
         }
-        .status-dot-emerald {
+        .beacon-green {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background-color: #10b981;
-          box-shadow: 0 0 6px #10b981;
+          background-color: #34c759;
+          box-shadow: 0 0 6px #34c759;
         }
-        .status-dot-blue {
+        .beacon-blue {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background-color: #38bdf8;
-          box-shadow: 0 0 6px #38bdf8;
+          background-color: #0071e3;
+          box-shadow: 0 0 6px #0071e3;
         }
-        .footer-nav-links {
+        .apple-footer-links {
           display: flex;
           align-items: center;
           gap: 18px;
         }
-        .footer-nav-links a {
+        .apple-footer-links a {
           color: #94a3b8;
-          transition: color 150ms var(--ease-out);
+          transition: color 140ms ease-out;
         }
         @media (hover: hover) and (pointer: fine) {
-          .footer-nav-links a:hover {
+          .apple-footer-links a:hover {
             color: #f8fafc;
           }
         }
-        .footer-copy {
+        .apple-footer-copy {
           font-size: 12px;
           color: #64748b;
         }
 
-        /* 9. Keyframe Animations (SKILL.md & RECIPES.md specifications) */
-        @keyframes itemFadeIn {
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Tab Panel Entrance: scale(0.98) + opacity: 0 to scale(1) + opacity: 1 */
-        @keyframes tabEnter {
+        /* Fluid Material Enter (Section 12) */
+        @keyframes appleEnter {
           from {
             opacity: 0;
-            transform: translateY(6px) scale(0.98);
+            transform: translateY(4px) scale(0.985);
           }
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
           }
         }
-        .animate-tab-enter {
-          animation: tabEnter 220ms var(--ease-out) forwards;
+        .apple-enter-active {
+          animation: appleEnter 180ms var(--apple-spring) forwards;
         }
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(6px) scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-        .animate-fade-in {
-          animation: fadeIn 200ms var(--ease-out) forwards;
-        }
-
-        @keyframes spin {
+        @keyframes appleSpin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        .spin-icon {
-          animation: spin 1s linear infinite;
+        .apple-spin-icon {
+          animation: appleSpin 1s linear infinite;
         }
 
-        /* Staggered lists inside panels */
-        .stagger-stat:nth-child(1) { animation: itemFadeIn 220ms var(--ease-out) 30ms forwards; }
-        .stagger-stat:nth-child(2) { animation: itemFadeIn 220ms var(--ease-out) 60ms forwards; }
-        .stagger-stat:nth-child(3) { animation: itemFadeIn 220ms var(--ease-out) 90ms forwards; }
-        .stagger-stat:nth-child(4) { animation: itemFadeIn 220ms var(--ease-out) 120ms forwards; }
-
-        .stagger-item:nth-child(1) { animation: itemFadeIn 200ms var(--ease-out) 40ms forwards; }
-        .stagger-item:nth-child(2) { animation: itemFadeIn 200ms var(--ease-out) 80ms forwards; }
-        .stagger-item:nth-child(3) { animation: itemFadeIn 200ms var(--ease-out) 120ms forwards; }
-
-        /* 10. PREFERS-REDUCED-MOTION (Accessibility Compliance) */
+        /* =====================================================================
+           ACCESSIBILITY TRIAD (Section 14: Reduced Motion, Transparency, Contrast)
+           ===================================================================== */
         @media (prefers-reduced-motion: reduce) {
           *, *::before, *::after {
             animation-duration: 0.01ms !important;
@@ -2814,17 +2730,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             transition-duration: 0.01ms !important;
             scroll-behavior: auto !important;
           }
-          .animate-tab-enter,
-          .animate-fade-in,
-          .stagger-chip,
-          .stagger-stat,
-          .stagger-item {
+          .apple-enter-active {
             animation: none !important;
             opacity: 1 !important;
             transform: none !important;
           }
-          .faq-chevron-wrapper {
+          .apple-faq-chevron {
             transition: none !important;
+          }
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+          .apple-nav-capsule,
+          .apple-section-inner,
+          .apple-window-bar,
+          .apple-chassis-inner {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background-color: #0b0f19 !important;
+          }
+        }
+
+        @media (prefers-contrast: more) {
+          .apple-nav-capsule,
+          .apple-chassis-outer,
+          .apple-section-shell,
+          .bento-shell,
+          .dist-card-shell,
+          .apple-faq-row {
+            border: 2px solid #ffffff !important;
           }
         }
       `}</style>
