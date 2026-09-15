@@ -90,18 +90,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'PRODUCT & TECHNOLOGY',
       items: [
-        { id: '/product', label: 'Product', icon: <FolderKanban size={16} /> },
-        { id: '/engineering', label: 'Engineering', icon: <Bug size={16} /> },
+        { id: '/product', label: 'Product & Technology', icon: <FolderKanban size={16} color="#fbbf24" />, badge: 'Coming Soon' },
       ],
     },
     {
       title: 'MANAGEMENT & ASSETS',
       items: [
-        { id: '/management/cash', label: 'Cash & Treasury', icon: <Landmark size={16} /> },
-        { id: '/management/balance-sheet', label: 'Assets & Liabilities', icon: <Scale size={16} /> },
-        { id: '/management/employees', label: 'Employees', icon: <UserCheck size={16} /> },
-        { id: '/management/departments', label: 'Departments', icon: <Building2 size={16} /> },
-        { id: '/management/uploads', label: 'Corporate Vault', icon: <UploadCloud size={16} /> },
+        { id: '/management', label: 'Management & Assets', icon: <Building2 size={16} color="#34d399" />, badge: 'Coming Soon' },
       ],
     },
     {

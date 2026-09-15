@@ -42,7 +42,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
           }}
         >
           <Sparkles size={13} />
-          FounderOS V2 • Coming Soon
+          FounderOS • Coming Soon
         </div>
 
         {/* Title */}
@@ -68,7 +68,7 @@ export const V2ComingSoonPage: React.FC<V2ComingSoonPageProps> = ({ featureName,
             margin: 0,
           }}
         >
-          This next-generation autonomous capability is planned for the upcoming FounderOS V2 release. All core features under the Command Center, Business &amp; Revenue, Execution, and Management modules remain fully active.
+          This capability is planned for an upcoming release. All core features under the Command Center, Business &amp; Revenue, and Execution modules remain fully active.
         </p>
 
         {/* Key Preview Pillars */}
