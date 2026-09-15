@@ -21,6 +21,16 @@ if errorlevel 1 (
 )
 
 echo.
+echo [1.5/4] Auto-syncing Web to Desktop (web -^> desktop)...
+node scripts\sync-desktop.cjs
+if errorlevel 1 (
+    echo.
+    echo [ERROR] Web to Desktop sync failed.
+    pause
+    exit /b 1
+)
+
+echo.
 echo [2/4] Staging all changes...
 git add .
 

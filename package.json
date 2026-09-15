@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run sync:desktop && tsc && vite build",
     "preview": "vite preview",
-    "desktop:dev": "npm --prefix desktop run dev",
-    "desktop:build": "npm --prefix desktop run build",
+    "sync:desktop": "node scripts/sync-desktop.cjs",
+    "watch:desktop": "node scripts/watch-desktop-sync.cjs",
+    "desktop:dev": "npm run sync:desktop && npm --prefix desktop run dev",
+    "desktop:build": "npm run sync:desktop && npm --prefix desktop run build",
     "desktop:start": "npm --prefix desktop start",
-    "desktop:package": "npm --prefix desktop run package:portable",
-    "desktop:setup": "npm --prefix desktop run package:win",
+    "desktop:package": "npm run sync:desktop && npm --prefix desktop run package:portable",
+    "desktop:setup": "npm run sync:desktop && npm --prefix desktop run package:win",
     "desktop:sync": "powershell -Command \"New-Item -ItemType Directory -Force -Path 'public/downloads'; Copy-Item -Path 'desktop/release/FounderOS Setup 1.0.0.exe' -Destination 'public/downloads/FounderOS-Setup.exe' -Force\""
   },
   "dependencies": {

@@ -7,6 +7,9 @@
   "author": "Arvind Vadivelu <varvind2004@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "sync": "node ../scripts/sync-desktop.cjs",
+    "prebuild": "npm run sync",
+    "predev": "npm run sync",
     "dev": "concurrently -k \"vite\" \"wait-on tcp:5173 && electron .\"",
     "dev:web": "vite",
     "build:renderer": "tsc && vite build",
