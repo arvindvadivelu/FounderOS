@@ -14,7 +14,7 @@
     "desktop:start": "npm --prefix desktop start",
     "desktop:package": "npm run sync:desktop && npm --prefix desktop run package:portable",
     "desktop:setup": "npm run sync:desktop && npm --prefix desktop run package:win",
-    "desktop:sync": "powershell -Command \"New-Item -ItemType Directory -Force -Path 'public/downloads'; Copy-Item -Path 'desktop/release/FounderOS Setup 1.0.0.exe' -Destination 'public/downloads/FounderOS-Setup.exe' -Force\""
+    "desktop:sync": "powershell -Command \"New-Item -ItemType Directory -Force -Path 'public/downloads'; Copy-Item -Path 'desktop/release/FounderOS Setup 1.0.0.exe' -Destination 'public/downloads/FounderOS-Setup.exe' -Force; Copy-Item -Path 'desktop/release/FounderOS 1.0.0.exe' -Destination 'public/downloads/FounderOS-Portable.exe' -Force\""
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
