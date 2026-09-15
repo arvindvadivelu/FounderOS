@@ -107,12 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'FOUNDEROS V2',
       items: [
-        { id: '/workflows', label: 'Workflows & Triggers', icon: <Zap size={16} color="#38bdf8" /> },
-        { id: '/boardroom', label: 'Executive Boardroom', icon: <Bot size={16} color="#ec4899" /> },
-        { id: '/forecasting', label: 'Financial Forecasting', icon: <TrendingUp size={16} color="#34d399" /> },
-        { id: '/customer-intelligence', label: 'Customer Radar', icon: <Users size={16} color="#38bdf8" /> },
-        { id: '/product-intelligence', label: 'Product RICE', icon: <Target size={16} color="#fbbf24" /> },
-        { id: '/autopilot', label: 'Autonomous Ops', icon: <Cpu size={16} color="#10b981" /> },
+        { id: '/v2', label: 'FounderOS V2', icon: <Sparkles size={16} color="#c084fc" />, badge: 'Coming Soon' },
       ],
     },
     {
@@ -316,23 +311,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       {item.badge !== undefined && (
                         <span
                           style={{
-                            fontSize: isDisabled ? '9.5px' : '10.5px',
+                            fontSize: isDisabled || item.badge === 'Coming Soon' ? '9.5px' : '10.5px',
                             fontWeight: 700,
-                            padding: isDisabled ? '2px 7px' : '1px 6px',
+                            padding: isDisabled || item.badge === 'Coming Soon' ? '2px 7px' : '1px 6px',
                             borderRadius: '10px',
-                            backgroundColor: isDisabled
-                              ? 'rgba(168, 85, 247, 0.12)'
+                            backgroundColor: isDisabled || item.badge === 'Coming Soon'
+                              ? 'rgba(168, 85, 247, 0.14)'
                               : isActive
                               ? 'var(--brand-accent)'
                               : 'var(--bg-surface-elevated)',
-                            color: isDisabled
+                            color: isDisabled || item.badge === 'Coming Soon'
                               ? '#c084fc'
                               : isActive
                               ? '#ffffff'
                               : 'var(--text-dim)',
-                            border: isDisabled ? '1px solid rgba(168, 85, 247, 0.28)' : 'none',
-                            letterSpacing: isDisabled ? '0.4px' : 'normal',
-                            textTransform: isDisabled ? 'uppercase' : 'none',
+                            border: isDisabled || item.badge === 'Coming Soon' ? '1px solid rgba(168, 85, 247, 0.32)' : 'none',
+                            letterSpacing: isDisabled || item.badge === 'Coming Soon' ? '0.4px' : 'normal',
+                            textTransform: isDisabled || item.badge === 'Coming Soon' ? 'uppercase' : 'none',
                           }}
                         >
                           {item.badge}
