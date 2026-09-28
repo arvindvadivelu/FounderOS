@@ -174,28 +174,37 @@ Designed for power users who refuse to touch the mouse:
 FounderOS is engineered as a unified, local-first startup operating system delivered across both **Web** and **Native Desktop** platforms.
 
 ### 🌐 Web Application Stack
-- **Framework & UI**: React 18 (`react`, `react-dom`) + TypeScript 5
-- **Bundler & Build Tool**: Vite 6 (sub-second Hot Module Replacement, optimized static tree-shaking)
-- **Local Persistence**: Dexie.js 4 (IndexedDB wrapper with reactive `useLiveQuery` subscriptions for instant, sub-10ms UI updates)
-- **Styling & Design System**: Handcrafted Vanilla CSS with modern Solvst design tokens (Midnight Obsidian `#030712`, Electric Accent `#0050FF`, Cyan `#38bdf8`, glassmorphism backdrop filters)
-- **Markdown & Content Engine**: React Markdown (`react-markdown`) + Remark GFM (`remark-gfm`)
-- **Icons & Micro-Interactions**: Lucide Icons (`lucide-react`), Canvas Confetti (`canvas-confetti`)
-- **Testing & Quality Assurance**: TypeScript (`tsc`), tsx execution engine, `fake-indexeddb` for headless automated domain test suites
+
+| Icon | Technology | Category | Version | Role & Description |
+|:---:|:---|:---|:---:|:---|
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="22" height="22" alt="React" /> | **React** | Core UI Framework | `v18.3.1` | Component-driven reactive UI architecture |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="22" height="22" alt="TypeScript" /> | **TypeScript** | Language & Types | `v5.7.3` | End-to-end type safety, strict interfaces & data contracts |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" width="22" height="22" alt="Vite" /> | **Vite** | Bundler & Dev Server | `v6.2.0` | Sub-second Hot Module Replacement (HMR) & static builds |
+| <img src="https://cdn.simpleicons.org/databricks/38bdf8" width="22" height="22" alt="Dexie.js" /> | **Dexie.js** | Local Database | `v4.0.11` | High-speed IndexedDB wrapper with reactive `useLiveQuery` |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="22" height="22" alt="Vanilla CSS" /> | **Vanilla CSS** | Styling System | `CSS3` | Handcrafted Solvst tokens, Midnight Obsidian theme & glassmorphism |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" width="22" height="22" alt="Markdown" /> | **React Markdown** | Content Engine | `v9.0.3` | Real-time rendering for AI proposals, PRDs & markdown notes |
+| <img src="https://cdn.simpleicons.org/lucide/0050FF" width="22" height="22" alt="Lucide" /> | **Lucide Icons** | Design & UI | `v1.16.0` | Minimalist, consistent vector iconography |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="22" height="22" alt="tsx & fake-idb" /> | **tsx & Fake-IDB** | Testing Harness | `Latest` | Headless execution runner & in-memory IndexedDB test suites |
 
 ### 💻 Desktop Application Stack (Native Windows / Electron)
-- **Desktop Runtime**: Electron 33 (Chromium + Node.js runtime bridging native desktop capabilities)
-- **Application Packager**: `electron-builder` 25 (outputs NSIS Windows Installers and standalone zero-install Portable `.exe` binaries)
-- **Multi-Process Architecture**:
-  - **Main Process**: Electron Node.js runtime configuring secure window lifecycle, frame controls, and hardware acceleration
-  - **Renderer Process**: High-performance Vite + React application bundle running locally inside the desktop shell
-  - **Preload Script**: Isolated context-bridging IPC layer
-- **Sync & Watch Automation**: Custom cross-platform synchronization scripts (`scripts/sync-desktop.cjs`, `scripts/watch-desktop-sync.cjs`) maintaining continuous parity between root web codebase and desktop distribution
-- **Dev Tooling**: `concurrently` + `wait-on` for synchronized dev server and native window launch
+
+| Icon | Technology | Category | Version | Role & Description |
+|:---:|:---|:---|:---:|:---|
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/electron/electron-original.svg" width="22" height="22" alt="Electron" /> | **Electron** | Desktop Shell | `v33.2.1` | Native cross-platform desktop framework (Chromium + Node.js) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" width="22" height="22" alt="electron-builder" /> | **electron-builder** | Packaging & Installer | `v25.1.8` | Packages Portable `.exe` and NSIS Windows installer setups |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="22" height="22" alt="Main Process" /> | **Main Process** | Node Runtime | `Node.js 20+` | Window lifecycle management, frame styling & hardware acceleration |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="22" height="22" alt="Preload" /> | **Preload IPC** | Security Bridge | `TypeScript` | Context-isolated secure communication bridge |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="22" height="22" alt="Renderer" /> | **Renderer UI** | Frontend Bundle | `React 18` | Zero-latency local interface running inside desktop shell |
+| <img src="https://cdn.simpleicons.org/powershell/5391FE" width="22" height="22" alt="Sync Scripts" /> | **Sync Automation** | Build Scripts | `Node.js / PS` | Synchronizes root web updates into the desktop distribution |
 
 ### 🧠 AI & Intelligence Layer
-- **Client-Side Direct Streaming**: Direct API communication with zero intermediary proxy servers
-- **Supported Providers**: OpenRouter, Anthropic (Claude 3.7 Sonnet), OpenAI (GPT-4o), Ollama, and LocalAI / OpenAI-compatible endpoints
-- **Zero-Cloud Privacy**: API keys, prompts, and company data remain strictly on your local machine
+
+| Icon | Provider / Engine | Category | Models & Integration Details |
+|:---:|:---|:---|:---|
+| <img src="https://cdn.simpleicons.org/anthropic/D97706" width="22" height="22" alt="Anthropic" /> | **Anthropic** | Frontier Reasoning | Claude 3.7 Sonnet / Claude 3.5 Sonnet for deep strategic planning & tool calling |
+| <img src="https://cdn.simpleicons.org/openai/412991" width="22" height="22" alt="OpenAI" /> | **OpenAI** | Frontier Multimodal | GPT-4o / GPT-4o-mini for rapid task decomposition & structured JSON output |
+| <img src="https://cdn.simpleicons.org/openrouter/0050FF" width="22" height="22" alt="OpenRouter" /> | **OpenRouter** | AI Gateway | Unified aggregator providing access to 100+ state-of-the-art models with one API key |
+| <img src="https://cdn.simpleicons.org/ollama/ffffff" width="22" height="22" alt="Ollama" /> | **Ollama / LocalAI** | Local Inference | 100% offline, privacy-first local LLMs running on your own GPU/CPU |
 
 ---
 
