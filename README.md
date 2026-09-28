@@ -15,8 +15,8 @@
 <p align="center">
   <a href="#-the-autonomous-ai-ceo"><img src="https://img.shields.io/badge/AI%20CEO-Claude%203.7%20%7C%20OpenRouter-0050FF?style=for-the-badge&logo=anthropic&logoColor=white" alt="AI CEO" /></a>
   <a href="#-built-for-absolute-privacy"><img src="https://img.shields.io/badge/Privacy-100%25%20Local--First-10b981?style=for-the-badge&logo=dexie&logoColor=white" alt="Local First" /></a>
-  <a href="#-keyboard-driven-velocity"><img src="https://img.shields.io/badge/Speed-Sub--10ms%20IndexedDB-38bdf8?style=for-the-badge&logo=speedtest&logoColor=white" alt="Speed" /></a>
-  <a href="#-quick-start"><img src="https://img.shields.io/badge/Built%20With-React%2019%20%2B%20Vite-6366f1?style=for-the-badge&logo=vite&logoColor=white" alt="Vite React" /></a>
+  <a href="#-desktop-application-stack-native-windows--electron"><img src="https://img.shields.io/badge/Desktop-Electron%2033-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron Desktop" /></a>
+  <a href="#-architecture--tech-stack"><img src="https://img.shields.io/badge/Built%20With-React%20%2B%20Vite-6366f1?style=for-the-badge&logo=vite&logoColor=white" alt="Vite React" /></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-gray?style=for-the-badge" alt="License" /></a>
 </p>
 
@@ -171,14 +171,31 @@ Designed for power users who refuse to touch the mouse:
 
 ## 🛠️ Architecture & Tech Stack
 
-FounderOS is engineered using high-performance, modern web technologies:
+FounderOS is engineered as a unified, local-first startup operating system delivered across both **Web** and **Native Desktop** platforms.
 
-- **Core Framework**: React 19 + TypeScript 5
-- **Build Tool**: Vite 6 (sub-second hot module reload, <5s production builds)
-- **Local Database**: Dexie.js (IndexedDB wrapper with reactive `useLiveQuery` subscriptions)
-- **Icons & Visuals**: Lucide Icons
-- **Design System**: Handcrafted Solvst aesthetic—Midnight Obsidian canvas (`#030712`), Electric Accent (`#0050FF`), Cyan highlights (`#38bdf8`), and glassmorphism backdrop filters.
-- **AI Integrations**: OpenRouter, Anthropic Claude 3.7 Sonnet, OpenAI GPT-4o, Ollama, LocalAI.
+### 🌐 Web Application Stack
+- **Framework & UI**: React 18 (`react`, `react-dom`) + TypeScript 5
+- **Bundler & Build Tool**: Vite 6 (sub-second Hot Module Replacement, optimized static tree-shaking)
+- **Local Persistence**: Dexie.js 4 (IndexedDB wrapper with reactive `useLiveQuery` subscriptions for instant, sub-10ms UI updates)
+- **Styling & Design System**: Handcrafted Vanilla CSS with modern Solvst design tokens (Midnight Obsidian `#030712`, Electric Accent `#0050FF`, Cyan `#38bdf8`, glassmorphism backdrop filters)
+- **Markdown & Content Engine**: React Markdown (`react-markdown`) + Remark GFM (`remark-gfm`)
+- **Icons & Micro-Interactions**: Lucide Icons (`lucide-react`), Canvas Confetti (`canvas-confetti`)
+- **Testing & Quality Assurance**: TypeScript (`tsc`), tsx execution engine, `fake-indexeddb` for headless automated domain test suites
+
+### 💻 Desktop Application Stack (Native Windows / Electron)
+- **Desktop Runtime**: Electron 33 (Chromium + Node.js runtime bridging native desktop capabilities)
+- **Application Packager**: `electron-builder` 25 (outputs NSIS Windows Installers and standalone zero-install Portable `.exe` binaries)
+- **Multi-Process Architecture**:
+  - **Main Process**: Electron Node.js runtime configuring secure window lifecycle, frame controls, and hardware acceleration
+  - **Renderer Process**: High-performance Vite + React application bundle running locally inside the desktop shell
+  - **Preload Script**: Isolated context-bridging IPC layer
+- **Sync & Watch Automation**: Custom cross-platform synchronization scripts (`scripts/sync-desktop.cjs`, `scripts/watch-desktop-sync.cjs`) maintaining continuous parity between root web codebase and desktop distribution
+- **Dev Tooling**: `concurrently` + `wait-on` for synchronized dev server and native window launch
+
+### 🧠 AI & Intelligence Layer
+- **Client-Side Direct Streaming**: Direct API communication with zero intermediary proxy servers
+- **Supported Providers**: OpenRouter, Anthropic (Claude 3.7 Sonnet), OpenAI (GPT-4o), Ollama, and LocalAI / OpenAI-compatible endpoints
+- **Zero-Cloud Privacy**: API keys, prompts, and company data remain strictly on your local machine
 
 ---
 
@@ -198,16 +215,36 @@ npm install
 ```
 
 ### 3. Launch Development Environment
+
+#### 🌐 Web App (Browser)
 ```bash
 npm run dev
 ```
 Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
-### 4. Build for Production
+#### 💻 Desktop App (Electron)
+```bash
+npm run desktop:dev
+```
+Launches the native Electron desktop application with hot-reloading enabled.
+
+### 4. Build & Package for Production
+
+#### 🌐 Web App (Static Bundle)
 ```bash
 npm run build
 ```
 Generates production-ready, ultra-optimized static assets in `dist/`.
+
+#### 💻 Desktop App (Windows Executables)
+```bash
+# Build standalone Portable Windows executable (.exe)
+npm run desktop:package
+
+# Build Windows NSIS installer setup wizard (.exe)
+npm run desktop:setup
+```
+The compiled binaries are generated in `desktop/release/`.
 
 ---
 
