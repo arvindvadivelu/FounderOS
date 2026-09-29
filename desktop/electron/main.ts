@@ -21,10 +21,10 @@ if (!gotTheLock) {
 
 function getAppLogoPath(): string {
   const candidates = [
-    path.join(__dirname, '../dist/founderos-logo.jpg'),
-    path.join(__dirname, '../public/founderos-logo.jpg'),
-    path.join(app.getAppPath(), 'dist/founderos-logo.jpg'),
-    path.join(app.getAppPath(), 'public/founderos-logo.jpg'),
+    path.join(__dirname, '../dist/founderos-logo.png'),
+    path.join(__dirname, '../public/founderos-logo.png'),
+    path.join(app.getAppPath(), 'dist/founderos-logo.png'),
+    path.join(app.getAppPath(), 'public/founderos-logo.png'),
   ];
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) return candidate;

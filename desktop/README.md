@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/founderos-logo.jpg" alt="FounderOS Desktop Logo" width="110" style="border-radius: 24px; box-shadow: 0 16px 40px rgba(0, 80, 255, 0.45); margin-bottom: 16px;" />
+  <img src="./public/founderos-logo.png" alt="FounderOS Desktop Logo" width="110" style="border-radius: 24px; box-shadow: 0 16px 40px rgba(0, 80, 255, 0.45); margin-bottom: 16px;" />
 </p>
 
 <h1 align="center">FounderOS — Native Desktop Edition</h1>

@@ -15,7 +15,7 @@ import {
   Layers,
   AlertTriangle,
 } from 'lucide-react';
-import founderosLogo from '../assets/founderos-logo.jpg';
+import founderosLogo from '../assets/founderos-logo.png';
 
 interface LandingPageProps {
   onLaunchApp: () => void;

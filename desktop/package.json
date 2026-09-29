@@ -61,7 +61,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "public/founderos-logo.jpg"
+      "icon": "public/founderos-logo.png"
     },
     "nsis": {
       "oneClick": false,

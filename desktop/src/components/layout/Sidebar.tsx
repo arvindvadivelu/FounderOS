@@ -26,7 +26,7 @@ import {
   Bot,
   Zap,
 } from 'lucide-react';
-import founderosLogo from '../../assets/founderos-logo.jpg';
+import founderosLogo from '../../assets/founderos-logo.png';
 import type { Company } from '../../types';
 
 interface SidebarProps {

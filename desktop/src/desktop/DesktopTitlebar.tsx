@@ -1,7 +1,7 @@
 import React from 'react';
 import { Minus, Square, Copy, X } from 'lucide-react';
 import { useDesktopBridge } from './useDesktopBridge';
-import founderosLogo from '../assets/founderos-logo.jpg';
+import founderosLogo from '../assets/founderos-logo.png';
 
 export const DesktopTitlebar: React.FC = () => {
   const { isDesktop, isMaximized, minimize, maximize, close } = useDesktopBridge();
