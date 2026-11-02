@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react';
+import { Modal } from '../components/common/Modal';
 import { db } from '../db';
 import { AIMessageView } from '../components/ai/AIMessageView';
 import { aiChatService, useAIChatState } from '../ai/aiChatService';
@@ -35,6 +36,7 @@ export const AICopilotPage: React.FC<AICopilotPageProps> = ({ onNavigateToSettin
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isInitializingRef = useRef(false);
   const briefingExecutedRef = useRef(false);
+  const [sessionToDelete, setSessionToDelete] = useState<string | null>(null);
 
   // Background execution state for this conversation and globally
   const { isActive: isConvActive, status: liveStatus, allActive } = useAIChatState(selectedConvId);
@@ -119,18 +121,23 @@ export const AICopilotPage: React.FC<AICopilotPageProps> = ({ onNavigateToSettin
     setSelectedConvId(newConv.id);
   };
 
-  const handleDeleteConversation = async (id: string, e: React.MouseEvent) => {
+  const handleDeleteClick = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (confirm('Delete this conversation?')) {
-      await deleteConversation(id);
-      if (selectedConvId === id) {
-        const remaining = conversations.filter((c) => c.id !== id);
-        if (remaining.length > 0) {
-          setSelectedConvId(remaining[0].id);
-        } else {
-          const fresh = await createConversation('Founder Copilot Session');
-          setSelectedConvId(fresh.id);
-        }
+    setSessionToDelete(id);
+  };
+
+  const confirmDeleteSession = async () => {
+    if (!sessionToDelete) return;
+    const id = sessionToDelete;
+    setSessionToDelete(null);
+    await deleteConversation(id);
+    if (selectedConvId === id) {
+      const remaining = conversations.filter((c) => c.id !== id);
+      if (remaining.length > 0) {
+        setSelectedConvId(remaining[0].id);
+      } else {
+        const fresh = await createConversation('Founder Copilot Session');
+        setSelectedConvId(fresh.id);
       }
     }
   };
@@ -493,7 +500,7 @@ export const AICopilotPage: React.FC<AICopilotPageProps> = ({ onNavigateToSettin
 
                   <button
                     type="button"
-                    onClick={(e) => handleDeleteConversation(conv.id, e)}
+                    onClick={(e) => handleDeleteClick(conv.id, e)}
                     style={{
                       color: '#64748b',
                       padding: '4px',
@@ -803,6 +810,45 @@ export const AICopilotPage: React.FC<AICopilotPageProps> = ({ onNavigateToSettin
           </div>
         </div>
       </div>
+
+            {/* Confirmation Modal for Session Deletion */}
+      <Modal
+        isOpen={Boolean(sessionToDelete)}
+        onClose={() => setSessionToDelete(null)}
+        title="Delete Session"
+        maxWidth="440px"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', padding: '8px 4px' }}>
+          <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+            Are you sure you want to delete this chat session? All messages and strategic intelligence generated within this thread will be permanently removed.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => setSessionToDelete(null)}
+              style={{ padding: '8px 16px', borderRadius: '50px', fontSize: '13px' }}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={confirmDeleteSession}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '50px',
+                fontSize: '13px',
+                backgroundColor: '#e11d48',
+                borderColor: '#e11d48',
+                color: '#ffffff',
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Embedded CSS for Workspace Grid Responsiveness */}
       <style>{`
