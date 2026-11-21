@@ -173,58 +173,6 @@ Designed for power users who refuse to touch the mouse:
 
 FounderOS is engineered as a unified, local-first startup operating system delivered across both **Web** and **Native Desktop** platforms.
 
-```
-+==================================================================================================+
-|                                    FOUNDEROS FULL TECH STACK                                     |
-+==================================================================================================+
-
- ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ 🌐 WEB APPLICATION (Primary Source of Truth)                                                   │
- ├─────────────────────────┬──────────────────────────────────────────────────────────────────────┤
- │ Layer                   │ Technologies & Specifications                                        │
- ├─────────────────────────┼──────────────────────────────────────────────────────────────────────┤
- │ Core UI Framework       │ • React 18.3.1 (Functional Components, Custom Hooks, Context API)    │
- │ Language                │ • TypeScript 5.7.3 (Strict Type Checking, ESNext)                    │
- │ Build & Dev Server      │ • Vite 6.2.0 + @vitejs/plugin-react (Sub-second HMR & Rollup Bundler)│
- │ Database & Storage      │ • Dexie.js 4.0.11 (High-performance IndexedDB Wrapper)              │
- │                         │ • Dexie React Hooks 1.1.7 (Reactive useLiveQuery data binding)       │
- │ Styling & Aesthetics    │ • Handcrafted Pure CSS Design System (Midnight Obsidian Theme)       │
- │                         │ • Glassmorphism, CSS Custom Properties & Dynamic Design Tokens       │
- │ Typography & Fonts      │ • Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono             │
- │ Vector Iconography      │ • Lucide React 1.16.0 (Consistent SVG Icon Set)                      │
- │ Content Engine          │ • React Markdown 9.0.3 + Remark GFM 4.0.1 (PRDs, Proposals, Memos)  │
- │ Micro-Interactions      │ • Canvas Confetti 1.9.4 (Milestone & Deal Win Celebrations)          │
- │ Testing & Verification  │ • tsx 4.23.15 + Fake-IndexedDB 6.2.5 (Headless in-memory test runner) │
- │ Distribution Assets     │ • Dedicated public/downloads/ serving validated executables          │
- └─────────────────────────┴──────────────────────────────────────────────────────────────────────┘
-
- ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ 🖥️ DESKTOP APPLICATION (Native Windows Edition)                                                │
- ├─────────────────────────┬──────────────────────────────────────────────────────────────────────┤
- │ Layer                   │ Technologies & Specifications                                        │
- ├─────────────────────────┼──────────────────────────────────────────────────────────────────────┤
- │ Desktop Shell & Runtime │ • Electron 33.2.1 (Chromium 130 + Node.js 20+ Runtime)               │
- │ Main Orchestration      │ • Node.js Process (dist-electron/main.js - Lifecycle & Windows Host) │
- │ Security & IPC Bridge   │ • TypeScript Preload Scripts (Isolated contextBridge & IPC channels) │
- │ Packager & Builder      │ • Electron-Builder 25.1.8                                            │
- │ Distribution Targets    │ • Windows Portable Standalone (.exe, ~76.6 MB with embedded assets)   │
- │                         │ • Windows NSIS Installer (.exe wizard with desktop/start shortcuts)  │
- │ Application Icon        │ • Multi-resolution Icon (public/icon.ico: 16x16 up to 256x256 RGBA)  │
- │ UI Renderer             │ • Synchronized React 18 + Vite client (dist/ bundle running locally) │
- │ Dev Concurrency         │ • Concurrently 9.1.2 + Wait-on 8.0.2 + Cross-Env 7.0.3               │
- │ Persistence Engine      │ • Native Chromium IndexedDB (Offline-first, zero telemetry)          │
- └─────────────────────────┴──────────────────────────────────────────────────────────────────────┘
-
- ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ 🔄 UNIFIED SYNCHRONIZATION PIPELINE                                                            │
- ├────────────────────────────────────────────────────────────────────────────────────────────────┤
- │ • Architecture Model: Web First — FounderOS/src/ serves as the single source of truth          │
- │ • Sync Engine: scripts/sync-desktop.cjs automated mirror script                                │
- │ • Synchronization Command: npm run sync:desktop (mirrors all web components to desktop/src/)    │
- │ • Continuous Sync: npm run watch:desktop (real-time watch & sync for desktop dev)             │
- └────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
 ### 🌐 Web Application Stack Breakdown
 
 | Icon | Technology | Category | Version | Role & Description |
